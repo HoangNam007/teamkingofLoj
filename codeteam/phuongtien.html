@@ -3,48 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phương Tiện Cũ Giá Rẻ</title>
+    <title>Phương Tiện – Chợ Tốt</title>
     <link rel="stylesheet" href="giaodien.css">
 </head>
 <body>
 
-    <header>
-        <h1>DANH MỤC: PHƯƠNG TIỆN</h1>
-    </header>
+<header class="header-container">
+    <div class="header-top">
+        <div class="logo-section">
+            <span class="menu-icon">☰</span>
+            <a href="idea.html" class="logo-text">chợ tốt</a>
+        </div>
+        <nav class="top-nav">
+            <a href="idea.html">Trang chủ</a>
+            <a href="phuongtien.html" class="active">Xe cộ</a>
+            <a href="dientu.html">Điện tử</a>
+            <a href="trangphuc.html">Thời trang</a>
+            <a href="vatdung.html">Đồ dùng</a>
+        </nav>
+        <div class="user-actions">
+            <span class="icon-btn">♡</span>
+            <span class="icon-btn">🔔</span>
+            <a href="taikhoan.html" class="btn-login">Đăng nhập</a>
+            <button class="btn-post">Đăng tin</button>
+        </div>
+    </div>
+</header>
 
-    <nav>
-        <a href="idea.html">Trang Chủ</a>
-        <a href="vatdung.html">Vật Dụng Gia Đình</a>
-        <a href="dientu.html">Thiết Bị Điện Tử</a>
-        <a href="phuongtien.html">Phương Tiện</a>
-        <a href="trangphuc.html">Trang Phục</a>
-        <a href="giohang.html">Giỏ Hàng</a>
-        <a href="taikhoan.html">Đăng Nhập / Đăng Ký</a>
-    </nav>
+<div class="page-header">
+    <h1>DANH MỤC: PHƯƠNG TIỆN</h1>
+    <p>Xe cũ chính chủ, đầy đủ giấy tờ</p>
+</div>
 
-    <main>
-        <h2>Xe cũ chính chủ, đầy đủ giấy tờ</h2>
+<main>
+    <div class="product-grid">
 
-        <div class="product-box">
-            <img src="https://via.placeholder.com/150" alt="Xe đạp địa hình">
-            <h3>Xe đạp địa hình Asama đen cam</h3>
-            <p>Mô tả: Khung sườn nhôm siêu nhẹ, xích líp hoạt động trơn tru sang số nhạy.</p>
-            <p class="price">Giá bán: 1.100.000 đ</p>
-            <a href="giohang.html"><button>Thêm vào giỏ</button></a>
+        <div class="product-card" data-name="Xe đạp địa hình Asama đen cam" data-price="1.100.000 đ" data-desc="Khung sườn nhôm siêu nhẹ, xích líp hoạt động trơn tru sang số nhạy." data-seller="Ngô Văn I" data-phone="0922 333 444" data-location="Hà Nội" data-qty="1">
+            <img src="xedop.jpg" alt="Xe đạp Asama" class="card-img">
+            <div class="card-actions">
+                <button class="card-btn btn-heart">♡</button>
+                <button class="card-btn btn-cart">🛒</button>
+            </div>
+            <div class="card-body">
+                <h3>Xe đạp địa hình Asama đen cam</h3>
+                <p class="price">₫1.100.000</p>
+            </div>
         </div>
 
-        <div class="product-box">
-            <img src="https://via.placeholder.com/150" alt="Xe máy Honda Wave">
-            <h3>Honda Wave Alpha đời 2018 chính chủ</h3>
-            <p>Mô tả: Máy móc nguyên bản chưa sửa chữa, biển số Hà Nội, sang tên nhanh chóng.</p>
-            <p class="price">Giá bán: 9.800.000 đ</p>
-            <a href="giohang.html"><button>Thêm vào giỏ</button></a>
+        <div class="product-card" data-name="Honda Wave Alpha đời 2018" data-price="9.800.000 đ" data-desc="Máy móc nguyên bản chưa sửa chữa, biển số Hà Nội, sang tên nhanh chóng." data-seller="Đỗ Văn K" data-phone="0955 666 777" data-location="Hà Nội" data-qty="1">
+            <img src="xemay.jpg" alt="Honda Wave" class="card-img">
+            <div class="card-actions">
+                <button class="card-btn btn-heart">♡</button>
+                <button class="card-btn btn-cart">🛒</button>
+            </div>
+            <div class="card-body">
+                <h3>Honda Wave Alpha đời 2018</h3>
+                <p class="price">₫9.800.000</p>
+            </div>
         </div>
-    </main>
 
-    <footer>
-        <p>&copy; 2026 Chợ Tốt Đồ Cũ</p>
-    </footer>
+        <div class="product-card" data-name="Honda Vision 2021 chính chủ" data-price="25.000.000 đ" data-desc="Xe chính chủ, đầy đủ giấy tờ sang tên, bảo dưỡng định kỳ tại hãng." data-seller="Lý Văn L" data-phone="0988 999 000" data-location="TP.HCM" data-qty="1">
+            <img src="hoda.jpg" alt="Honda Vision" class="card-img">
+            <div class="card-actions">
+                <button class="card-btn btn-heart">♡</button>
+                <button class="card-btn btn-cart">🛒</button>
+            </div>
+            <div class="card-body">
+                <h3>Honda Vision 2021 chính chủ</h3>
+                <p class="price">₫25.000.000</p>
+            </div>
+        </div>
 
+    </div>
+</main>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+    <div class="modal-box">
+        <button class="modal-close" onclick="closeModal()">✕</button>
+        <img src="" alt="" class="modal-img" id="modalImg">
+        <div class="modal-body">
+            <h2 id="modalName"></h2>
+            <p class="modal-price" id="modalPrice"></p>
+            <div class="modal-info">
+                <div class="modal-info-row"><span class="label">📝 Mô tả:</span><span class="value" id="modalDesc"></span></div>
+                <div class="modal-info-row"><span class="label">📍 Địa chỉ:</span><span class="value" id="modalLocation"></span></div>
+                <div class="modal-info-row"><span class="label">📦 Số lượng:</span><span class="value" id="modalQty"></span></div>
+                <div class="modal-info-row"><span class="label">👤 Người bán:</span><span class="value" id="modalSeller"></span></div>
+                <div class="modal-info-row"><span class="label">📞 SĐT:</span><span class="value" id="modalPhone"></span></div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-add-cart" onclick="showToast('🛒 Đã thêm vào giỏ hàng!')">Thêm vào giỏ</button>
+                <button class="btn-contact" onclick="showToast('📞 Đang gọi người bán...')">Gọi điện</button>
+                <button class="btn-message" onclick="showToast('💬 Mở khung nhắn tin...')">Nhắn tin</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="site-footer">
+    <p>© 2026 Chợ Tốt Đồ Cũ – Bản quyền thuộc về Nhóm Phát Triển</p>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const cards = document.querySelectorAll('.product-card');
+const modal = document.getElementById('modal');
+
+cards.forEach(card => {
+    card.addEventListener('click', (e) => {
+        if (e.target.closest('.card-btn')) return;
+        document.getElementById('modalImg').src = card.querySelector('.card-img').src;
+        document.getElementById('modalName').textContent = card.dataset.name;
+        document.getElementById('modalPrice').textContent = '₫' + card.dataset.price;
+        document.getElementById('modalDesc').textContent = card.dataset.desc;
+        document.getElementById('modalLocation').textContent = card.dataset.location;
+        document.getElementById('modalQty').textContent = card.dataset.qty;
+        document.getElementById('modalSeller').textContent = card.dataset.seller;
+        document.getElementById('modalPhone').textContent = card.dataset.phone;
+        modal.classList.add('show');
+    });
+});
+
+function closeModal() { modal.classList.remove('show'); }
+modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+document.querySelectorAll('.btn-heart').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        btn.classList.toggle('liked');
+        btn.textContent = btn.classList.contains('liked') ? '♥' : '♡';
+        showToast(btn.classList.contains('liked') ? '❤️ Đã thêm yêu thích!' : '💔 Đã bỏ yêu thích');
+    });
+});
+
+document.querySelectorAll('.btn-cart').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showToast('🛒 Đã thêm vào giỏ hàng!');
+    });
+});
+
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+}
+</script>
 </body>
 </html>

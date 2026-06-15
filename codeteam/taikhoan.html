@@ -3,73 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tài Khoản Hệ Thống</title>
+    <title>Tài Khoản – Chợ Tốt</title>
     <link rel="stylesheet" href="giaodien.css">
 </head>
 <body>
 
-    <header>
-        <h1>HỆ THỐNG THÀNH VIÊN</h1>
-    </header>
+<header class="header-container">
+    <div class="header-top">
+        <div class="logo-section">
+            <span class="menu-icon">☰</span>
+            <a href="idea.html" class="logo-text">chợ tốt</a>
+        </div>
+        <nav class="top-nav">
+            <a href="idea.html">Trang chủ</a>
+            <a href="phuongtien.html">Xe cộ</a>
+            <a href="dientu.html">Điện tử</a>
+            <a href="trangphuc.html">Thời trang</a>
+            <a href="vatdung.html">Đồ dùng</a>
+        </nav>
+        <div class="user-actions">
+            <span class="icon-btn">♡</span>
+            <span class="icon-btn">🔔</span>
+            <a href="taikhoan.html" class="btn-login" style="background:#000;color:#fff;">Đăng nhập</a>
+            <button class="btn-post">Đăng tin</button>
+        </div>
+    </div>
+</header>
 
-    <nav>
-        <a href="idea.html">Trang Chủ</a>
-        <a href="vatdung.html">Vật Dụng Gia Đình</a>
-        <a href="dientu.html">Thiết Bị Điện Tử</a>
-        <a href="phuongtien.html">Phương Tiện</a>
-        <a href="trangphuc.html">Trang Phục</a>
-        <a href="giohang.html">Giỏ Hàng</a>
-        <a href="taikhoan.html">Đăng Nhập / Đăng Ký</a>
-    </nav>
+<div class="page-header">
+    <h1>👤 HỆ THỐNG THÀNH VIÊN</h1>
+    <p>Đăng nhập hoặc tạo tài khoản mới</p>
+</div>
 
-    <main>
-        <section>
-            <h2 style="text-align: center;">1. Đăng Nhập Hệ Thống</h2>
-            <form action="#" method="POST">
+<main>
+    <div class="auth-container">
+
+        <!-- ĐĂNG NHẬP -->
+        <div class="auth-section">
+            <h2>Đăng Nhập</h2>
+            <form onsubmit="handleLogin(event)">
                 <div class="form-group">
-                    <label for="login-email">Tài khoản Email / Số điện thoại:</label>
-                    <input type="text" id="login-email" placeholder="Nhập email hoặc SĐT..." required>
+                    <label>Email / Số điện thoại</label>
+                    <input type="text" placeholder="Nhập email hoặc SĐT..." required>
                 </div>
                 <div class="form-group">
-                    <label for="login-pass">Mật khẩu:</label>
-                    <input type="password" id="login-pass" placeholder="Nhập mật khẩu..." required>
+                    <label>Mật khẩu</label>
+                    <input type="password" placeholder="Nhập mật khẩu..." required>
                 </div>
-                <button type="submit">Đăng Nhập</button>
+                <button type="submit" class="btn-submit">Đăng Nhập</button>
             </form>
-        </section>
+        </div>
 
-        <br><hr><br>
-
-        <section>
-            <h2 style="text-align: center;">2. Đăng Ký Tài Khoản Mới</h2>
-            <form action="#" method="POST">
+        <!-- ĐĂNG KÝ -->
+        <div class="auth-section">
+            <h2>Đăng Ký Tài Khoản Mới</h2>
+            <form onsubmit="handleRegister(event)">
                 <div class="form-group">
-                    <label for="reg-name">Họ và Tên:</label>
-                    <input type="text" id="reg-name" placeholder="Ví dụ: Nguyễn Văn A" required>
+                    <label>Họ và Tên</label>
+                    <input type="text" placeholder="Ví dụ: Nguyễn Văn A" required>
                 </div>
                 <div class="form-group">
-                    <label for="reg-email">Địa chỉ Email:</label>
-                    <input type="email" id="reg-email" placeholder="name@example.com" required>
+                    <label>Địa chỉ Email</label>
+                    <input type="email" placeholder="name@example.com" required>
                 </div>
                 <div class="form-group">
-                    <label for="reg-role">Bạn là người dùng hệ thống với vai trò nào?</label>
-                    <select id="reg-role">
+                    <label>Vai trò</label>
+                    <select>
                         <option value="buyer">Tôi muốn tìm mua đồ cũ</option>
-                        <option value="seller">Tôi muốn đăng tin thanh lý đồ cũ</option>
+                        <option value="seller">Tôi muốn đăng tin thanh lý</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="reg-pass">Mật khẩu mới:</label>
-                    <input type="password" id="reg-pass" placeholder="Tối thiểu 6 ký tự" required>
+                    <label>Mật khẩu mới</label>
+                    <input type="password" placeholder="Tối thiểu 6 ký tự" required minlength="6">
                 </div>
-                <button type="submit">Đăng Ký Tài Khoản</button>
+                <div class="form-group">
+                    <label>Xác nhận mật khẩu</label>
+                    <input type="password" placeholder="Nhập lại mật khẩu..." required minlength="6">
+                </div>
+                <button type="submit" class="btn-submit">Đăng Ký Tài Khoản</button>
             </form>
-        </section>
-    </main>
+        </div>
 
-    <footer>
-        <p>&copy; 2026 Chợ Tốt Đồ Cũ</p>
-    </footer>
+    </div>
+</main>
 
+<footer class="site-footer">
+    <p>© 2026 Chợ Tốt Đồ Cũ – Bản quyền thuộc về Nhóm Phát Triển</p>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+function handleLogin(e) {
+    e.preventDefault();
+    showToast('✅ Đăng nhập thành công! Chào mừng bạn.');
+    e.target.reset();
+}
+
+function handleRegister(e) {
+    e.preventDefault();
+    const pw = e.target.querySelectorAll('input[type="password"]');
+    if (pw[0].value !== pw[1].value) {
+        showToast('❌ Mật khẩu xác nhận không khớp!');
+        return;
+    }
+    showToast('🎉 Đăng ký thành công! Hãy đăng nhập.');
+    e.target.reset();
+}
+
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+}
+</script>
 </body>
 </html>
