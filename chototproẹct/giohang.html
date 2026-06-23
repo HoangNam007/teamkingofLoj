@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ Hàng – Chợ Tốt</title>
+    <link rel="stylesheet" href="giaodien.css">
+</head>
+<body>
+
+<header class="header-container">
+    <div class="header-top">
+        <div class="logo-section">
+            <span class="menu-icon">☰</span>
+            <a href="idea.html" class="logo-text">chợ tốt</a>
+        </div>
+        <nav class="top-nav">
+            <a href="idea.html">Trang chủ</a>
+            <a href="phuongtien.html">Xe cộ</a>
+            <a href="dientu.html">Điện tử</a>
+            <a href="trangphuc.html">Thời trang</a>
+            <a href="vatdung.html">Đồ dùng</a>
+        </nav>
+        <div class="user-actions">
+            <span class="icon-btn">♡</span>
+            <span class="icon-btn">🔔</span>
+            <a href="taikhoan.html" class="btn-login" id="authBtn">Đăng nhập</a>
+            <button class="btn-post">Đăng tin</button>
+        </div>
+    </div>
+</header>
+
+<div class="page-header">
+    <h1>🛒 GIỎ HÀNG CỦA BẠN</h1>
+    <p>Các sản phẩm bạn đang quan tâm đặt mua</p>
+</div>
+
+<main>
+    <!-- Thông báo chưa đăng nhập -->
+    <div id="notLoggedIn" style="display:none; text-align:center; padding:60px 20px;">
+        <div style="font-size:64px; margin-bottom:20px;">🔐</div>
+        <h2 style="color:#666; margin-bottom:15px;">Vui lòng đăng nhập để xem giỏ hàng</h2>
+        <p style="color:#999; margin-bottom:25px;">Giỏ hàng chỉ khả dụng khi bạn đã đăng nhập vào tài khoản</p>
+        <a href="taikhoan.html" class="btn-explore">Đăng nhập ngay</a>
+    </div>
+    
+    <!-- Nội dung giỏ hàng (chỉ hiện khi đã đăng nhập) -->
+    <div id="cartContent" style="display:none;">
+        <table class="cart-table">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Tên Sản Phẩm</th>
+                    <th>Danh Mục</th>
+                    <th>Đơn Giá</th>
+                    <th>Hành Động</th>
+                </tr>
+            </thead>
+            <tbody id="cartBody">
+                <!-- JavaScript sẽ render sản phẩm vào đây -->
+            </tbody>
+        </table>
+
+        <div class="cart-total">
+            Tổng tiền tạm tính: <span class="price" id="totalPrice">0 đ</span>
+        </div>
+
+        <div style="text-align: right; margin-top: 10px;">
+            <button class="btn-checkout" onclick="checkout()">
+                Tiến Hành Thanh Toán
+            </button>
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+</main>
+
+<footer class="site-footer">
+    <p>© 2026 Chợ Tốt Đồ Cũ – Bản quyền thuộc về Nhóm Phát Triển</p>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== KHỞI TẠO DỮ LIỆU =====
+let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
+let cart = currentUser ? (currentUser.cart || []) : [];
+
+// ===== KIỂM TRA ĐĂNG NHẬP KHI TRANG LOAD =====
+document.addEventListener('DOMContentLoaded', () => {
+    const authBtn = document.getElementById('authBtn');
+    const notLoggedIn = document.getElementById('notLoggedIn');
+    const cartContent = document.getElementById('cartContent');
+    
+    if (!currentUser) {
+        // Chưa đăng nhập → Hiện thông báo, ẩn giỏ hàng
+        notLoggedIn.style.display = 'block';
+        cartContent.style.display = 'none';
+        if (authBtn) authBtn.textContent = 'Đăng nhập';
+    } else {
+        // Đã đăng nhập → Ẩn thông báo, hiện giỏ hàng
+        notLoggedIn.style.display = 'none';
+        cartContent.style.display = 'block';
+        
+        // Cập nhật nút auth hiển thị tên user
+        if (authBtn) {
+            authBtn.textContent = '👤 ' + currentUser.name;
+            authBtn.style.background = '#ffba00';
+            authBtn.style.color = '#000';
+            authBtn.href = '#';
+            authBtn.onclick = function(e) {
+                e.preventDefault();
+                if (confirm('Bạn muốn đăng xuất?')) {
+                    localStorage.removeItem('currentUser');
+                    showToast('👋 Đã đăng xuất');
+                    setTimeout(() => window.location.reload(), 1000);
+                }
+            };
+        }
+        
+        // Render giỏ hàng
+        renderCart();
+    }
+});
+
+// ===== RENDER GIỎ HÀNG =====
+function renderCart() {
+    const tbody = document.getElementById('cartBody');
+    
+    if (cart.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:40px; color:#888;">🛒 Giỏ hàng trống. <a href="idea.html" style="color:#ff8a00;">Mua sắm ngay</a></td></tr>';
+        updateTotal();
+        return;
+    }
+    
+    let html = '';
+    cart.forEach((item, index) => {
+        html += `
+            <tr id="row-${index}">
+                <td>${index + 1}</td>
+                <td>
+                    <div style="display:flex; align-items:center; gap:12px;">
+                        <img src="${item.image}" alt="${item.name}" style="width:60px; height:60px; object-fit:cover; border-radius:8px;">
+                        <span>${item.name}</span>
+                    </div>
+                </td>
+                <td>${item.cat || 'Sản phẩm'}</td>
+                <td class="price">${item.price.toLocaleString()} đ</td>
+                <td>
+                    <button class="btn-remove" onclick="removeRow(${index})">✕ Xóa</button>
+                </td>
+            </tr>
+        `;
+    });
+    tbody.innerHTML = html;
+    updateTotal();
+}
+
+// ===== XÓA SẢN PHẨM (CÓ ANIMATION) =====
+function removeRow(index) {
+    const row = document.getElementById(`row-${index}`);
+    if (row) {
+        // Animation trước khi xóa
+        row.style.transition = 'opacity 0.3s, transform 0.3s';
+        row.style.opacity = '0';
+        row.style.transform = 'translateX(30px)';
+        
+        setTimeout(() => {
+            // Xóa khỏi mảng cart
+            cart.splice(index, 1);
+            // Lưu lại vào localStorage
+            saveCart();
+            // Render lại bảng
+            renderCart();
+            // Thông báo
+            showToast('🗑️ Đã xóa sản phẩm khỏi giỏ hàng');
+        }, 300);
+    }
+}
+
+// ===== CẬP NHẬT TỔNG TIỀN =====
+function updateTotal() {
+    let total = 0;
+    cart.forEach(item => {
+        total += item.price;
+    });
+    document.getElementById('totalPrice').textContent = total.toLocaleString('vi-VN') + ' đ';
+}
+
+// ===== LƯU GIỎ HÀNG VÀO LOCALSTORAGE =====
+function saveCart() {
+    if (currentUser) {
+        currentUser.cart = cart;
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        
+        // Cập nhật trong danh sách users
+        const users = JSON.parse(localStorage.getItem('users')) || [];
+        const userIndex = users.findIndex(u => u.email === currentUser.email);
+        if (userIndex > -1) {
+            users[userIndex].cart = cart;
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+    }
+}
+
+// ===== THANH TOÁN =====
+function checkout() {
+    if (cart.length === 0) {
+        showToast('⚠️ Giỏ hàng trống!');
+        return;
+    }
+    
+    const total = cart.reduce((sum, item) => sum + item.price, 0);
+    const message = `🛒 THANH TOÁN\n\n📦 Sản phẩm (${cart.length}):\n${cart.map(p => '• ' + p.name).join('\n')}\n\n💰 Tổng tiền: ${total.toLocaleString()} đ\n\n⚠️ Tính năng thanh toán đang được phát triển!`;
+    
+    alert(message);
+    showToast('⏳ Tính năng thanh toán đang phát triển...');
+}
+
+// ===== TOAST =====
+function showToast(msg) {
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
+}
+</script>
+
+</body>
+</html>

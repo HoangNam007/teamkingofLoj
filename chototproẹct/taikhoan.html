@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tài Khoản – Chợ Tốt</title>
+    <link rel="stylesheet" href="giaodien.css">
+</head>
+<body>
+
+<header class="header-container">
+    <div class="header-top">
+        <div class="logo-section">
+            <span class="menu-icon">☰</span>
+            <a href="idea.html" class="logo-text">chợ tốt</a>
+        </div>
+        <nav class="top-nav">
+            <a href="idea.html">Trang chủ</a>
+            <a href="phuongtien.html">Xe cộ</a>
+            <a href="dientu.html">Điện tử</a>
+            <a href="trangphuc.html">Thời trang</a>
+            <a href="vatdung.html">Đồ dùng</a>
+        </nav>
+        <div class="user-actions">
+            <span class="icon-btn">♡</span>
+            <span class="icon-btn">🔔</span>
+            <a href="taikhoan.html" class="btn-login" id="authBtn" style="background:#000;color:#fff;">Đăng nhập</a>
+            <button class="btn-post">Đăng tin</button>
+        </div>
+    </div>
+</header>
+
+<div class="page-header">
+    <h1>👤 HỆ THỐNG THÀNH VIÊN</h1>
+    <p>Đăng nhập hoặc tạo tài khoản mới</p>
+</div>
+
+<main>
+    <div class="auth-container">
+
+        <!-- ĐĂNG NHẬP -->
+        <div class="auth-section">
+            <h2>🔐 Đăng Nhập</h2>
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Email / Số điện thoại</label>
+                    <input type="text" name="email" placeholder="Nhập email hoặc SĐT..." required>
+                </div>
+                <div class="form-group">
+                    <label>Mật khẩu</label>
+                    <input type="password" name="password" placeholder="Nhập mật khẩu..." required>
+                </div>
+                <button type="submit" class="btn-submit">Đăng Nhập</button>
+                <p style="text-align:center;margin-top:15px;font-size:13px;color:#666;">
+                    Chưa có tài khoản? <a href="#" onclick="switchToRegister();return false;" style="color:#ff8a00;font-weight:600;">Đăng ký ngay</a>
+                </p>
+            </form>
+        </div>
+
+        <!-- ĐĂNG KÝ -->
+        <div class="auth-section" id="registerSection" style="display:none;">
+            <h2>📝 Đăng Ký Tài Khoản Mới</h2>
+            <form id="registerForm" onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label>Họ và Tên</label>
+                    <input type="text" name="name" placeholder="Ví dụ: Nguyễn Văn A" required>
+                </div>
+                <div class="form-group">
+                    <label>Địa chỉ Email</label>
+                    <input type="email" name="email" placeholder="name@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Vai trò</label>
+                    <select name="role">
+                        <option value="buyer">🛒 Tôi muốn tìm mua đồ cũ</option>
+                        <option value="seller">📦 Tôi muốn đăng tin thanh lý</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Mật khẩu mới</label>
+                    <input type="password" name="password" placeholder="Tối thiểu 6 ký tự" required minlength="6">
+                </div>
+                <div class="form-group">
+                    <label>Xác nhận mật khẩu</label>
+                    <input type="password" name="confirmPassword" placeholder="Nhập lại mật khẩu..." required minlength="6">
+                </div>
+                <button type="submit" class="btn-submit">Đăng Ký Tài Khoản</button>
+                <p style="text-align:center;margin-top:15px;font-size:13px;color:#666;">
+                    Đã có tài khoản? <a href="#" onclick="switchToLogin();return false;" style="color:#ff8a00;font-weight:600;">Đăng nhập ngay</a>
+                </p>
+            </form>
+        </div>
+
+    </div>
+</main>
+
+<footer class="site-footer">
+    <p>© 2026 Chợ Tốt Đồ Cũ – Bản quyền thuộc về Nhóm Phát Triển</p>
+</footer>
+
+<div class="toast" id="toast"></div>
+<script>
+let users = JSON.parse(localStorage.getItem('users')) || [];
+let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
+
+document.addEventListener('DOMContentLoaded', () => {
+    const authBtn = document.getElementById('authBtn');
+    
+    if (currentUser && authBtn) {
+        authBtn.textContent = '👤 ' + currentUser.name;
+        authBtn.style.background = '#ffba00';
+        authBtn.style.color = '#000';
+        authBtn.href = '#';
+        authBtn.onclick = (e) => {
+            e.preventDefault();
+            if (confirm('Bạn muốn đăng xuất?')) {
+                localStorage.removeItem('currentUser');
+                showToast('👋 Đã đăng xuất');
+                setTimeout(() => window.location.reload(), 1000);
+            }
+        };
+    }
+    
+    const la_trang_auth = document.getElementById('registerSection') || document.getElementById('loginForm');
+    if (currentUser && la_trang_auth) {
+        setTimeout(() => {
+            window.location.href = 'idea.html';
+        }, 800);
+    }
+});
+
+function switchToRegister() {
+    const tieu_de = document.querySelector('.auth-section h2');
+    const vung_dang_ky = document.getElementById('registerSection');
+    const form_dang_nhap = document.getElementById('loginForm');
+
+    if (tieu_de) tieu_de.textContent = '📝 Đăng Ký Tài Khoản Mới';
+    if (vung_dang_ky) vung_dang_ky.style.display = 'block';
+    if (form_dang_nhap && form_dang_nhap.parentElement) {
+        form_dang_nhap.parentElement.style.display = 'none';
+    }
+}
+
+function switchToLogin() {
+    const tieu_de = document.querySelector('.auth-section h2');
+    const vung_dang_ky = document.getElementById('registerSection');
+    const form_dang_nhap = document.getElementById('loginForm');
+
+    if (tieu_de) tieu_de.textContent = '🔐 Đăng Nhập';
+    if (vung_dang_ky) vung_dang_ky.style.display = 'none';
+    if (form_dang_nhap && form_dang_nhap.parentElement) {
+        form_dang_nhap.parentElement.style.display = 'block';
+    }
+}
+
+function handleRegister(e) {
+    e.preventDefault();
+    const form = e.target;
+    
+    const name = form.querySelector('[name="name"]')?.value || '';
+    const email = form.querySelector('[name="email"]')?.value.trim() || '';
+    const password = form.querySelector('[name="password"]')?.value || '';
+    const confirmPassword = form.querySelector('[name="confirmPassword"]')?.value || '';
+    const role = form.querySelector('[name="role"]')?.value || 'user';
+    
+    if (password !== confirmPassword) {
+        showToast('❌ Mật khẩu xác nhận không khớp!');
+        return;
+    }
+    
+    if (password.length < 6) {
+        showToast('❌ Mật khẩu tối thiểu 6 ký tự!');
+        return;
+    }
+    
+    const email_ton_tai = users.some(u => u.email.toLowerCase() === email.toLowerCase());
+    if (email_ton_tai) {
+        showToast('❌ Email đã tồn tại! Hãy đăng nhập.');
+        setTimeout(switchToLogin, 1500);
+        return;
+    }
+    
+    const user_moi = {
+        id: Date.now(),
+        name: name,
+        email: email,
+        password: password, 
+        role: role,
+        createdAt: new Date().toISOString()
+    };
+    
+    users.push(user_moi);
+    localStorage.setItem('users', JSON.stringify(users));
+    
+    showToast('✅ Đăng ký thành công! Hãy đăng nhập.');
+    form.reset();
+    setTimeout(switchToLogin, 1500);
+}
+
+function handleLogin(e) {
+    e.preventDefault();
+    const form = e.target;
+    const email = form.querySelector('[name="email"]')?.value.trim() || '';
+    const password = form.querySelector('[name="password"]')?.value || '';
+    
+    // Tìm kiếm thông tin khớp tài khoản
+    const tim_thay_user = users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
+    
+    if (tim_thay_user) {
+        // Cập nhật biến bộ nhớ tạm và lưu vào localStorage
+        currentUser = { name: tim_thay_user.name, email: tim_thay_user.email, role: tim_thay_user.role };
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        
+        showToast(`✅ Chào mừng, ${tim_thay_user.name}!`);
+        form.reset();
+        
+        // Đổi trạng thái hiển thị nút auth ngay trên thanh điều hướng
+        const authBtn = document.getElementById('authBtn');
+        if (authBtn) {
+            authBtn.textContent = '👤 ' + tim_thay_user.name;
+            authBtn.style.background = '#ffba00';
+            authBtn.style.color = '#000';
+        }
+        
+        // Điều hướng mượt về trang chủ sau 1 giây
+        setTimeout(() => window.location.href = 'idea.html', 1000);
+    } else {
+        showToast('❌ Email hoặc mật khẩu sai!');
+    }
+}
+
+// ===== HIỂN THỊ THÔNG BÁO CHUNG (TOAST) =====
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    if (!t) return; // Bảo vệ mã kịch bản tránh bị sập
+    
+    t.textContent = msg;
+    t.classList.add('show');
+    
+    if (window.authToastTimer) clearTimeout(window.authToastTimer);
+    window.authToastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+</script>
+</body>
+</html>
