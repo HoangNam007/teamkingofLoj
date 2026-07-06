@@ -1,229 +1,231 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Giỏ Hàng – Chợ Tốt</title>
-    <link rel="stylesheet" href="giaodien.css">
-</head>
-<body>
+<!DOCTYPE html> 
 
-<header class="header-container">
-    <div class="header-top">
-        <div class="logo-section">
-            <span class="menu-icon">☰</span>
-            <a href="idea.html" class="logo-text">chợ tốt</a>
-        </div>
-        <nav class="top-nav">
-            <a href="idea.html">Trang chủ</a>
-            <a href="phuongtien.html">Xe cộ</a>
-            <a href="dientu.html">Điện tử</a>
-            <a href="trangphuc.html">Thời trang</a>
-            <a href="vatdung.html">Đồ dùng</a>
-        </nav>
-        <div class="user-actions">
-            <span class="icon-btn">♡</span>
-            <span class="icon-btn">🔔</span>
-            <a href="taikhoan.html" class="btn-login" id="authBtn">Đăng nhập</a>
-            <button class="btn-post">Đăng tin</button>
-        </div>
-    </div>
-</header>
+<html lang="vi"> 
 
-<div class="page-header">
-    <h1>🛒 GIỎ HÀNG CỦA BẠN</h1>
-    <p>Các sản phẩm bạn đang quan tâm đặt mua</p>
-</div>
+<head> 
 
-<main>
-    <!-- Thông báo chưa đăng nhập -->
-    <div id="notLoggedIn" style="display:none; text-align:center; padding:60px 20px;">
-        <div style="font-size:64px; margin-bottom:20px;">🔐</div>
-        <h2 style="color:#666; margin-bottom:15px;">Vui lòng đăng nhập để xem giỏ hàng</h2>
-        <p style="color:#999; margin-bottom:25px;">Giỏ hàng chỉ khả dụng khi bạn đã đăng nhập vào tài khoản</p>
-        <a href="taikhoan.html" class="btn-explore">Đăng nhập ngay</a>
-    </div>
-    
-    <!-- Nội dung giỏ hàng (chỉ hiện khi đã đăng nhập) -->
-    <div id="cartContent" style="display:none;">
-        <table class="cart-table">
-            <thead>
-                <tr>
-                    <th>STT</th>
-                    <th>Tên Sản Phẩm</th>
-                    <th>Danh Mục</th>
-                    <th>Đơn Giá</th>
-                    <th>Hành Động</th>
-                </tr>
-            </thead>
-            <tbody id="cartBody">
-                <!-- JavaScript sẽ render sản phẩm vào đây -->
-            </tbody>
-        </table>
+    <meta charset="UTF-8"> 
 
-        <div class="cart-total">
-            Tổng tiền tạm tính: <span class="price" id="totalPrice">0 đ</span>
-        </div>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 
-        <div style="text-align: right; margin-top: 10px;">
-            <button class="btn-checkout" onclick="checkout()">
-                Tiến Hành Thanh Toán
-            </button>
-        </div>
-        <div style="clear: both;"></div>
-    </div>
-</main>
+    <title>Giỏ Hàng – Chợ Tốt</title> 
 
-<footer class="site-footer">
-    <p>© 2026 Chợ Tốt Đồ Cũ – Bản quyền thuộc về Nhóm Phát Triển</p>
-</footer>
+    <link rel="stylesheet" href="giaodien.css"> 
 
-<div class="toast" id="toast"></div>
+</head> 
 
-<script>
-// ===== KHỞI TẠO DỮ LIỆU =====
-let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
-let cart = currentUser ? (currentUser.cart || []) : [];
+<body> 
 
-// ===== KIỂM TRA ĐĂNG NHẬP KHI TRANG LOAD =====
-document.addEventListener('DOMContentLoaded', () => {
-    const authBtn = document.getElementById('authBtn');
-    const notLoggedIn = document.getElementById('notLoggedIn');
-    const cartContent = document.getElementById('cartContent');
-    
-    if (!currentUser) {
-        // Chưa đăng nhập → Hiện thông báo, ẩn giỏ hàng
-        notLoggedIn.style.display = 'block';
-        cartContent.style.display = 'none';
-        if (authBtn) authBtn.textContent = 'Đăng nhập';
-    } else {
-        // Đã đăng nhập → Ẩn thông báo, hiện giỏ hàng
-        notLoggedIn.style.display = 'none';
-        cartContent.style.display = 'block';
-        
-        // Cập nhật nút auth hiển thị tên user
-        if (authBtn) {
-            authBtn.textContent = '👤 ' + currentUser.name;
-            authBtn.style.background = '#ffba00';
-            authBtn.style.color = '#000';
-            authBtn.href = '#';
-            authBtn.onclick = function(e) {
-                e.preventDefault();
-                if (confirm('Bạn muốn đăng xuất?')) {
-                    localStorage.removeItem('currentUser');
-                    showToast('👋 Đã đăng xuất');
-                    setTimeout(() => window.location.reload(), 1000);
-                }
-            };
-        }
-        
-        // Render giỏ hàng
-        renderCart();
-    }
-});
+ 
 
-// ===== RENDER GIỎ HÀNG =====
-function renderCart() {
-    const tbody = document.getElementById('cartBody');
-    
-    if (cart.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:40px; color:#888;">🛒 Giỏ hàng trống. <a href="idea.html" style="color:#ff8a00;">Mua sắm ngay</a></td></tr>';
-        updateTotal();
-        return;
-    }
-    
-    let html = '';
-    cart.forEach((item, index) => {
-        html += `
-            <tr id="row-${index}">
-                <td>${index + 1}</td>
-                <td>
-                    <div style="display:flex; align-items:center; gap:12px;">
-                        <img src="${item.image}" alt="${item.name}" style="width:60px; height:60px; object-fit:cover; border-radius:8px;">
-                        <span>${item.name}</span>
-                    </div>
-                </td>
-                <td>${item.cat || 'Sản phẩm'}</td>
-                <td class="price">${item.price.toLocaleString()} đ</td>
-                <td>
-                    <button class="btn-remove" onclick="removeRow(${index})">✕ Xóa</button>
-                </td>
-            </tr>
-        `;
-    });
-    tbody.innerHTML = html;
-    updateTotal();
-}
+<!-- ===== HEADER ===== --> 
 
-// ===== XÓA SẢN PHẨM (CÓ ANIMATION) =====
-function removeRow(index) {
-    const row = document.getElementById(`row-${index}`);
-    if (row) {
-        // Animation trước khi xóa
-        row.style.transition = 'opacity 0.3s, transform 0.3s';
-        row.style.opacity = '0';
-        row.style.transform = 'translateX(30px)';
-        
-        setTimeout(() => {
-            // Xóa khỏi mảng cart
-            cart.splice(index, 1);
-            // Lưu lại vào localStorage
-            saveCart();
-            // Render lại bảng
-            renderCart();
-            // Thông báo
-            showToast('🗑️ Đã xóa sản phẩm khỏi giỏ hàng');
-        }, 300);
-    }
-}
+<header class="header-container"> 
 
-// ===== CẬP NHẬT TỔNG TIỀN =====
-function updateTotal() {
-    let total = 0;
-    cart.forEach(item => {
-        total += item.price;
-    });
-    document.getElementById('totalPrice').textContent = total.toLocaleString('vi-VN') + ' đ';
-}
+    <div class="header-top"> 
 
-// ===== LƯU GIỎ HÀNG VÀO LOCALSTORAGE =====
-function saveCart() {
-    if (currentUser) {
-        currentUser.cart = cart;
-        localStorage.setItem('currentUser', JSON.stringify(currentUser));
-        
-        // Cập nhật trong danh sách users
-        const users = JSON.parse(localStorage.getItem('users')) || [];
-        const userIndex = users.findIndex(u => u.email === currentUser.email);
-        if (userIndex > -1) {
-            users[userIndex].cart = cart;
-            localStorage.setItem('users', JSON.stringify(users));
-        }
-    }
-}
+        <div class="logo-section"> 
 
-// ===== THANH TOÁN =====
-function checkout() {
-    if (cart.length === 0) {
-        showToast('⚠️ Giỏ hàng trống!');
-        return;
-    }
-    
-    const total = cart.reduce((sum, item) => sum + item.price, 0);
-    const message = `🛒 THANH TOÁN\n\n📦 Sản phẩm (${cart.length}):\n${cart.map(p => '• ' + p.name).join('\n')}\n\n💰 Tổng tiền: ${total.toLocaleString()} đ\n\n⚠️ Tính năng thanh toán đang được phát triển!`;
-    
-    alert(message);
-    showToast('⏳ Tính năng thanh toán đang phát triển...');
-}
+            <span class="menu-icon">☰</span> 
 
-// ===== TOAST =====
-function showToast(msg) {
-    const toast = document.getElementById('toast');
-    toast.textContent = msg;
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 2500);
-}
-</script>
+            <a href="idea.html" class="logo-text">chợ tốt</a> 
 
-</body>
-</html>
+        </div> 
+
+ 
+
+        <nav class="top-nav"> 
+
+            <a href="idea.html">Trang chủ</a> 
+
+            <a href="phuongtien.html">Xe cộ</a> 
+
+            <a href="dientu.html">Điện tử</a> 
+
+            <a href="trangphuc.html">Thời trang</a> 
+
+            <a href="vatdung.html">Đồ dùng</a> 
+
+        </nav> 
+
+        <div class="user-actions"> 
+
+    <!-- Nút Thông báo --> 
+
+          <a href="#" class="icon-btn-circle" id="notificationBtn" title="Thông báo"> 
+
+        🔔 
+
+             <span class="badge" id="notiCount" style="display:none">0</span> 
+
+          </a> 
+
+ 
+
+    <!-- Giỏ hàng --> 
+
+         <a href="giohang.html" class="icon-btn-circle" title="Giỏ hàng"> 
+
+        🛒 
+
+          <span class="badge" id="cartCount" style="display:none">0</span> 
+
+         </a> 
+
+ 
+
+            <a href="taikhoan.html" class="btn-login" id="authBtn">Đăng nhập</a> 
+
+            <a href="dangtin.html" class="btn-post">Đăng tin</a> 
+
+        </div> 
+
+    </div> 
+
+</header> 
+
+ 
+
+<!-- ===== PAGE HEADER ===== --> 
+
+<div class="page-header"> 
+
+    <h1>🛒 GIỎ HÀNG CỦA BẠN</h1> 
+
+    <p>Các sản phẩm bạn đang quan tâm đặt mua</p> 
+
+</div> 
+
+ 
+
+<!-- ===== MAIN ===== --> 
+
+<main> 
+
+    <!-- Thông báo chưa đăng nhập --> 
+
+    <div id="notLoggedIn" style="display:none; text-align:center; padding:60px 20px;"> 
+
+        <div style="font-size:64px; margin-bottom:20px;">🔐</div> 
+
+        <h2 style="color:#666; margin-bottom:15px;">Vui lòng đăng nhập để xem giỏ hàng</h2> 
+
+        <p style="color:#999; margin-bottom:25px;">Giỏ hàng chỉ khả dụng khi bạn đã đăng nhập vào tài khoản</p> 
+
+        <a href="taikhoan.html" class="btn-explore">Đăng nhập ngay</a> 
+
+    </div> 
+
+ 
+
+    <!-- Nội dung giỏ hàng --> 
+
+    <div id="cartContent" style="display:none;"> 
+
+        <table class="cart-table"> 
+
+            <thead> 
+
+                <tr> 
+
+                    <th>STT</th> 
+
+                    <th>Tên Sản Phẩm</th> 
+
+                    <th>Danh Mục</th> 
+
+                    <th>Đơn Giá</th> 
+
+                    <th>Hành Động</th> 
+
+                </tr> 
+
+            </thead> 
+
+ 
+
+            <tbody id="cartBody"> 
+
+                <!-- JavaScript sẽ render sản phẩm vào đây --> 
+
+            </tbody> 
+
+        </table> 
+
+ 
+
+        <div class="cart-total"> 
+
+            Tổng tiền tạm tính: <span class="price" id="totalPrice">0 đ</span> 
+
+        </div> 
+
+ 
+
+        <div style="text-align: right; margin-top: 10px;"> 
+
+            <button class="btn-checkout"> 
+
+                Tiến Hành Thanh Toán 
+
+            </button> 
+
+        </div> 
+
+ 
+
+        <div style="clear: both;"></div> 
+
+    </div> 
+
+</main> 
+
+ 
+
+<!-- ===== FOOTER ===== --> 
+
+<footer class="site-footer"> 
+
+    <div style="margin-bottom:10px;"> 
+
+        <a href="#">Về chúng tôi</a> 
+
+        <a href="#">Điều khoản</a> 
+
+        <a href="#">Bảo mật</a> 
+
+        <a href="#">Liên hệ</a> 
+
+    </div> 
+
+    <p>© 2026 Chợ Tốt Đồ Cũ – đồ của người là đồ của mình, đồ của mình chính là của mình</p> 
+
+</footer> 
+
+ 
+
+<!-- TOAST --> 
+
+<div class="toast" id="toast"></div> 
+
+ 
+
+<!-- ===== NHÚNG 5 FILE JS ===== --> 
+
+<script src="codejs/luutru.js"></script> 
+
+<script src="codejs/giaodien.js"></script> 
+
+<script src="codejs/taikhoan.js"></script> 
+
+<script src="codejs/giohang.js"></script> 
+
+<script src="codejs/trang.js"></script> 
+
+ 
+
+</body> 
+
+</html> 
+
+ 
