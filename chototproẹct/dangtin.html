@@ -1,1 +1,911 @@
+<!DOCTYPE html> 
 
+<html lang="vi"> 
+
+<head> 
+
+    <meta charset="UTF-8"> 
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+
+    <title>Đăng Tin – Chợ Tốt</title> 
+
+    <link rel="stylesheet" href="giaodien.css"> 
+
+</head> 
+
+<body> 
+
+ 
+
+<!-- ===== HEADER ===== --> 
+
+<header class="header-container"> 
+
+    <div class="header-top"> 
+
+        <div class="logo-section"> 
+
+            <span class="menu-icon">☰</span> 
+
+            <a href="idea.html" class="logo-text">chợ tốt</a> 
+
+        </div> 
+
+ 
+
+        <nav class="top-nav"> 
+
+            <a href="idea.html">Trang chủ</a> 
+
+        </nav> 
+
+ 
+
+        <div class="user-actions"> 
+
+            <!-- Nút Thông báo --> 
+
+            <a href="thongbao.html" class="icon-btn-circle" id="notificationBtn" title="Thông báo"> 
+
+                🔔 
+
+                <span class="badge" id="notiCount" style="display:none">0</span> 
+
+            </a> 
+
+ 
+
+            <!-- Giỏ hàng --> 
+
+            <a href="giohang.html" class="icon-btn-circle" title="Giỏ hàng"> 
+
+                🛒 
+
+                <span class="badge" id="cartCount" style="display:none">0</span> 
+
+            </a> 
+
+ 
+
+            <a href="taikhoan.html" class="btn-login" id="authBtn">Đăng nhập</a> 
+
+            <a href="dangtin.html" class="btn-post">Đăng tin</a> 
+
+        </div> 
+
+    </div> 
+
+</header> 
+
+ 
+
+<!-- ===== PAGE HEADER ===== --> 
+
+<div class="page-header"> 
+
+    <h1>📝 QUẢN LÝ TIN ĐĂNG</h1> 
+
+    <p>Đăng sản phẩm mới hoặc quản lý các tin bạn đã đăng</p> 
+
+</div> 
+
+ 
+
+<!-- ===== MAIN ===== --> 
+
+<main> 
+
+    <!-- Chưa đăng nhập --> 
+
+    <div id="notLoggedIn" style="display:none; text-align:center; padding:60px 20px;"> 
+
+        <div style="font-size:64px; margin-bottom:20px;">🔐</div> 
+
+        <h2 style="color:#666; margin-bottom:15px;">Vui lòng đăng nhập để đăng tin</h2> 
+
+        <p style="color:#999; margin-bottom:25px;"> 
+
+            Chỉ thành viên đã đăng nhập mới có thể đăng bán sản phẩm. 
+
+        </p> 
+
+        <a href="taikhoan.html" class="btn-explore">Đăng nhập ngay</a> 
+
+    </div> 
+
+ 
+
+    <!-- Đã đăng nhập --> 
+
+    <div id="postContent" style="display:none;"> 
+
+ 
+
+        <!-- ===== TAB CHUYỂN ĐỔI ===== --> 
+
+        <div class="post-tabs" id="postTabs"> 
+
+            <button type="button" class="tab-btn active" id="tabDangTin" data-tab="dangtin"> 
+
+                📝 Đăng tin mới 
+
+            </button> 
+
+            <button type="button" class="tab-btn" id="tabTinCuaToi" data-tab="tincuatoi"> 
+
+                📋 Tin của tôi <span id="myPostCount" class="tab-count"></span> 
+
+            </button> 
+
+        </div> 
+
+ 
+
+        <!-- ===== TAB 1: FORM ĐĂNG TIN ===== --> 
+
+        <div id="tabContentDangTin"> 
+
+            <div class="auth-container"> 
+
+                <div class="auth-section"> 
+
+                    <h2>Thông tin sản phẩm</h2> 
+
+ 
+
+                    <form id="postForm"> 
+
+                        <div class="form-group"> 
+
+                            <label>Tên sản phẩm *</label> 
+
+                            <input type="text" name="name" placeholder="Ví dụ: iPhone 13 Pro Max 128GB" required> 
+
+                        </div> 
+
+ 
+
+                        <div class="form-group"> 
+
+                            <label>Danh mục *</label> 
+
+                            <select name="cat" required> 
+
+                                <option value="dientu">Thiết bị điện tử</option> 
+
+                                <option value="phuongtien">Phương tiện</option> 
+
+                                <option value="trangphuc">Thời trang & Phụ kiện</option> 
+
+                                <option value="vatdung">Vật dụng gia đình</option> 
+
+                            </select> 
+
+                        </div> 
+
+ 
+
+                        <div class="form-group"> 
+
+                            <label>Giá bán (VNĐ) *</label> 
+
+                            <input type="number" name="price" placeholder="Ví dụ: 2500000" required min="1"> 
+
+                        </div> 
+
+ 
+
+                        <div class="form-group"> 
+
+                            <label>Số lượng</label> 
+
+                            <input type="number" name="qty" placeholder="1" value="1" min="1"> 
+
+                        </div> 
+
+ 
+
+                        <div class="form-group"> 
+
+                            <label>Mô tả sản phẩm</label> 
+
+                            <textarea name="desc" rows="4" placeholder="Mô tả tình trạng sản phẩm, phụ kiện đi kèm, lý do bán..."></textarea> 
+
+                        </div> 
+
+ 
+
+                        <div class="form-group"> 
+
+                            <label>Link hình ảnh sản phẩm</label> 
+
+                            <input type="url" name="image" id="postImageInput" placeholder="https://example.com/hinh-anh.jpg"> 
+
+ 
+
+                            <p style="font-size:12px; color:#777; margin-top:6px;"> 
+
+                                Nếu để trống, hệ thống sẽ dùng ảnh mặc định. 
+
+                            </p> 
+
+ 
+
+                            <div style="margin-top:12px;"> 
+
+                                <img id="postImagePreview" 
+
+                                     src="https://via.placeholder.com/400x300?text=Cho+Tot" 
+
+                                     alt="Ảnh xem trước" 
+
+                                     style="width:100%; max-height:220px; object-fit:cover; border-radius:10px; border:1px solid #eee; background:#fafafa;"> 
+
+                            </div> 
+
+                        </div> 
+
+ 
+
+                        <div class="form-group"> 
+
+                            <label>Người bán *</label> 
+
+                            <input type="text" name="seller" placeholder="Tên người bán" required> 
+
+                        </div> 
+
+ 
+
+                        <div class="form-group"> 
+
+                            <label>Số điện thoại liên hệ *</label> 
+
+                            <input type="text" name="phone" placeholder="Ví dụ: 0912 345 678" required> 
+
+                        </div> 
+
+ 
+
+                        <div class="form-group"> 
+
+                            <label>Facebook người bán</label> 
+
+                            <input type="url" name="facebook" placeholder="Ví dụ: https://facebook.com/tennguoidung"> 
+
+                            <p style="font-size:12px; color:#777; margin-top:6px;"> 
+
+                                Không bắt buộc. Nếu có, người mua có thể mở Facebook người bán trong chi tiết sản phẩm. 
+
+                            </p> 
+
+                        </div> 
+
+ 
+
+                        <div class="form-group"> 
+
+                            <label>Tỉnh/Thành phố *</label> 
+
+                            <select name="location" id="postLocationSelect" required> 
+
+                                <option value="">-- Chọn tỉnh/thành phố --</option> 
+
+ 
+
+                                <optgroup label="Miền Bắc"> 
+
+                                    <option value="Hà Nội">Hà Nội</option> 
+
+                                    <option value="Hải Phòng">Hải Phòng</option> 
+
+                                    <option value="Quảng Ninh">Quảng Ninh</option> 
+
+                                    <option value="Bắc Ninh">Bắc Ninh</option> 
+
+                                    <option value="Hải Dương">Hải Dương</option> 
+
+                                    <option value="Hưng Yên">Hưng Yên</option> 
+
+                                    <option value="Thái Bình">Thái Bình</option> 
+
+                                    <option value="Nam Định">Nam Định</option> 
+
+                                    <option value="Ninh Bình">Ninh Bình</option> 
+
+                                    <option value="Hà Nam">Hà Nam</option> 
+
+                                    <option value="Vĩnh Phúc">Vĩnh Phúc</option> 
+
+                                    <option value="Phú Thọ">Phú Thọ</option> 
+
+                                    <option value="Thái Nguyên">Thái Nguyên</option> 
+
+                                    <option value="Bắc Giang">Bắc Giang</option> 
+
+                                    <option value="Lạng Sơn">Lạng Sơn</option> 
+
+                                    <option value="Cao Bằng">Cao Bằng</option> 
+
+                                    <option value="Bắc Kạn">Bắc Kạn</option> 
+
+                                    <option value="Tuyên Quang">Tuyên Quang</option> 
+
+                                    <option value="Hà Giang">Hà Giang</option> 
+
+                                    <option value="Yên Bái">Yên Bái</option> 
+
+                                    <option value="Lào Cai">Lào Cai</option> 
+
+                                    <option value="Lai Châu">Lai Châu</option> 
+
+                                    <option value="Điện Biên">Điện Biên</option> 
+
+                                    <option value="Sơn La">Sơn La</option> 
+
+                                    <option value="Hòa Bình">Hòa Bình</option> 
+
+                                </optgroup> 
+
+ 
+
+                                <optgroup label="Miền Trung"> 
+
+                                    <option value="Thanh Hóa">Thanh Hóa</option> 
+
+                                    <option value="Nghệ An">Nghệ An</option> 
+
+                                    <option value="Hà Tĩnh">Hà Tĩnh</option> 
+
+                                    <option value="Quảng Bình">Quảng Bình</option> 
+
+                                    <option value="Quảng Trị">Quảng Trị</option> 
+
+                                    <option value="Thừa Thiên Huế">Thừa Thiên Huế</option> 
+
+                                    <option value="Đà Nẵng">Đà Nẵng</option> 
+
+                                    <option value="Quảng Nam">Quảng Nam</option> 
+
+                                    <option value="Quảng Ngãi">Quảng Ngãi</option> 
+
+                                    <option value="Bình Định">Bình Định</option> 
+
+                                    <option value="Phú Yên">Phú Yên</option> 
+
+                                    <option value="Khánh Hòa">Khánh Hòa</option> 
+
+                                    <option value="Ninh Thuận">Ninh Thuận</option> 
+
+                                    <option value="Bình Thuận">Bình Thuận</option> 
+
+                                    <option value="Kon Tum">Kon Tum</option> 
+
+                                    <option value="Gia Lai">Gia Lai</option> 
+
+                                    <option value="Đắk Lắk">Đắk Lắk</option> 
+
+                                    <option value="Đắk Nông">Đắk Nông</option> 
+
+                                    <option value="Lâm Đồng">Lâm Đồng</option> 
+
+                                </optgroup> 
+
+ 
+
+                                <optgroup label="Miền Nam"> 
+
+                                    <option value="TP.HCM">TP.HCM</option> 
+
+                                    <option value="Bình Dương">Bình Dương</option> 
+
+                                    <option value="Đồng Nai">Đồng Nai</option> 
+
+                                    <option value="Bà Rịa - Vũng Tàu">Bà Rịa - Vũng Tàu</option> 
+
+                                    <option value="Tây Ninh">Tây Ninh</option> 
+
+                                    <option value="Bình Phước">Bình Phước</option> 
+
+                                    <option value="Long An">Long An</option> 
+
+                                    <option value="Tiền Giang">Tiền Giang</option> 
+
+                                    <option value="Bến Tre">Bến Tre</option> 
+
+                                    <option value="Trà Vinh">Trà Vinh</option> 
+
+                                    <option value="Vĩnh Long">Vĩnh Long</option> 
+
+                                    <option value="Đồng Tháp">Đồng Tháp</option> 
+
+                                    <option value="An Giang">An Giang</option> 
+
+                                    <option value="Kiên Giang">Kiên Giang</option> 
+
+                                    <option value="Cần Thơ">Cần Thơ</option> 
+
+                                    <option value="Hậu Giang">Hậu Giang</option> 
+
+                                    <option value="Sóc Trăng">Sóc Trăng</option> 
+
+                                    <option value="Bạc Liêu">Bạc Liêu</option> 
+
+                                    <option value="Cà Mau">Cà Mau</option> 
+
+                                </optgroup> 
+
+                            </select> 
+
+ 
+
+                            <p id="postRegionPreview" style="font-size:12px; color:#777; margin-top:6px;"> 
+
+                                Hệ thống sẽ tự xác định miền sau khi chọn tỉnh/thành phố. 
+
+                            </p> 
+
+                        </div> 
+
+ 
+
+                        <button type="submit" class="btn-submit">Đăng Tin Ngay</button> 
+
+                    </form> 
+
+                </div> 
+
+            </div> 
+
+        </div> 
+
+ 
+
+        <!-- ===== TAB 2: TIN CỦA TÔI ===== --> 
+
+        <div id="tabContentTinCuaToi" style="display:none;"> 
+
+            <div id="myPostsContainer" class="my-posts-container"> 
+
+                <!-- JavaScript sẽ render danh sách tin đã đăng vào đây --> 
+
+            </div> 
+
+        </div> 
+
+ 
+
+    </div> 
+
+</main> 
+
+ 
+
+<!-- ===== FOOTER ===== --> 
+
+<footer class="site-footer"> 
+
+    <div style="margin-bottom:10px;"> 
+
+        <a href="#">Về chúng tôi</a> 
+
+        <a href="#">Điều khoản</a> 
+
+        <a href="#">Bảo mật</a> 
+
+        <a href="#">Liên hệ</a> 
+
+    </div> 
+
+    <p>© 2026 Chợ Tốt Đồ Cũ – đồ của người là đồ của mình, đồ của mình chính là của mình</p> 
+
+</footer> 
+
+ 
+
+<!-- TOAST --> 
+
+<div class="toast" id="toast"></div> 
+
+ 
+
+<!-- ===== NHÚNG JS THEO ĐÚNG THƯ MỤC codejs ===== --> 
+
+<script src="codejs/luutru.js"></script> 
+
+<script src="codejs/giaodien.js"></script> 
+
+<script src="codejs/taikhoan.js"></script> 
+
+<script src="codejs/giohang.js"></script> 
+
+<script src="codejs/trang.js"></script> 
+
+ 
+
+<!-- ===== SCRIPT RIÊNG: PREVIEW ẢNH + PREVIEW MIỀN + TAB TIN CỦA TÔI ===== --> 
+
+<script> 
+
+document.addEventListener('DOMContentLoaded', function () { 
+
+ 
+
+    /* ---------- PREVIEW ẢNH + MIỀN (giữ nguyên) ---------- */ 
+
+    const imageInput = document.getElementById('postImageInput'); 
+
+    const imagePreview = document.getElementById('postImagePreview'); 
+
+    const locationSelect = document.getElementById('postLocationSelect'); 
+
+    const regionPreview = document.getElementById('postRegionPreview'); 
+
+ 
+
+    const defaultImage = 'https://via.placeholder.com/400x300?text=Cho+Tot'; 
+
+ 
+
+    function capNhatAnhPreview() { 
+
+        if (!imageInput || !imagePreview) return; 
+
+        const url = imageInput.value.trim(); 
+
+        imagePreview.src = url || defaultImage; 
+
+    } 
+
+ 
+
+    function capNhatMienPreview() { 
+
+        if (!locationSelect || !regionPreview) return; 
+
+ 
+
+        const city = locationSelect.value; 
+
+ 
+
+        if (!city) { 
+
+            regionPreview.textContent = 'Hệ thống sẽ tự xác định miền sau khi chọn tỉnh/thành phố.'; 
+
+            regionPreview.style.color = '#777'; 
+
+            regionPreview.style.fontWeight = '400'; 
+
+            return; 
+
+        } 
+
+ 
+
+        const region = typeof layMienTheoThanhPho === 'function' 
+
+            ? layMienTheoThanhPho(city) 
+
+            : ''; 
+
+ 
+
+        if (region) { 
+
+            regionPreview.textContent = 'Khu vực tự động: ' + region; 
+
+            regionPreview.style.color = '#ff8a00'; 
+
+            regionPreview.style.fontWeight = '600'; 
+
+        } else { 
+
+            regionPreview.textContent = 'Không xác định được miền. Vui lòng chọn đúng tỉnh/thành phố.'; 
+
+            regionPreview.style.color = '#ff4757'; 
+
+            regionPreview.style.fontWeight = '600'; 
+
+        } 
+
+    } 
+
+ 
+
+    if (imageInput) imageInput.addEventListener('input', capNhatAnhPreview); 
+
+    if (imagePreview) { 
+
+        imagePreview.onerror = function () { this.src = defaultImage; }; 
+
+    } 
+
+    if (locationSelect) locationSelect.addEventListener('change', capNhatMienPreview); 
+
+ 
+
+    setTimeout(capNhatMienPreview, 0); 
+
+ 
+
+    /* ---------- TAB ĐĂNG TIN / TIN CỦA TÔI ---------- */ 
+
+    const tabDangTin = document.getElementById('tabDangTin'); 
+
+    const tabTinCuaToi = document.getElementById('tabTinCuaToi'); 
+
+    const contentDangTin = document.getElementById('tabContentDangTin'); 
+
+    const contentTinCuaToi = document.getElementById('tabContentTinCuaToi'); 
+
+ 
+
+    function chuyenTab(tab) { 
+
+        if (!tabDangTin || !tabTinCuaToi) return; 
+
+ 
+
+        const laDangTin = tab === 'dangtin'; 
+
+ 
+
+        tabDangTin.classList.toggle('active', laDangTin); 
+
+        tabTinCuaToi.classList.toggle('active', !laDangTin); 
+
+ 
+
+        if (contentDangTin) contentDangTin.style.display = laDangTin ? 'block' : 'none'; 
+
+        if (contentTinCuaToi) contentTinCuaToi.style.display = laDangTin ? 'none' : 'block'; 
+
+ 
+
+        if (!laDangTin) { 
+
+            renderTinCuaToi(); 
+
+        } 
+
+    } 
+
+ 
+
+    if (tabDangTin) tabDangTin.addEventListener('click', () => chuyenTab('dangtin')); 
+
+    if (tabTinCuaToi) tabTinCuaToi.addEventListener('click', () => chuyenTab('tincuatoi')); 
+
+ 
+
+    /* ---------- RENDER TIN CỦA TÔI ---------- */ 
+
+    const TEN_DANH_MUC = { 
+
+        dientu: '📱 Điện tử', 
+
+        phuongtien: '🚗 Phương tiện', 
+
+        trangphuc: '👕 Thời trang', 
+
+        vatdung: '🏠 Vật dụng', 
+
+        khac: '🎁 Khác' 
+
+    }; 
+
+ 
+
+    function escapeHtmlLocal(value) { 
+
+        return (value ?? '') 
+
+            .toString() 
+
+            .replace(/&/g, '&amp;') 
+
+            .replace(/</g, '&lt;') 
+
+            .replace(/>/g, '&gt;') 
+
+            .replace(/"/g, '&quot;') 
+
+            .replace(/'/g, '&#039;'); 
+
+    } 
+
+ 
+
+    function capNhatSoTinCuaToi() { 
+
+        const countEl = document.getElementById('myPostCount'); 
+
+        if (!countEl) return; 
+
+ 
+
+        const posts = typeof layBaiDangCuaUserHienTai === 'function' 
+
+            ? layBaiDangCuaUserHienTai() 
+
+            : []; 
+
+ 
+
+        countEl.textContent = posts.length > 0 ? '(' + posts.length + ')' : ''; 
+
+    } 
+
+ 
+
+    function renderTinCuaToi() { 
+
+        const container = document.getElementById('myPostsContainer'); 
+
+        if (!container) return; 
+
+ 
+
+        const posts = typeof layBaiDangCuaUserHienTai === 'function' 
+
+            ? layBaiDangCuaUserHienTai() 
+
+            : []; 
+
+ 
+
+        capNhatSoTinCuaToi(); 
+
+ 
+
+        if (posts.length === 0) { 
+
+            container.innerHTML = ` 
+
+                <div class="empty-state"> 
+
+                    <div class="empty-state-icon">📭</div> 
+
+                    <h2>Bạn chưa đăng tin nào</h2> 
+
+                    <p>Chuyển sang tab "Đăng tin mới" để đăng bán sản phẩm đầu tiên nhé!</p> 
+
+                </div> 
+
+            `; 
+
+            return; 
+
+        } 
+
+ 
+
+        let html = ''; 
+
+ 
+
+        posts.forEach(post => { 
+
+            const ngayDang = post.createdAt 
+
+                ? new Date(post.createdAt).toLocaleDateString('vi-VN') 
+
+                : ''; 
+
+ 
+
+            html += ` 
+
+                <div class="my-post-card" data-id="${escapeHtmlLocal(post.id)}"> 
+
+                    <img src="${escapeHtmlLocal(post.image)}" alt="${escapeHtmlLocal(post.name)}" 
+
+                         class="my-post-img" 
+
+                         onerror="this.src='https://via.placeholder.com/400x300?text=No+Image'"> 
+
+                    <div class="my-post-info"> 
+
+                        <h3>${escapeHtmlLocal(post.name)}</h3> 
+
+                        <p class="my-post-price">₫${(Number(post.price) || 0).toLocaleString('vi-VN')}</p> 
+
+                        <p class="my-post-meta"> 
+
+                            ${TEN_DANH_MUC[post.cat] || '📦 Sản phẩm'} 
+
+                            &nbsp;•&nbsp; 📍 ${escapeHtmlLocal(post.location || 'Chưa rõ')} 
+
+                            ${post.region ? '&nbsp;•&nbsp; ' + escapeHtmlLocal(post.region) : ''} 
+
+                        </p> 
+
+                        <p class="my-post-meta">🗓 Đăng ngày: ${ngayDang}</p> 
+
+                    </div> 
+
+                    <div class="my-post-actions"> 
+
+                        <button type="button" class="btn-delete-post" data-id="${escapeHtmlLocal(post.id)}"> 
+
+                            🗑 Xóa tin 
+
+                        </button> 
+
+                    </div> 
+
+                </div> 
+
+            `; 
+
+        }); 
+
+ 
+
+        container.innerHTML = html; 
+
+ 
+
+        // Gắn sự kiện xóa 
+
+        container.querySelectorAll('.btn-delete-post').forEach(btn => { 
+
+            btn.addEventListener('click', function () { 
+
+                const id = this.dataset.id; 
+
+ 
+
+                if (!confirm('Bạn chắc chắn muốn xóa tin này? Hành động không thể hoàn tác.')) { 
+
+                    return; 
+
+                } 
+
+ 
+
+                const ok = typeof xoaBaiDang === 'function' ? xoaBaiDang(id) : false; 
+
+ 
+
+                if (ok) { 
+
+                    if (typeof showToast === 'function') showToast('🗑️ Đã xóa tin đăng!'); 
+
+                    renderTinCuaToi(); 
+
+                } else { 
+
+                    if (typeof showToast === 'function') showToast('⚠️ Không thể xóa tin này!'); 
+
+                } 
+
+            }); 
+
+        }); 
+
+    } 
+
+ 
+
+    // Cập nhật số tin ngay khi load (nếu đã đăng nhập) 
+
+    if (typeof dangDangNhap === 'function' && dangDangNhap()) { 
+
+        capNhatSoTinCuaToi(); 
+
+    } 
+
+}); 
+
+</script> 
+
+ 
+
+</body> 
+
+</html> 
+
+ 
