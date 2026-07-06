@@ -1,2 +1,0 @@
-# teamkingofLoj
-hello world
