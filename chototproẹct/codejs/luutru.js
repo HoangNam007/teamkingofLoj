@@ -1,186 +1,803 @@
-/* ========================================================================
-   STORAGE.JS - Quản lý dữ liệu trên localStorage
-   ------------------------------------------------------------------------
-   Vai trò: Lớp trung gian giao tiếp với localStorage.
-            Mọi thao tác lưu/đọc dữ liệu đều phải qua file này.
-   Lợi ích: Sau này chuyển sang ASP.NET API chỉ cần sửa file này!
-   ======================================================================== */
+/* ======================================================================== 
 
-// ===== KEYS - Tên các "ngăn" lưu trong localStorage =====
-const STORAGE_KEYS = {
-    USERS: 'users',                  // Danh sách tất cả tài khoản
-    CURRENT_USER: 'currentUser',     // User đang đăng nhập
-    GUEST_CART: 'guestCart',         // Giỏ hàng khi chưa đăng nhập
-    GUEST_FAVORITES: 'guestFavorites' // Yêu thích khi chưa đăng nhập
-};
+   LUUTRU.JS - Quản lý dữ liệu localStorage 
 
-/* ========================================================================
-   QUẢN LÝ DANH SÁCH USERS
-   ======================================================================== */
+   ------------------------------------------------------------------------ 
 
-// Lấy toàn bộ danh sách user đã đăng ký
-function layDanhSachUsers() {
-    const data = localStorage.getItem(STORAGE_KEYS.USERS);
-    return data ? JSON.parse(data) : [];
-}
+   Vai trò: 
 
-// Lưu danh sách users
-function luuDanhSachUsers(users) {
-    localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
-}
+   - Lưu danh sách tài khoản 
 
-// Tìm user theo email
-function timUserTheoEmail(email) {
-    const users = layDanhSachUsers();
-    return users.find(u => u.email === email);
-}
+   - Lưu user đang đăng nhập 
 
-// Kiểm tra email đã tồn tại chưa
-function emailDaTonTai(email) {
-    return layDanhSachUsers().some(u => u.email === email);
-}
+   - Mỗi user có giỏ hàng riêng 
 
-// Thêm user mới vào danh sách
-function themUserMoi(user) {
-    const users = layDanhSachUsers();
-    users.push(user);
-    luuDanhSachUsers(users);
-}
+   - Mỗi user có danh sách yêu thích riêng 
 
-// Cập nhật thông tin user trong danh sách (theo email)
-function capNhatUser(email, dataMoi) {
-    const users = layDanhSachUsers();
-    const index = users.findIndex(u => u.email === email);
-    if (index > -1) {
-        users[index] = { ...users[index], ...dataMoi };
-        luuDanhSachUsers(users);
-        return true;
-    }
-    return false;
-}
+   - Lưu tin đăng người dùng tạo 
 
-/* ========================================================================
-   QUẢN LÝ USER HIỆN TẠI (Đang đăng nhập)
-   ======================================================================== */
+   - Lưu thông báo riêng cho từng người bán (MỚI) 
 
-// Lấy user đang đăng nhập (null nếu chưa login)
-function layUserHienTai() {
-    const data = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
-    return data ? JSON.parse(data) : null;
-}
+   ======================================================================== */ 
 
-// Đặt user hiện tại (sau khi login thành công)
-function datUserHienTai(user) {
-    localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(user));
-}
+ 
 
-// Xóa user hiện tại (đăng xuất)
-function xoaUserHienTai() {
-    localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
-}
+const STORAGE_KEYS = { 
 
-// Kiểm tra có đang đăng nhập không
-function dangDangNhap() {
-    return layUserHienTai() !== null;
-}
+    USERS: 'users', 
 
-/* ========================================================================
-   QUẢN LÝ GIỎ HÀNG
-   ------------------------------------------------------------------------
-   - Nếu user đã login → lưu trong currentUser.cart
-   - Nếu chưa login → lưu vào guestCart riêng (gộp vào user sau khi login)
-   ======================================================================== */
+    CURRENT_USER: 'currentUser', 
 
-// Lấy giỏ hàng của user hiện tại (hoặc guest)
-function layGioHang() {
-    const user = layUserHienTai();
-    if (user) {
-        return user.cart || [];
-    }
-    // Guest: lấy từ guestCart
-    const data = localStorage.getItem(STORAGE_KEYS.GUEST_CART);
-    return data ? JSON.parse(data) : [];
-}
+    POSTS: 'userPosts', 
 
-// Lưu giỏ hàng
-function luuGioHang(cart) {
-    const user = layUserHienTai();
-    if (user) {
-        // User đã login → cập nhật vào currentUser VÀ vào users[]
-        user.cart = cart;
-        datUserHienTai(user);
-        capNhatUser(user.email, { cart: cart });
-    } else {
-        // Guest → lưu riêng
-        localStorage.setItem(STORAGE_KEYS.GUEST_CART, JSON.stringify(cart));
-    }
-}
+    NOTIFICATIONS: 'userNotifications'   // MỚI: thông báo theo từng user 
 
-// Gộp guestCart vào user khi đăng nhập
-function gopGuestCartVaoUser() {
-    const guestCart = JSON.parse(localStorage.getItem(STORAGE_KEYS.GUEST_CART)) || [];
-    if (guestCart.length === 0) return;
+}; 
 
-    const user = layUserHienTai();
-    if (!user) return;
+ 
 
-    const userCart = user.cart || [];
-    const mergedCart = [...userCart, ...guestCart];
+/* ======================================================================== 
 
-    user.cart = mergedCart;
-    datUserHienTai(user);
-    capNhatUser(user.email, { cart: mergedCart });
+   ĐỌC / GHI JSON AN TOÀN 
 
-    // Xóa guestCart
-    localStorage.removeItem(STORAGE_KEYS.GUEST_CART);
-}
+   ======================================================================== */ 
 
-/* ========================================================================
-   QUẢN LÝ YÊU THÍCH (FAVORITES)
-   ======================================================================== */
+function docJSON(key, fallbackValue) { 
 
-// Lấy danh sách yêu thích
-function layDanhSachYeuThich() {
-    const user = layUserHienTai();
-    if (user) {
-        return user.favorites || [];
-    }
-    const data = localStorage.getItem(STORAGE_KEYS.GUEST_FAVORITES);
-    return data ? JSON.parse(data) : [];
-}
+    try { 
 
-// Lưu danh sách yêu thích
-function luuDanhSachYeuThich(favorites) {
-    const user = layUserHienTai();
-    if (user) {
-        user.favorites = favorites;
-        datUserHienTai(user);
-        capNhatUser(user.email, { favorites: favorites });
-    } else {
-        localStorage.setItem(STORAGE_KEYS.GUEST_FAVORITES, JSON.stringify(favorites));
-    }
-}
+        const data = localStorage.getItem(key); 
 
-// Gộp guestFavorites vào user khi đăng nhập
-function gopGuestFavoritesVaoUser() {
-    const guestFavs = JSON.parse(localStorage.getItem(STORAGE_KEYS.GUEST_FAVORITES)) || [];
-    if (guestFavs.length === 0) return;
+        return data ? JSON.parse(data) : fallbackValue; 
 
-    const user = layUserHienTai();
-    if (!user) return;
+    } catch (error) { 
 
-    const userFavs = user.favorites || [];
-    // Tránh trùng lặp khi gộp (theo id)
-    const merged = [...userFavs];
-    guestFavs.forEach(gFav => {
-        if (!merged.some(f => f.id === gFav.id)) {
-            merged.push(gFav);
-        }
-    });
+        console.warn('Lỗi đọc localStorage:', key, error); 
 
-    user.favorites = merged;
-    datUserHienTai(user);
-    capNhatUser(user.email, { favorites: merged });
+        return fallbackValue; 
 
-    localStorage.removeItem(STORAGE_KEYS.GUEST_FAVORITES);
-}
+    } 
+
+} 
+
+ 
+
+function ghiJSON(key, value) { 
+
+    try { 
+
+        localStorage.setItem(key, JSON.stringify(value)); 
+
+        return true; 
+
+    } catch (error) { 
+
+        console.warn('Lỗi ghi localStorage:', key, error); 
+
+        return false; 
+
+    } 
+
+} 
+
+ 
+
+/* ======================================================================== 
+
+   CHUẨN HÓA USER 
+
+   ======================================================================== */ 
+
+function chuanHoaEmailStorage(email) { 
+
+    return (email || '').toString().trim().toLowerCase(); 
+
+} 
+
+ 
+
+function chuanHoaUserStorage(user) { 
+
+    return { 
+
+        id: user.id || Date.now(), 
+
+        name: user.name || user.fullName || '', 
+
+        email: chuanHoaEmailStorage(user.email), 
+
+        password: user.password || '', 
+
+        role: user.role || 'buyer', 
+
+        city: user.city || '', 
+
+        region: user.region || '', 
+
+        cart: Array.isArray(user.cart) ? user.cart : [], 
+
+        favorites: Array.isArray(user.favorites) ? user.favorites : [], 
+
+        posts: Array.isArray(user.posts) ? user.posts : [], 
+
+        createdAt: user.createdAt || new Date().toISOString() 
+
+    }; 
+
+} 
+
+ 
+
+/* ======================================================================== 
+
+   USERS 
+
+   ======================================================================== */ 
+
+function layDanhSachUsers() { 
+
+    const users = docJSON(STORAGE_KEYS.USERS, []); 
+
+    if (!Array.isArray(users)) return []; 
+
+    return users.map(chuanHoaUserStorage); 
+
+} 
+
+ 
+
+function luuDanhSachUsers(users) { 
+
+    if (!Array.isArray(users)) users = []; 
+
+    const normalizedUsers = users.map(chuanHoaUserStorage); 
+
+    ghiJSON(STORAGE_KEYS.USERS, normalizedUsers); 
+
+} 
+
+ 
+
+function timUserTheoEmail(email) { 
+
+    const normalizedEmail = chuanHoaEmailStorage(email); 
+
+    return layDanhSachUsers().find(u => u.email === normalizedEmail) || null; 
+
+} 
+
+ 
+
+function emailDaTonTai(email) { 
+
+    return timUserTheoEmail(email) !== null; 
+
+} 
+
+ 
+
+function themUserMoi(user) { 
+
+    const users = layDanhSachUsers(); 
+
+    users.push(chuanHoaUserStorage(user)); 
+
+    luuDanhSachUsers(users); 
+
+} 
+
+ 
+
+function capNhatUser(email, dataMoi) { 
+
+    const normalizedEmail = chuanHoaEmailStorage(email); 
+
+    const users = layDanhSachUsers(); 
+
+ 
+
+    const index = users.findIndex(u => u.email === normalizedEmail); 
+
+    if (index === -1) return false; 
+
+ 
+
+    users[index] = chuanHoaUserStorage({ 
+
+        ...users[index], 
+
+        ...dataMoi 
+
+    }); 
+
+ 
+
+    luuDanhSachUsers(users); 
+
+    return true; 
+
+} 
+
+ 
+
+/* ======================================================================== 
+
+   CURRENT USER 
+
+   ======================================================================== */ 
+
+function layUserHienTai() { 
+
+    const user = docJSON(STORAGE_KEYS.CURRENT_USER, null); 
+
+    if (!user) return null; 
+
+    return chuanHoaUserStorage(user); 
+
+} 
+
+ 
+
+function datUserHienTai(user) { 
+
+    if (!user) return; 
+
+    ghiJSON(STORAGE_KEYS.CURRENT_USER, chuanHoaUserStorage(user)); 
+
+} 
+
+ 
+
+function xoaUserHienTai() { 
+
+    localStorage.removeItem(STORAGE_KEYS.CURRENT_USER); 
+
+} 
+
+ 
+
+function dangDangNhap() { 
+
+    return layUserHienTai() !== null; 
+
+} 
+
+ 
+
+function capNhatUserHienTai(dataMoi) { 
+
+    const user = layUserHienTai(); 
+
+    if (!user) return false; 
+
+ 
+
+    const updatedUser = chuanHoaUserStorage({ 
+
+        ...user, 
+
+        ...dataMoi 
+
+    }); 
+
+ 
+
+    datUserHienTai(updatedUser); 
+
+    capNhatUser(updatedUser.email, updatedUser); 
+
+    return true; 
+
+} 
+
+ 
+
+/* ======================================================================== 
+
+   GIỎ HÀNG THEO TỪNG TÀI KHOẢN 
+
+   ======================================================================== */ 
+
+function layGioHang() { 
+
+    const user = layUserHienTai(); 
+
+    if (!user) return []; 
+
+    return Array.isArray(user.cart) ? user.cart : []; 
+
+} 
+
+ 
+
+function luuGioHang(cart) { 
+
+    const user = layUserHienTai(); 
+
+    if (!user) return false; 
+
+ 
+
+    if (!Array.isArray(cart)) cart = []; 
+
+ 
+
+    user.cart = cart; 
+
+    datUserHienTai(user); 
+
+    capNhatUser(user.email, { cart: cart }); 
+
+    return true; 
+
+} 
+
+ 
+
+/* ======================================================================== 
+
+   YÊU THÍCH THEO TỪNG TÀI KHOẢN 
+
+   ======================================================================== */ 
+
+function layDanhSachYeuThich() { 
+
+    const user = layUserHienTai(); 
+
+    if (!user) return []; 
+
+    return Array.isArray(user.favorites) ? user.favorites : []; 
+
+} 
+
+ 
+
+function luuDanhSachYeuThich(favorites) { 
+
+    const user = layUserHienTai(); 
+
+    if (!user) return false; 
+
+ 
+
+    if (!Array.isArray(favorites)) favorites = []; 
+
+ 
+
+    user.favorites = favorites; 
+
+    datUserHienTai(user); 
+
+    capNhatUser(user.email, { favorites: favorites }); 
+
+    return true; 
+
+} 
+
+ 
+
+/* ======================================================================== 
+
+   TIN ĐĂNG NGƯỜI DÙNG 
+
+   ======================================================================== */ 
+
+function layDanhSachBaiDang() { 
+
+    const posts = docJSON(STORAGE_KEYS.POSTS, []); 
+
+    return Array.isArray(posts) ? posts : []; 
+
+} 
+
+ 
+
+function luuDanhSachBaiDang(posts) { 
+
+    if (!Array.isArray(posts)) posts = []; 
+
+    ghiJSON(STORAGE_KEYS.POSTS, posts); 
+
+} 
+
+ 
+
+function themBaiDangMoi(post) { 
+
+    const user = layUserHienTai(); 
+
+    const posts = layDanhSachBaiDang(); 
+
+ 
+
+    const newPost = { 
+
+        id: post.id || Date.now(), 
+
+        ownerEmail: post.ownerEmail || user?.email || '', 
+
+        name: post.name || '', 
+
+        cat: post.cat || 'vatdung', 
+
+        price: Number(post.price) || 0, 
+
+        qty: post.qty || '1', 
+
+        desc: post.desc || '', 
+
+        image: post.image || 'https://via.placeholder.com/400x300?text=Cho+Tot', 
+
+        seller: post.seller || user?.name || '', 
+
+        phone: post.phone || '', 
+
+        location: post.location || user?.city || '', 
+
+        region: post.region || user?.region || '', 
+
+        facebook: post.facebook || '', 
+
+        createdAt: post.createdAt || new Date().toISOString(), 
+
+        updatedAt: null, 
+
+        status: 'active' 
+
+    }; 
+
+ 
+
+    posts.unshift(newPost); 
+
+    luuDanhSachBaiDang(posts); 
+
+ 
+
+    if (user) { 
+
+        const userPosts = Array.isArray(user.posts) ? user.posts : []; 
+
+        userPosts.unshift(newPost.id); 
+
+        capNhatUserHienTai({ posts: userPosts }); 
+
+    } 
+
+ 
+
+    return newPost; 
+
+} 
+
+ 
+
+function layBaiDangTheoId(id) { 
+
+    return layDanhSachBaiDang().find(p => String(p.id) === String(id)) || null; 
+
+} 
+
+ 
+
+function layBaiDangCuaUserHienTai() { 
+
+    const user = layUserHienTai(); 
+
+    if (!user) return []; 
+
+    return layDanhSachBaiDang().filter(p => p.ownerEmail === user.email); 
+
+} 
+
+ 
+
+function capNhatBaiDang(id, dataMoi) { 
+
+    const user = layUserHienTai(); 
+
+    if (!user) return false; 
+
+ 
+
+    const posts = layDanhSachBaiDang(); 
+
+    const index = posts.findIndex(p => String(p.id) === String(id)); 
+
+ 
+
+    if (index === -1) return false; 
+
+    if (posts[index].ownerEmail !== user.email) return false; 
+
+ 
+
+    posts[index] = { 
+
+        ...posts[index], 
+
+        ...dataMoi, 
+
+        updatedAt: new Date().toISOString() 
+
+    }; 
+
+ 
+
+    luuDanhSachBaiDang(posts); 
+
+    return true; 
+
+} 
+
+ 
+
+function xoaBaiDang(id) { 
+
+    const user = layUserHienTai(); 
+
+    if (!user) return false; 
+
+ 
+
+    const posts = layDanhSachBaiDang(); 
+
+    const post = posts.find(p => String(p.id) === String(id)); 
+
+ 
+
+    if (!post) return false; 
+
+    if (post.ownerEmail !== user.email) return false; 
+
+ 
+
+    const newPosts = posts.filter(p => String(p.id) !== String(id)); 
+
+    luuDanhSachBaiDang(newPosts); 
+
+ 
+
+    const newUserPosts = (user.posts || []).filter(postId => String(postId) !== String(id)); 
+
+    capNhatUserHienTai({ posts: newUserPosts }); 
+
+ 
+
+    return true; 
+
+} 
+
+ 
+
+/* ======================================================================== 
+
+   ★★★ THÔNG BÁO THEO TỪNG NGƯỜI BÁN (MỚI) ★★★ 
+
+   ------------------------------------------------------------------------ 
+
+   Cấu trúc 1 thông báo: 
+
+   { 
+
+       id: số, 
+
+       toEmail: email người bán nhận thông báo, 
+
+       fromUser: tên người quan tâm, 
+
+       productName: tên sản phẩm, 
+
+       time: ISO string, 
+
+       read: true/false 
+
+   } 
+
+   ======================================================================== */ 
+
+ 
+
+/** 
+
+ * Thêm thông báo cho người bán khi có người thêm sản phẩm vào giỏ. 
+
+ * @param {Object} noti - { toEmail, fromUser, productName } 
+
+ */ 
+
+function themThongBaoChoNguoiBan(noti) { 
+
+    if (!noti || !noti.toEmail) return false; 
+
+ 
+
+    const all = docJSON(STORAGE_KEYS.NOTIFICATIONS, []); 
+
+    const list = Array.isArray(all) ? all : []; 
+
+ 
+
+    list.unshift({ 
+
+        id: Date.now() + Math.floor(Math.random() * 1000), 
+
+        toEmail: chuanHoaEmailStorage(noti.toEmail), 
+
+        fromUser: noti.fromUser || 'Người dùng', 
+
+        productName: noti.productName || 'Sản phẩm', 
+
+        time: new Date().toISOString(), 
+
+        read: false 
+
+    }); 
+
+ 
+
+    // Giới hạn tối đa 100 thông báo toàn hệ thống (tránh phình localStorage) 
+
+    if (list.length > 100) list.length = 100; 
+
+ 
+
+    ghiJSON(STORAGE_KEYS.NOTIFICATIONS, list); 
+
+    capNhatBadgeThongBao(); 
+
+    return true; 
+
+} 
+
+ 
+
+/** 
+
+ * Lấy danh sách thông báo của user đang đăng nhập (mới nhất trước). 
+
+ */ 
+
+function layDanhSachThongBaoCuaUser() { 
+
+    const user = layUserHienTai(); 
+
+    if (!user) return []; 
+
+ 
+
+    const all = docJSON(STORAGE_KEYS.NOTIFICATIONS, []); 
+
+    if (!Array.isArray(all)) return []; 
+
+ 
+
+    return all.filter(n => chuanHoaEmailStorage(n.toEmail) === user.email); 
+
+} 
+
+ 
+
+/** 
+
+ * Đánh dấu tất cả thông báo của user hiện tại là đã đọc. 
+
+ */ 
+
+function danhDauThongBaoDaDoc() { 
+
+    const user = layUserHienTai(); 
+
+    if (!user) return false; 
+
+ 
+
+    const all = docJSON(STORAGE_KEYS.NOTIFICATIONS, []); 
+
+    if (!Array.isArray(all)) return false; 
+
+ 
+
+    let changed = false; 
+
+ 
+
+    all.forEach(n => { 
+
+        if (chuanHoaEmailStorage(n.toEmail) === user.email && !n.read) { 
+
+            n.read = true; 
+
+            changed = true; 
+
+        } 
+
+    }); 
+
+ 
+
+    if (changed) { 
+
+        ghiJSON(STORAGE_KEYS.NOTIFICATIONS, all); 
+
+    } 
+
+ 
+
+    capNhatBadgeThongBao(); 
+
+    return true; 
+
+} 
+
+ 
+
+/** 
+
+ * Cập nhật badge chuông (#notiCount) = số thông báo CHƯA ĐỌC của user hiện tại. 
+
+ */ 
+
+function capNhatBadgeThongBao() { 
+
+    const badges = document.querySelectorAll('#notiCount'); 
+
+    if (!badges || badges.length === 0) return; 
+
+ 
+
+    const user = layUserHienTai(); 
+
+    let unread = 0; 
+
+ 
+
+    if (user) { 
+
+        unread = layDanhSachThongBaoCuaUser().filter(n => !n.read).length; 
+
+    } 
+
+ 
+
+    badges.forEach(badge => { 
+
+        badge.textContent = unread; 
+
+        badge.style.display = unread > 0 ? 'flex' : 'none'; 
+
+    }); 
+
+} 
+
+ 
+
+/* Chạy sau cùng (setTimeout) để đè lên badge cũ của giaodien.js nếu còn */ 
+
+document.addEventListener('DOMContentLoaded', () => { 
+
+    setTimeout(capNhatBadgeThongBao, 50); 
+
+}); 
+
+ 
+
+/* ======================================================================== 
+
+   RESET DEMO - chỉ dùng khi test 
+
+   ======================================================================== */ 
+
+function xoaTatCaDuLieuDemo() { 
+
+    localStorage.removeItem(STORAGE_KEYS.USERS); 
+
+    localStorage.removeItem(STORAGE_KEYS.CURRENT_USER); 
+
+    localStorage.removeItem(STORAGE_KEYS.POSTS); 
+
+    localStorage.removeItem(STORAGE_KEYS.NOTIFICATIONS); 
+
+} 
+
+ 
