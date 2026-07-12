@@ -328,145 +328,78 @@ function damBaoFormDangKyCoThanhPho() {
 
    ======================================================================== */ 
 
-function dangKy(name, email, password, confirmPassword, role, city) { 
-
-    name = (name || '').trim(); 
-
-    email = chuanHoaEmail(email); 
-
-    city = (city || '').trim(); 
-
+function dangKy(name, email, password, confirmPassword, role, city, phone) { 
+   name = (name || '').trim(); 
+   email = chuanHoaEmail(email); 
+   city = (city || '').trim(); 
+   phone = (phone || '').toString().trim().replace(/\s+/g, ''); 
  
-
-    if (!name || !email || !password || !confirmPassword || !city) { 
-
-        return { 
-
-            success: false, 
-
-            message: '⚠️ Vui lòng nhập đầy đủ thông tin!' 
-
-        }; 
-
-    } 
-
+   if (!name || !email || !password || !confirmPassword || !city || !phone) { 
+       return { 
+           success: false, 
+           message: '⚠️ Vui lòng nhập đầy đủ thông tin (kể cả số điện thoại)!' 
+       }; 
+   } 
  
-
-    if (password.length < 6) { 
-
-        return { 
-
-            success: false, 
-
-            message: '❌ Mật khẩu tối thiểu 6 ký tự!' 
-
-        }; 
-
-    } 
-
+   if (!/^[0-9]{9,15}$/.test(phone)) { 
+       return { 
+           success: false, 
+           message: '❌ Số điện thoại không hợp lệ (chỉ chứa số, 9-15 chữ số)!' 
+       }; 
+   } 
  
-
-    if (password !== confirmPassword) { 
-
-        return { 
-
-            success: false, 
-
-            message: '❌ Mật khẩu xác nhận không khớp!' 
-
-        }; 
-
-    } 
-
+   if (password.length < 6) { 
+       return { 
+           success: false, 
+           message: '❌ Mật khẩu tối thiểu 6 ký tự!' 
+       }; 
+   } 
  
-
-    const region = layMienTheoThanhPho(city); 
-
+   if (password !== confirmPassword) { 
+       return { 
+           success: false, 
+           message: '❌ Mật khẩu xác nhận không khớp!' 
+       }; 
+   } 
  
-
-    if (!region) { 
-
-        return { 
-
-            success: false, 
-
-            message: '❌ Tỉnh/thành phố không hợp lệ!' 
-
-        }; 
-
-    } 
-
+   const region = layMienTheoThanhPho(city); 
  
-
-    if (emailDaTonTai(email)) { 
-
-        return { 
-
-            success: false, 
-
-            message: '❌ Email đã tồn tại! Hãy đăng nhập.' 
-
-        }; 
-
-    } 
-
+   if (!region) { 
+       return { 
+           success: false, 
+           message: '❌ Tỉnh/thành phố không hợp lệ!' 
+       }; 
+   } 
  
-
-    const user = { 
-
-        id: Date.now(), 
-
-        name: name, 
-
-        email: email, 
-
-        password: password, 
-
-        role: role || 'buyer', 
-
-        city: city, 
-
-        region: region, 
-
-        cart: [], 
-
-        favorites: [], 
-
-        posts: [], 
-
-        createdAt: new Date().toISOString() 
-
-    }; 
-
+   if (emailDaTonTai(email)) { 
+       return { 
+           success: false, 
+           message: '❌ Email đã tồn tại! Hãy đăng nhập.' 
+       }; 
+   } 
  
-
-    themUserMoi(user); 
-
+   const user = { 
+       id: Date.now(), 
+       name: name, 
+       email: email, 
+       password: password, 
+       phone: phone,              // ★ MỚI 
+       role: role || 'buyer', 
+       city: city, 
+       region: region, 
+       cart: [], 
+       favorites: [], 
+       posts: [], 
+       createdAt: new Date().toISOString() 
+   }; 
  
-
-    return { 
-
-        success: true, 
-
-        message: '✅ Đăng ký thành công! Hãy đăng nhập.' 
-
-    }; 
-
+   themUserMoi(user); 
+ 
+   return { 
+       success: true, 
+       message: '✅ Đăng ký thành công! Hãy đăng nhập.' 
+   }; 
 } 
- <div class="form-group"> 
-                   <label>Số điện thoại</label> 
-                   <input type="tel" name="phone" placeholder="Ví dụ: 0912 345 678"  
-                          pattern="[0-9\s]{9,15}" required> 
-                   <p style="font-size:12px; color:#777; margin-top:6px;"> 
-                       Số điện thoại sẽ hiển thị cho người bán khi bạn quan tâm sản phẩm của họ. 
-                   </p> 
-               </div> 
- 
-               <div class="form-group"> 
-                   <label>Vai trò</label> 
-                   <!-- ... giữ nguyên phần cũ ... --> 
- 
-
 /* ======================================================================== 
 
    ĐĂNG NHẬP 
