@@ -1,70 +1,40 @@
 /* ======================================================================== 
 
-   TAIKHOAN.JS - Đăng ký / Đăng nhập bằng localStorage 
+   PAGE.JS - Logic riêng cho từng trang 
 
    ------------------------------------------------------------------------ 
 
    Vai trò: 
 
-   - Đăng ký tài khoản 
+   - Tự nhận biết trang hiện tại 
 
-   - Đăng nhập tài khoản 
+   - Chạy code tương ứng từng trang 
 
-   - Đăng xuất 
+   - Chặn tính năng cần đăng nhập 
 
-   - Mỗi tài khoản có cart/favorites riêng 
+   - Tìm kiếm / lọc miền / lọc danh mục / phân trang sản phẩm 
 
-   - Chọn tỉnh/thành phố và tự xác định miền 
+   Phụ thuộc: storage.js, ui.js, auth.js, cart.js 
 
    ======================================================================== */ 
 
  
 
-/* ======================================================================== 
+let dangChuyenHuongDangNhap = false; 
 
-   DANH SÁCH TỈNH/THÀNH THEO MIỀN 
+ 
 
-   ======================================================================== */ 
+const TRANG_THAI_LOC = { 
 
-const TINH_THANH_THEO_MIEN = { 
+    keyword: '', 
 
-    'Miền Bắc': [ 
+    category: 'all', 
 
-        'Hà Nội', 'Hải Phòng', 'Quảng Ninh', 'Bắc Ninh', 'Hải Dương', 
+    region: 'all', 
 
-        'Hưng Yên', 'Thái Bình', 'Nam Định', 'Ninh Bình', 'Hà Nam', 
+    page: 1, 
 
-        'Vĩnh Phúc', 'Phú Thọ', 'Thái Nguyên', 'Bắc Giang', 'Lạng Sơn', 
-
-        'Cao Bằng', 'Bắc Kạn', 'Tuyên Quang', 'Hà Giang', 'Yên Bái', 
-
-        'Lào Cai', 'Lai Châu', 'Điện Biên', 'Sơn La', 'Hòa Bình' 
-
-    ], 
-
-    'Miền Trung': [ 
-
-        'Thanh Hóa', 'Nghệ An', 'Hà Tĩnh', 'Quảng Bình', 'Quảng Trị', 
-
-        'Thừa Thiên Huế', 'Đà Nẵng', 'Quảng Nam', 'Quảng Ngãi', 'Bình Định', 
-
-        'Phú Yên', 'Khánh Hòa', 'Ninh Thuận', 'Bình Thuận', 'Kon Tum', 
-
-        'Gia Lai', 'Đắk Lắk', 'Đắk Nông', 'Lâm Đồng' 
-
-    ], 
-
-    'Miền Nam': [ 
-
-        'TP.HCM', 'Bình Dương', 'Đồng Nai', 'Bà Rịa - Vũng Tàu', 
-
-        'Tây Ninh', 'Bình Phước', 'Long An', 'Tiền Giang', 'Bến Tre', 
-
-        'Trà Vinh', 'Vĩnh Long', 'Đồng Tháp', 'An Giang', 'Kiên Giang', 
-
-        'Cần Thơ', 'Hậu Giang', 'Sóc Trăng', 'Bạc Liêu', 'Cà Mau' 
-
-    ] 
+    perPage: 30 
 
 }; 
 
@@ -72,25 +42,103 @@ const TINH_THANH_THEO_MIEN = {
 
 /* ======================================================================== 
 
-   TOAST FALLBACK 
-
-   ------------------------------------------------------------------------ 
-
-   Nếu giaodien.js chưa load thì vẫn báo được. 
+   ĐIỂM KHỞI ĐẦU 
 
    ======================================================================== */ 
 
-function thongBaoTaiKhoan(message) { 
+document.addEventListener('DOMContentLoaded', () => { 
 
-    if (typeof showToast === 'function') { 
+    capNhatNutAuth(); 
 
-        showToast(message); 
+    capNhatBadgeGioHang(); 
 
-    } else { 
+    capNhatSoThongBao(); 
 
-        alert(message); 
+    setupModalEvents(); 
+
+    setupModalActions(); 
+
+ 
+
+    thietLapChanTinhNangCanDangNhap(); 
+
+ 
+
+    const trangHienTai = nhanBietTrang(); 
+
+ 
+
+    switch (trangHienTai) { 
+
+        case 'home': 
+
+            khoiTaoTrangChu(); 
+
+            break; 
+
+        case 'cart': 
+
+            khoiTaoTrangGioHang(); 
+
+            break; 
+
+        case 'auth': 
+
+            khoiTaoTrangTaiKhoan(); 
+
+            break; 
+
+        case 'post': 
+
+            khoiTaoTrangDangTin(); 
+
+            break; 
+
+        case 'notifications': 
+
+            khoiTaoTrangThongBao(); 
+
+            break; 
 
     } 
+
+}); 
+
+ 
+
+/* ======================================================================== 
+
+   NHẬN BIẾT TRANG 
+
+   ======================================================================== */ 
+
+function nhanBietTrang() { 
+
+    const path = window.location.pathname.toLowerCase(); 
+
+    const fileName = path.split('/').pop() || 'idea.html'; 
+
+ 
+
+    if (fileName === '' || fileName === 'idea.html' || fileName === 'index.html') { 
+
+        return 'home'; 
+
+    } 
+
+ 
+
+    if (fileName === 'giohang.html') return 'cart'; 
+
+    if (fileName === 'taikhoan.html') return 'auth'; 
+
+    if (fileName === 'dangtin.html') return 'post'; 
+
+    if (fileName === 'thongbao.html') return 'notifications'; 
+
+ 
+
+    return 'other'; 
 
 } 
 
@@ -98,151 +146,113 @@ function thongBaoTaiKhoan(message) {
 
 /* ======================================================================== 
 
-   CHUẨN HÓA 
+   CHẶN TÍNH NĂNG CẦN ĐĂNG NHẬP 
 
    ======================================================================== */ 
 
-function chuanHoaText(text) { 
+function thietLapChanTinhNangCanDangNhap() { 
 
-    return (text || '') 
+    document.addEventListener('click', (e) => { 
 
-        .toString() 
+        const restrictedTarget = e.target.closest(` 
 
-        .trim() 
+            a[href="giohang.html"], 
 
-        .toLowerCase() 
+            a[href="thongbao.html"], 
 
-        .normalize('NFD') 
+            .btn-post, 
 
-        .replace(/[\u0300-\u036f]/g, '') 
+            .btn-cart, 
 
-        .replace(/đ/g, 'd') 
+            .btn-add-cart, 
 
-        .replace(/[^a-z0-9]/g, ''); 
+            .btn-contact, 
+
+            .btn-message 
+
+        `); 
+
+ 
+
+        if (!restrictedTarget) return; 
+
+ 
+
+        if (restrictedTarget.classList.contains('btn-post') && dangDangNhap()) { 
+
+            e.preventDefault(); 
+
+            e.stopPropagation(); 
+
+            window.location.href = 'dangtin.html'; 
+
+            return; 
+
+        } 
+
+ 
+
+        if (dangDangNhap()) return; 
+
+ 
+
+        e.preventDefault(); 
+
+        e.stopPropagation(); 
+
+        e.stopImmediatePropagation(); 
+
+ 
+
+        let message = '⚠️ Vui lòng đăng nhập/đăng ký để sử dụng tính năng này!'; 
+
+ 
+
+        if (restrictedTarget.classList.contains('btn-post')) { 
+
+            message = '⚠️ Vui lòng đăng nhập để đăng tin!'; 
+
+        } else if (restrictedTarget.classList.contains('btn-cart') || restrictedTarget.classList.contains('btn-add-cart')) { 
+
+            message = '⚠️ Vui lòng đăng nhập để sử dụng giỏ hàng!'; 
+
+        } else if (restrictedTarget.classList.contains('btn-message')) { 
+
+            message = '⚠️ Vui lòng đăng nhập để nhắn tin!'; 
+
+        } else if (restrictedTarget.classList.contains('btn-contact')) { 
+
+            message = '⚠️ Vui lòng đăng nhập để xem/gọi người bán!'; 
+
+        } 
+
+ 
+
+        yeuCauDangNhap(message); 
+
+    }, true); 
 
 } 
 
  
 
-function chuanHoaEmail(email) { 
+function yeuCauDangNhap(message) { 
 
-    return (email || '').toString().trim().toLowerCase(); 
-
-} 
+    if (dangChuyenHuongDangNhap) return; 
 
  
 
-/* ======================================================================== 
+    dangChuyenHuongDangNhap = true; 
 
-   LẤY MIỀN THEO TỈNH/THÀNH 
-
-   ======================================================================== */ 
-
-function layMienTheoThanhPho(city) { 
-
-    if (!city) return ''; 
+    showToast(message); 
 
  
 
-    const input = chuanHoaText(city); 
+    setTimeout(() => { 
 
- 
+        window.location.href = 'taikhoan.html'; 
 
-    const aliasesHCM = [ 
-
-        'tphcm', 
-
-        'tp hcm', 
-
-        'tp.hcm', 
-
-        'hochiminh', 
-
-        'ho chi minh', 
-
-        'thanhphohochiminh', 
-
-        'sai gon', 
-
-        'saigon' 
-
-    ].map(chuanHoaText); 
-
- 
-
-    if (aliasesHCM.includes(input)) { 
-
-        return 'Miền Nam'; 
-
-    } 
-
- 
-
-    for (const mien in TINH_THANH_THEO_MIEN) { 
-
-        const found = TINH_THANH_THEO_MIEN[mien].some(tinh => { 
-
-            const tinhChuanHoa = chuanHoaText(tinh); 
-
- 
-
-            return input === tinhChuanHoa || 
-
-                   input.includes(tinhChuanHoa) || 
-
-                   tinhChuanHoa.includes(input); 
-
-        }); 
-
- 
-
-        if (found) return mien; 
-
-    } 
-
- 
-
-    return ''; 
-
-} 
-
- 
-
-/* ======================================================================== 
-
-   TẠO OPTION TỈNH/THÀNH 
-
-   ======================================================================== */ 
-
-function taoOptionsTinhThanh(selectedCity = '') { 
-
-    let html = '<option value="">-- Chọn tỉnh/thành phố --</option>'; 
-
- 
-
-    for (const mien in TINH_THANH_THEO_MIEN) { 
-
-        html += `<optgroup label="${mien}">`; 
-
- 
-
-        TINH_THANH_THEO_MIEN[mien].forEach(tinh => { 
-
-            const selected = tinh === selectedCity ? 'selected' : ''; 
-
-            html += `<option value="${tinh}" ${selected}>${tinh}</option>`; 
-
-        }); 
-
- 
-
-        html += '</optgroup>'; 
-
-    } 
-
- 
-
-    return html; 
+    }, 1200); 
 
 } 
 
@@ -250,73 +260,23 @@ function taoOptionsTinhThanh(selectedCity = '') {
 
 /* ======================================================================== 
 
-   ĐẢM BẢO FORM ĐĂNG KÝ CÓ Ô TỈNH/THÀNH 
-
-   ------------------------------------------------------------------------ 
-
-   Nếu taikhoan.html cũ chưa có city thì JS tự thêm. 
+   TRANG CHỦ 
 
    ======================================================================== */ 
 
-function damBaoFormDangKyCoThanhPho() { 
+function khoiTaoTrangChu() { 
 
-    const registerForm = document.getElementById('registerForm'); 
+    renderBaiDangNguoiDungLenGrid(); 
 
-    if (!registerForm) return; 
+    setupCardEvents(); 
 
- 
+    setupLocDanhMuc(); 
 
-    if (registerForm.querySelector('[name="city"]')) return; 
+    setupTimKiem(); 
 
- 
+    setupLocKhuVucTheoMien(); 
 
-    const roleGroup = registerForm.querySelector('[name="role"]')?.closest('.form-group'); 
-
-    const passwordGroup = registerForm.querySelector('[name="password"]')?.closest('.form-group'); 
-
- 
-
-    const cityGroup = document.createElement('div'); 
-
-    cityGroup.className = 'form-group'; 
-
- 
-
-    cityGroup.innerHTML = ` 
-
-        <label>Tỉnh/Thành phố</label> 
-
-        <select name="city" id="citySelect" required> 
-
-            ${taoOptionsTinhThanh()} 
-
-        </select> 
-
-        <p id="regionPreview" style="font-size:12px; color:#777; margin-top:6px;"> 
-
-            Hệ thống sẽ tự xác định miền sau khi bạn chọn tỉnh/thành. 
-
-        </p> 
-
-    `; 
-
- 
-
-    if (roleGroup) { 
-
-        roleGroup.insertAdjacentElement('afterend', cityGroup); 
-
-    } else if (passwordGroup) { 
-
-        passwordGroup.insertAdjacentElement('beforebegin', cityGroup); 
-
-    } else { 
-
-        const submitBtn = registerForm.querySelector('.btn-submit') || registerForm.querySelector('button[type="submit"]'); 
-
-        registerForm.insertBefore(cityGroup, submitBtn); 
-
-    } 
+    apDungBoLocVaPhanTrang(); 
 
 } 
 
@@ -324,373 +284,711 @@ function damBaoFormDangKyCoThanhPho() {
 
 /* ======================================================================== 
 
-   ĐĂNG KÝ 
+   LỌC DANH MỤC (SỬA - từ nav chuyển sang dropdown trong search) 
 
    ======================================================================== */ 
 
-function dangKy(name, email, password, confirmPassword, role, city) { 
+function setupLocDanhMuc() { 
 
-    name = (name || '').trim(); 
+    const categoryBtn = document.getElementById('categoryBtn'); 
 
-    email = chuanHoaEmail(email); 
+    const categoryDropdown = document.getElementById('categoryDropdown'); 
 
-    city = (city || '').trim(); 
+    const categoryText = document.getElementById('categoryText'); 
 
- 
-
-    if (!name || !email || !password || !confirmPassword || !city) { 
-
-        return { 
-
-            success: false, 
-
-            message: '⚠️ Vui lòng nhập đầy đủ thông tin!' 
-
-        }; 
-
-    } 
+    const sectionTitle = document.getElementById('sectionTitle'); 
 
  
 
-    if (password.length < 6) { 
-
-        return { 
-
-            success: false, 
-
-            message: '❌ Mật khẩu tối thiểu 6 ký tự!' 
-
-        }; 
-
-    } 
+    if (!categoryBtn || !categoryDropdown) return; 
 
  
 
-    if (password !== confirmPassword) { 
+    if (categoryBtn.dataset.dropdownBound === 'true') return; 
 
-        return { 
-
-            success: false, 
-
-            message: '❌ Mật khẩu xác nhận không khớp!' 
-
-        }; 
-
-    } 
+    categoryBtn.dataset.dropdownBound = 'true'; 
 
  
 
-    const region = layMienTheoThanhPho(city); 
+    // Mở/đóng dropdown 
 
- 
+    categoryBtn.addEventListener('click', (e) => { 
 
-    if (!region) { 
+        e.stopPropagation(); 
 
-        return { 
-
-            success: false, 
-
-            message: '❌ Tỉnh/thành phố không hợp lệ!' 
-
-        }; 
-
-    } 
-
- 
-
-    if (emailDaTonTai(email)) { 
-
-        return { 
-
-            success: false, 
-
-            message: '❌ Email đã tồn tại! Hãy đăng nhập.' 
-
-        }; 
-
-    } 
-
- 
-
-    const user = { 
-
-        id: Date.now(), 
-
-        name: name, 
-
-        email: email, 
-
-        password: password, 
-
-        role: role || 'buyer', 
-
-        city: city, 
-
-        region: region, 
-
-        cart: [], 
-
-        favorites: [], 
-
-        posts: [], 
-
-        createdAt: new Date().toISOString() 
-
-    }; 
-
- 
-
-    themUserMoi(user); 
-
- 
-
-    return { 
-
-        success: true, 
-
-        message: '✅ Đăng ký thành công! Hãy đăng nhập.' 
-
-    }; 
-
-} 
-
- 
-
-/* ======================================================================== 
-
-   ĐĂNG NHẬP 
-
-   ======================================================================== */ 
-
-function dangNhap(email, password) { 
-
-    email = chuanHoaEmail(email); 
-
- 
-
-    if (!email || !password) { 
-
-        return { 
-
-            success: false, 
-
-            message: '⚠️ Vui lòng nhập email và mật khẩu!' 
-
-        }; 
-
-    } 
-
- 
-
-    const users = layDanhSachUsers(); 
-
- 
-
-    const user = users.find(u => { 
-
-        return chuanHoaEmail(u.email) === email && u.password === password; 
+        categoryDropdown.classList.toggle('show'); 
 
     }); 
 
  
 
-    if (!user) { 
+    document.addEventListener('click', () => { 
 
-        return { 
+        categoryDropdown.classList.remove('show'); 
 
-            success: false, 
-
-            message: '❌ Email hoặc mật khẩu sai!' 
-
-        }; 
-
-    } 
+    }); 
 
  
 
-    datUserHienTai(user); 
+    const tenDanhMuc = { 
 
- 
+        all: 'Tất cả sản phẩm', 
 
-    return { 
+        dientu: 'Thiết bị Điện tử', 
 
-        success: true, 
+        phuongtien: 'Phương tiện', 
 
-        message: '✅ Chào mừng, ' + user.name + '!', 
+        trangphuc: 'Trang phục & Phụ kiện', 
 
-        user: user 
+        vatdung: 'Vật dụng gia đình', 
+
+        khac: 'Khác' 
 
     }; 
 
+ 
+
+    categoryDropdown.querySelectorAll('div[data-cat]').forEach(item => { 
+
+        item.addEventListener('click', (e) => { 
+
+            e.stopPropagation(); 
+
+ 
+
+            const cat = item.dataset.cat; 
+
+            TRANG_THAI_LOC.category = cat; 
+
+            TRANG_THAI_LOC.page = 1; 
+
+ 
+
+            if (categoryText) { 
+
+                categoryText.textContent = tenDanhMuc[cat] || 'Danh mục'; 
+
+            } 
+
+ 
+
+            categoryDropdown.classList.remove('show'); 
+
+ 
+
+            if (sectionTitle) { 
+
+                sectionTitle.textContent = tenDanhMuc[cat] || 'Sản phẩm'; 
+
+            } 
+
+ 
+
+            showToast('📂 Đã chọn: ' + (tenDanhMuc[cat] || 'Danh mục')); 
+
+            apDungBoLocVaPhanTrang(); 
+
+        }); 
+
+    }); 
+
 } 
 
  
 
 /* ======================================================================== 
 
-   ĐĂNG XUẤT 
+   TÌM KIẾM 
 
    ======================================================================== */ 
 
-function dangXuat() { 
+function setupTimKiem() { 
 
-    xoaUserHienTai(); 
+    const searchInput = document.getElementById('searchInput'); 
 
-} 
-
- 
-
-/* ======================================================================== 
-
-   CẬP NHẬT NÚT HEADER 
-
-   ======================================================================== */ 
-
-function capNhatNutAuth() { 
-
-    const authButtons = document.querySelectorAll('#authBtn, .btn-login'); 
-
-    const user = layUserHienTai(); 
+    const btnSearch = document.querySelector('.btn-search'); 
 
  
 
-    authButtons.forEach(btn => { 
-
-        if (!btn) return; 
+    if (!searchInput) return; 
 
  
 
-        if (user) { 
+    searchInput.addEventListener('input', () => { 
 
-            btn.textContent = '👤 ' + user.name; 
+        TRANG_THAI_LOC.keyword = searchInput.value.toLowerCase().trim(); 
 
-            btn.href = '#'; 
+        TRANG_THAI_LOC.page = 1; 
 
-            btn.style.background = '#ffba00'; 
+        apDungBoLocVaPhanTrang(); 
 
-            btn.style.color = '#000'; 
-
-            btn.style.borderColor = '#000'; 
+    }); 
 
  
 
-            btn.onclick = function(e) { 
+    searchInput.addEventListener('keyup', (e) => { 
 
-                e.preventDefault(); 
+        if (e.key === 'Enter') { 
 
- 
-
-                const choice = confirm( 
-
-                    `👋 Xin chào ${user.name}!\n` + 
-
-                    `${user.email}\n` + 
-
-                    `${user.city || 'Chưa có địa chỉ'} ${user.region ? '- ' + user.region : ''}\n\n` + 
-
-                    `Bạn muốn:\n` + 
-
-                    `1. Xem tin đã đăng (OK)\n` + 
-
-                    `2. Đăng xuất (Cancel)` 
-
-                ); 
-
- 
-
-                if (choice) { 
-
-                    // Xem tin đã đăng 
-
-                    window.location.href = 'dangtin.html'; 
-
-                } else { 
-
-                    // Đăng xuất 
-
-                    dangXuat(); 
-
-                    showToast('👋 Đã đăng xuất'); 
-
-                    capNhatNutAuth(); 
-
-                    if (typeof capNhatBadgeGioHang === 'function') capNhatBadgeGioHang(); 
-
-                } 
-
-            }; 
-
-        } else { 
-
-            btn.textContent = 'Đăng nhập'; 
-
-            btn.href = 'taikhoan.html'; 
-
-            btn.style.background = ''; 
-
-            btn.style.color = ''; 
-
-            btn.style.borderColor = ''; 
-
-            btn.onclick = null; 
+            thucHienTimKiem(); 
 
         } 
 
     }); 
 
+ 
+
+    if (btnSearch) { 
+
+        btnSearch.onclick = thucHienTimKiem; 
+
+    } 
+
+} 
+
+ 
+
+function thucHienTimKiem() { 
+
+    const searchInput = document.getElementById('searchInput'); 
+
+ 
+
+    TRANG_THAI_LOC.keyword = searchInput ? searchInput.value.toLowerCase().trim() : ''; 
+
+    TRANG_THAI_LOC.page = 1; 
+
+ 
+
+    apDungBoLocVaPhanTrang(); 
+
+} 
+
+ 
+
+function doSearch() { 
+
+    thucHienTimKiem(); 
+
 } 
 
  
 
 /* ======================================================================== 
 
-   CHUYỂN FORM 
+   LỌC THEO MIỀN 
 
    ======================================================================== */ 
 
-function chuyenSangFormDangKy() { 
+function setupLocKhuVucTheoMien() { 
 
-    damBaoFormDangKyCoThanhPho(); 
+    const regionDropdown = document.getElementById('regionDropdown'); 
 
- 
-
-    const loginSection = document.getElementById('loginSection'); 
-
-    const registerSection = document.getElementById('registerSection'); 
-
-    const loggedInSection = document.getElementById('loggedInSection'); 
+    const regionText = document.getElementById('regionText'); 
 
  
 
-    if (loggedInSection) loggedInSection.style.display = 'none'; 
-
-    if (loginSection) loginSection.style.display = 'none'; 
-
-    if (registerSection) registerSection.style.display = 'block'; 
+    if (!regionDropdown) return; 
 
  
 
-    ganSuKienTinhThanh(); 
+    regionDropdown.querySelectorAll('div[data-region]').forEach(item => { 
+
+        item.addEventListener('click', (e) => { 
+
+            e.stopPropagation(); 
+
+ 
+
+            const region = item.dataset.region; 
+
+ 
+
+            TRANG_THAI_LOC.region = region; 
+
+            TRANG_THAI_LOC.page = 1; 
+
+ 
+
+            if (regionText) { 
+
+                regionText.textContent = region === 'all' ? 'Tất cả khu vực' : region; 
+
+            } 
+
+ 
+
+            regionDropdown.classList.remove('show'); 
+
+ 
+
+            if (region === 'all') { 
+
+                showToast('🌏 Đã chọn tất cả khu vực'); 
+
+            } else { 
+
+                showToast('📍 Đã lọc theo ' + region); 
+
+            } 
+
+ 
+
+            apDungBoLocVaPhanTrang(); 
+
+        }); 
+
+    }); 
 
 } 
 
  
 
-function chuyenSangFormDangNhap() { 
+/* ======================================================================== 
 
-    const loginSection = document.getElementById('loginSection'); 
+   ÁP DỤNG FILTER + PHÂN TRANG 
 
-    const registerSection = document.getElementById('registerSection'); 
+   ======================================================================== */ 
 
-    const loggedInSection = document.getElementById('loggedInSection'); 
+function apDungBoLocVaPhanTrang() { 
+
+    const grid = document.querySelector('.product-grid'); 
+
+    const sectionTitle = document.getElementById('sectionTitle'); 
 
  
 
-    if (loggedInSection) loggedInSection.style.display = 'none'; 
+    if (!grid) return; 
 
-    if (loginSection) loginSection.style.display = 'block'; 
+ 
 
-    if (registerSection) registerSection.style.display = 'none'; 
+    const allCards = Array.from(grid.querySelectorAll('.product-card')); 
+
+ 
+
+    const matchedCards = allCards.filter(card => { 
+
+        const name = (card.dataset.name || '').toLowerCase(); 
+
+        const cat = card.dataset.cat || ''; 
+
+        const location = card.dataset.location || ''; 
+
+ 
+
+        const matchKeyword = 
+
+            TRANG_THAI_LOC.keyword === '' || 
+
+            name.includes(TRANG_THAI_LOC.keyword); 
+
+ 
+
+        const matchCategory = 
+
+            TRANG_THAI_LOC.category === 'all' || 
+
+            cat === TRANG_THAI_LOC.category; 
+
+ 
+
+        let productRegion = ''; 
+
+ 
+
+        if (typeof layMienTheoThanhPho === 'function') { 
+
+            productRegion = layMienTheoThanhPho(location); 
+
+        } 
+
+ 
+
+        const matchRegion = 
+
+            TRANG_THAI_LOC.region === 'all' || 
+
+            productRegion === TRANG_THAI_LOC.region; 
+
+ 
+
+        return matchKeyword && matchCategory && matchRegion; 
+
+    }); 
+
+ 
+
+    allCards.forEach(card => { 
+
+        card.style.display = 'none'; 
+
+    }); 
+
+ 
+
+    const oldEmpty = document.getElementById('noResultMessage'); 
+
+    if (oldEmpty) oldEmpty.remove(); 
+
+ 
+
+    if (matchedCards.length === 0) { 
+
+        anPagination(); 
+
+ 
+
+        const emptyDiv = document.createElement('div'); 
+
+        emptyDiv.id = 'noResultMessage'; 
+
+        emptyDiv.style.gridColumn = '1 / -1'; 
+
+        emptyDiv.style.textAlign = 'center'; 
+
+        emptyDiv.style.padding = '60px 20px'; 
+
+        emptyDiv.style.color = '#888'; 
+
+        emptyDiv.innerHTML = ` 
+
+            <div style="font-size:64px; margin-bottom:12px;">🔎</div> 
+
+            <h2>Không tìm thấy sản phẩm phù hợp</h2> 
+
+            <p>Hãy thử từ khóa khác hoặc chọn lại danh mục/khu vực.</p> 
+
+        `; 
+
+ 
+
+        grid.appendChild(emptyDiv); 
+
+ 
+
+        if (sectionTitle) { 
+
+            sectionTitle.textContent = 'Không có kết quả phù hợp'; 
+
+        } 
+
+ 
+
+        return; 
+
+    } 
+
+ 
+
+    // Cập nhật tiêu đề section 
+
+    const tenDanhMuc = { 
+
+        dientu: 'Thiết bị Điện tử', 
+
+        phuongtien: 'Phương tiện', 
+
+        trangphuc: 'Trang phục & Phụ kiện', 
+
+        vatdung: 'Vật dụng gia đình', 
+
+        khac: 'Khác' 
+
+    }; 
+
+ 
+
+    if (sectionTitle) { 
+
+        if (TRANG_THAI_LOC.keyword) { 
+
+            sectionTitle.textContent = `Kết quả tìm kiếm cho "${TRANG_THAI_LOC.keyword}"`; 
+
+        } else if (TRANG_THAI_LOC.region !== 'all') { 
+
+            sectionTitle.textContent = `Sản phẩm tại ${TRANG_THAI_LOC.region}`; 
+
+        } else if (TRANG_THAI_LOC.category !== 'all') { 
+
+            sectionTitle.textContent = tenDanhMuc[TRANG_THAI_LOC.category] || 'Sản phẩm'; 
+
+        } else { 
+
+            sectionTitle.textContent = `Tất cả sản phẩm`; 
+
+        } 
+
+    } 
+
+ 
+
+    // Phân trang 
+
+    const totalPages = Math.ceil(matchedCards.length / TRANG_THAI_LOC.perPage); 
+
+ 
+
+    if (TRANG_THAI_LOC.page > totalPages) { 
+
+        TRANG_THAI_LOC.page = totalPages; 
+
+    } 
+
+ 
+
+    const start = (TRANG_THAI_LOC.page - 1) * TRANG_THAI_LOC.perPage; 
+
+    const end = start + TRANG_THAI_LOC.perPage; 
+
+ 
+
+    matchedCards.forEach((card, index) => { 
+
+        card.style.display = index >= start && index < end ? '' : 'none'; 
+
+    }); 
+
+ 
+
+    renderPagination(totalPages); 
+
+} 
+
+ 
+
+function renderPagination(totalPages) { 
+
+    const grid = document.querySelector('.product-grid'); 
+
+    if (!grid) return; 
+
+ 
+
+    anPagination(); 
+
+ 
+
+    if (totalPages <= 1) return; 
+
+ 
+
+    const pagination = document.createElement('div'); 
+
+    pagination.id = 'paginationContainer'; 
+
+    pagination.style.textAlign = 'center'; 
+
+    pagination.style.marginTop = '30px'; 
+
+ 
+
+    let html = ''; 
+
+ 
+
+    if (TRANG_THAI_LOC.page > 1) { 
+
+        html += `<button class="btn-page" onclick="chuyenTrangSanPham(${TRANG_THAI_LOC.page - 1})">« Trước</button>`; 
+
+    } 
+
+ 
+
+    for (let i = 1; i <= totalPages; i++) { 
+
+        const activeStyle = i === TRANG_THAI_LOC.page 
+
+            ? 'background:#ff8a00;color:white;border-color:#ff8a00;' 
+
+            : ''; 
+
+ 
+
+        html += ` 
+
+            <button class="btn-page" onclick="chuyenTrangSanPham(${i})" 
+
+                style="margin:0 4px;padding:8px 14px;border-radius:8px;border:1px solid #ddd;cursor:pointer;${activeStyle}"> 
+
+                ${i} 
+
+            </button> 
+
+        `; 
+
+    } 
+
+ 
+
+    if (TRANG_THAI_LOC.page < totalPages) { 
+
+        html += `<button class="btn-page" onclick="chuyenTrangSanPham(${TRANG_THAI_LOC.page + 1})">Sau »</button>`; 
+
+    } 
+
+ 
+
+    pagination.innerHTML = html; 
+
+    grid.parentNode.insertBefore(pagination, grid.nextSibling); 
+
+} 
+
+ 
+
+function chuyenTrangSanPham(page) { 
+
+    TRANG_THAI_LOC.page = page; 
+
+    apDungBoLocVaPhanTrang(); 
+
+ 
+
+    const grid = document.querySelector('.product-grid'); 
+
+    if (grid) { 
+
+        window.scrollTo({ 
+
+            top: grid.offsetTop - 120, 
+
+            behavior: 'smooth' 
+
+        }); 
+
+    } 
+
+} 
+
+ 
+
+function anPagination() { 
+
+    const oldPagination = document.getElementById('paginationContainer'); 
+
+    if (oldPagination) oldPagination.remove(); 
+
+} 
+
+ 
+
+/* ======================================================================== 
+
+   TRANG GIỎ HÀNG 
+
+   ======================================================================== */ 
+
+function khoiTaoTrangGioHang() { 
+
+    const notLoggedIn = document.getElementById('notLoggedIn'); 
+
+    const cartContent = document.getElementById('cartContent'); 
+
+ 
+
+    if (!dangDangNhap()) { 
+
+        if (notLoggedIn) notLoggedIn.style.display = 'block'; 
+
+        if (cartContent) cartContent.style.display = 'none'; 
+
+    } else { 
+
+        if (notLoggedIn) notLoggedIn.style.display = 'none'; 
+
+        if (cartContent) cartContent.style.display = 'block'; 
+
+        renderBangGioHang(); 
+
+    } 
+
+ 
+
+    const btnCheckout = document.querySelector('.btn-checkout'); 
+
+    if (btnCheckout) { 
+
+        btnCheckout.onclick = thanhToan; 
+
+    } 
+
+} 
+
+ 
+
+function checkout() { 
+
+    thanhToan(); 
+
+} 
+
+ 
+
+/* ======================================================================== 
+
+   TRANG TÀI KHOẢN 
+
+   ======================================================================== */ 
+
+function khoiTaoTrangTaiKhoan() { 
+
+    if (typeof themOChonThanhPhoDangKy === 'function') { 
+
+        themOChonThanhPhoDangKy(); 
+
+    } 
+
+ 
+
+    if (dangDangNhap()) { 
+
+        const user = layUserHienTai(); 
+
+ 
+
+        setTimeout(() => { 
+
+            const cityText = user.city && user.region 
+
+                ? `${user.city} - ${user.region}` 
+
+                : 'Chưa cập nhật địa chỉ'; 
+
+ 
+
+            if (confirm(`👋 Chào ${user.name}!\nĐịa chỉ: ${cityText}\n\nBạn muốn về trang chủ?`)) { 
+
+                window.location.href = 'idea.html'; 
+
+            } 
+
+        }, 500); 
+
+ 
+
+        return; 
+
+    } 
+
+ 
+
+    const loginForm = document.getElementById('loginForm'); 
+
+    if (loginForm) { 
+
+        loginForm.addEventListener('submit', xuLyFormDangNhap); 
+
+    } 
+
+ 
+
+    const registerForm = document.getElementById('registerForm'); 
+
+    if (registerForm) { 
+
+        registerForm.addEventListener('submit', xuLyFormDangKy); 
+
+    } 
 
 } 
 
@@ -712,121 +1010,17 @@ function switchToLogin() {
 
  
 
-/* ======================================================================== 
+function handleLogin(event) { 
 
-   XỬ LÝ SUBMIT FORM 
-
-   ======================================================================== */ 
-
-function xuLyFormDangNhap(event) { 
-
-    event.preventDefault(); 
-
- 
-
-    const form = event.target; 
-
- 
-
-    const email = form.querySelector('[name="email"]').value; 
-
-    const password = form.querySelector('[name="password"]').value; 
-
- 
-
-    const result = dangNhap(email, password); 
-
- 
-
-    thongBaoTaiKhoan(result.message); 
-
- 
-
-    if (result.success) { 
-
-        form.reset(); 
-
- 
-
-        capNhatNutAuth(); 
-
- 
-
-        if (typeof capNhatBadgeGioHang === 'function') { 
-
-            capNhatBadgeGioHang(); 
-
-        } 
-
- 
-
-        if (typeof capNhatBadgeYeuThich === 'function') { 
-
-            capNhatBadgeYeuThich(); 
-
-        } 
-
- 
-
-        setTimeout(() => { 
-
-            window.location.href = 'idea.html'; 
-
-        }, 800); 
-
-    } 
+    xuLyFormDangNhap(event); 
 
 } 
 
  
 
-function xuLyFormDangKy(event) { 
+function handleRegister(event) { 
 
-    event.preventDefault(); 
-
- 
-
-    const form = event.target; 
-
- 
-
-    const name = form.querySelector('[name="name"]').value; 
-
-    const email = form.querySelector('[name="email"]').value; 
-
-    const role = form.querySelector('[name="role"]')?.value || 'buyer'; 
-
-    const city = form.querySelector('[name="city"]')?.value || ''; 
-
-    const password = form.querySelector('[name="password"]').value; 
-
-    const confirmPassword = form.querySelector('[name="confirmPassword"]').value; 
-
- 
-
-    const result = dangKy(name, email, password, confirmPassword, role, city); 
-
- 
-
-    thongBaoTaiKhoan(result.message); 
-
- 
-
-    if (result.success) { 
-
-        form.reset(); 
-
-        resetRegionPreview(); 
-
- 
-
-        setTimeout(() => { 
-
-            chuyenSangFormDangNhap(); 
-
-        }, 800); 
-
-    } 
+    xuLyFormDangKy(event); 
 
 } 
 
@@ -834,59 +1028,23 @@ function xuLyFormDangKy(event) {
 
 /* ======================================================================== 
 
-   HIỂN THỊ TRANG TÀI KHOẢN 
+   TRANG ĐĂNG TIN 
 
    ======================================================================== */ 
 
-function capNhatHienThiTrangTaiKhoan() { 
+function khoiTaoTrangDangTin() { 
 
-    const loggedInSection = document.getElementById('loggedInSection'); 
+    const notLoggedIn = document.getElementById('notLoggedIn'); 
 
-    const loginSection = document.getElementById('loginSection'); 
-
-    const registerSection = document.getElementById('registerSection'); 
+    const postContent = document.getElementById('postContent'); 
 
  
 
-    const user = layUserHienTai(); 
+    if (!dangDangNhap()) { 
 
- 
+        if (notLoggedIn) notLoggedIn.style.display = 'block'; 
 
-    if (!loginSection || !registerSection) return; 
-
- 
-
-    if (user && loggedInSection) { 
-
-        loggedInSection.style.display = 'block'; 
-
-        loginSection.style.display = 'none'; 
-
-        registerSection.style.display = 'none'; 
-
- 
-
-        const loggedInName = document.getElementById('loggedInName'); 
-
-        const loggedInEmail = document.getElementById('loggedInEmail'); 
-
-        const loggedInLocation = document.getElementById('loggedInLocation'); 
-
- 
-
-        if (loggedInName) loggedInName.textContent = user.name; 
-
-        if (loggedInEmail) loggedInEmail.textContent = user.email; 
-
-        if (loggedInLocation) { 
-
-            loggedInLocation.textContent = 
-
-                `${user.city || 'Chưa có địa chỉ'} ${user.region ? '- ' + user.region : ''}`; 
-
-        } 
-
- 
+        if (postContent) postContent.style.display = 'none'; 
 
         return; 
 
@@ -894,11 +1052,163 @@ function capNhatHienThiTrangTaiKhoan() {
 
  
 
-    if (loggedInSection) loggedInSection.style.display = 'none'; 
+    if (notLoggedIn) notLoggedIn.style.display = 'none'; 
 
-    loginSection.style.display = 'block'; 
+    if (postContent) postContent.style.display = 'block'; 
 
-    registerSection.style.display = 'none'; 
+ 
+
+    const user = layUserHienTai(); 
+
+ 
+
+    const sellerInput = document.querySelector('#postForm [name="seller"]'); 
+
+    if (sellerInput && user.name) { 
+
+        sellerInput.value = user.name; 
+
+        sellerInput.readOnly = true; 
+
+    } 
+
+ 
+
+    const locationInput = document.querySelector('#postForm [name="location"]'); 
+
+    if (locationInput && user.city) { 
+
+        locationInput.value = user.city; 
+
+    } 
+
+ 
+
+    const postForm = document.getElementById('postForm'); 
+
+    if (postForm) { 
+
+        postForm.addEventListener('submit', xuLyFormDangTin); 
+
+    } 
+
+} 
+
+ 
+
+function xuLyFormDangTin(event) { 
+
+    event.preventDefault(); 
+
+ 
+
+    const form = event.target; 
+
+    const user = layUserHienTai(); 
+
+ 
+
+    if (!user) { 
+
+        yeuCauDangNhap('⚠️ Vui lòng đăng nhập để đăng tin!'); 
+
+        return; 
+
+    } 
+
+ 
+
+    const location = form.querySelector('[name="location"]').value.trim(); 
+
+    const region = typeof layMienTheoThanhPho === 'function' 
+
+        ? layMienTheoThanhPho(location) 
+
+        : ''; 
+
+ 
+
+    const newPost = { 
+
+        id: Date.now(), 
+
+        ownerEmail: user.email, 
+
+        name: form.querySelector('[name="name"]').value.trim(), 
+
+        cat: form.querySelector('[name="cat"]').value, 
+
+        price: parseInt(form.querySelector('[name="price"]').value) || 0, 
+
+        qty: form.querySelector('[name="qty"]').value.trim() || '1', 
+
+        desc: form.querySelector('[name="desc"]').value.trim(), 
+
+        image: form.querySelector('[name="image"]').value.trim() || 'https://via.placeholder.com/400x300?text=Cho+Tot', 
+
+        seller: form.querySelector('[name="seller"]').value.trim(), 
+
+        phone: form.querySelector('[name="phone"]').value.trim(), 
+
+        location: location, 
+
+        region: region, 
+
+        createdAt: new Date().toISOString() 
+
+    }; 
+
+ 
+
+    if (!newPost.name || newPost.price <= 0 || !newPost.phone || !newPost.location) { 
+
+        showToast('⚠️ Vui lòng nhập đầy đủ tên, giá, số điện thoại và địa chỉ!'); 
+
+        return; 
+
+    } 
+
+ 
+
+    if (!newPost.region) { 
+
+        showToast('⚠️ Địa chỉ chưa xác định được miền. Hãy nhập đúng tỉnh/thành phố!'); 
+
+        return; 
+
+    } 
+
+ 
+
+    if (typeof themBaiDangMoi === 'function') { 
+
+        themBaiDangMoi(newPost); 
+
+    } else { 
+
+        const data = localStorage.getItem('userPosts'); 
+
+        const posts = data ? JSON.parse(data) : []; 
+
+        posts.unshift(newPost); 
+
+        localStorage.setItem('userPosts', JSON.stringify(posts)); 
+
+    } 
+
+ 
+
+    showToast('✅ Đăng tin thành công!'); 
+
+    form.reset(); 
+
+ 
+
+    setTimeout(() => { 
+
+        window.location.href = 'idea.html'; 
+
+    }, 1200); 
 
 } 
 
@@ -906,63 +1216,165 @@ function capNhatHienThiTrangTaiKhoan() {
 
 /* ======================================================================== 
 
-   PREVIEW MIỀN 
+   TRANG THÔNG BÁO 
 
    ======================================================================== */ 
 
-function ganSuKienTinhThanh() { 
+function khoiTaoTrangThongBao() { 
 
-    const citySelect = document.querySelector('[name="city"]'); 
+    if (!dangDangNhap()) { 
 
-    const regionPreview = document.getElementById('regionPreview'); 
+        const container = document.getElementById('thongBaoList'); 
 
- 
+        if (container) { 
 
-    if (!citySelect || !regionPreview) return; 
+            container.innerHTML = ` 
 
- 
+                <div style="text-align:center; padding:60px 20px;"> 
 
-    if (citySelect.dataset.bound === 'true') return; 
+                    <div style="font-size:64px; margin-bottom:20px;">🔐</div> 
 
-    citySelect.dataset.bound = 'true'; 
+                    <h2 style="color:#666; margin-bottom:15px;">Vui lòng đăng nhập để xem thông báo</h2> 
 
- 
+                    <a href="taikhoan.html" class="btn-explore">Đăng nhập ngay</a> 
 
-    citySelect.addEventListener('change', () => { 
+                </div> 
 
-        const city = citySelect.value; 
-
-        const region = layMienTheoThanhPho(city); 
-
- 
-
-        if (!city) { 
-
-            resetRegionPreview(); 
-
-            return; 
+            `; 
 
         } 
 
+        return; 
+
+    } 
+
  
 
-        if (region) { 
+    if (typeof danhDauThongBaoDaDoc === 'function') { 
 
-            regionPreview.textContent = 'Khu vực tự động: ' + region; 
+        danhDauThongBaoDaDoc(); 
 
-            regionPreview.style.color = '#ff8a00'; 
+    } 
 
-            regionPreview.style.fontWeight = '600'; 
+ 
 
-        } else { 
+    renderDanhSachThongBao(); 
 
-            regionPreview.textContent = 'Không xác định được miền. Vui lòng chọn lại.'; 
+} 
 
-            regionPreview.style.color = '#ff4757'; 
+ 
 
-            regionPreview.style.fontWeight = '600'; 
+function renderDanhSachThongBao() { 
 
-        } 
+    const container = document.getElementById('thongBaoList'); 
+
+    if (!container) return; 
+
+ 
+
+    const thongBaos = typeof layDanhSachThongBaoCuaUser === 'function' 
+
+        ? layDanhSachThongBaoCuaUser() 
+
+        : []; 
+
+ 
+
+    if (thongBaos.length === 0) { 
+
+        container.innerHTML = ` 
+
+            <div style="text-align:center; padding:60px 20px; color:#888; background:#fff; 
+
+                        border-radius:14px; border:1px dashed #ddd; max-width:800px; margin:0 auto;"> 
+
+                <div style="font-size:64px; margin-bottom:12px;">🔔</div> 
+
+                <h2 style="color:#666; margin-bottom:8px;">Chưa có thông báo nào</h2> 
+
+                <p style="color:#999;">Khi có người quan tâm đến sản phẩm của bạn, thông báo sẽ hiện ở đây.</p> 
+
+            </div> 
+
+        `; 
+
+        return; 
+
+    } 
+
+ 
+
+    let html = '<div style="max-width:800px; margin:0 auto;">'; 
+
+ 
+
+    thongBaos.forEach((tb, idx) => { 
+
+        const time = new Date(tb.time); 
+
+        const timeText = tinhThoiGianThongBao(time); 
+
+        const fromEmail = tb.fromEmail || ''; 
+
+ 
+
+        html += ` 
+
+            <div class="noti-card" data-from-email="${escapeHtml(fromEmail)}"  
+
+                 data-from-user="${escapeHtml(tb.fromUser)}" 
+
+                 data-product-name="${escapeHtml(tb.productName)}"> 
+
+                <div class="noti-icon">🛒</div> 
+
+                <div class="noti-content"> 
+
+                    <p class="noti-text"> 
+
+                        <strong>${escapeHtml(tb.fromUser)}</strong> 
+
+                        đã thêm sản phẩm <strong>"${escapeHtml(tb.productName)}"</strong> vào giỏ hàng 
+
+                    </p> 
+
+                    <small class="noti-time">${timeText}</small> 
+
+                </div> 
+
+                <div class="noti-arrow">›</div> 
+
+            </div> 
+
+        `; 
+
+    }); 
+
+ 
+
+    html += '</div>'; 
+
+    container.innerHTML = html; 
+
+ 
+
+    // ★ Gắn sự kiện click để mở modal thông tin liên hệ 
+
+    container.querySelectorAll('.noti-card').forEach(card => { 
+
+        card.addEventListener('click', () => { 
+
+            const fromEmail = card.dataset.fromEmail; 
+
+            const fromUser = card.dataset.fromUser; 
+
+            const productName = card.dataset.productName; 
+
+ 
+
+            moModalThongTinNguoiMua(fromEmail, fromUser, productName); 
+
+        }); 
 
     }); 
 
@@ -970,21 +1382,249 @@ function ganSuKienTinhThanh() {
 
  
 
-function resetRegionPreview() { 
+/* ======================================================================== 
 
-    const regionPreview = document.getElementById('regionPreview'); 
+   ★ MODAL THÔNG TIN NGƯỜI MUA (khi click vào 1 thông báo) 
+
+   ======================================================================== */ 
+
+function moModalThongTinNguoiMua(fromEmail, fromUser, productName) { 
+
+    // Xóa modal cũ nếu có 
+
+    const oldModal = document.getElementById('modalNguoiMua'); 
+
+    if (oldModal) oldModal.remove(); 
 
  
 
-    if (!regionPreview) return; 
+    // Lấy thông tin user 
+
+    let userInfo = null; 
+
+    if (fromEmail && typeof layThongTinUserTheoEmail === 'function') { 
+
+        userInfo = layThongTinUserTheoEmail(fromEmail); 
+
+    } 
 
  
 
-    regionPreview.textContent = 'Hệ thống sẽ tự xác định miền sau khi bạn chọn tỉnh/thành.'; 
+    // Fallback nếu không tìm thấy user (tài khoản đã xóa hoặc dữ liệu cũ) 
 
-    regionPreview.style.color = '#777'; 
+    if (!userInfo) { 
 
-    regionPreview.style.fontWeight = '400'; 
+        userInfo = { 
+
+            name: fromUser || 'Người dùng', 
+
+            email: fromEmail || 'Không có thông tin', 
+
+            phone: '', 
+
+            city: '', 
+
+            region: '', 
+
+            role: '' 
+
+        }; 
+
+    } 
+
+ 
+
+    const phoneDisplay = userInfo.phone 
+
+        ? `<a href="tel:${escapeHtml(userInfo.phone)}" style="color:#ff8a00; text-decoration:none;"> 
+
+             📞 ${escapeHtml(userInfo.phone)} 
+
+           </a>` 
+
+        : '<span style="color:#999;">Chưa cập nhật</span>'; 
+
+ 
+
+    const addressDisplay = userInfo.city 
+
+        ? `${escapeHtml(userInfo.city)}${userInfo.region ? ' - ' + escapeHtml(userInfo.region) : ''}` 
+
+        : '<span style="color:#999;">Chưa cập nhật</span>'; 
+
+ 
+
+    const roleDisplay = userInfo.role === 'seller' 
+
+        ? '💰 Người bán' 
+
+        : userInfo.role === 'buyer' ? '🛒 Người mua' : 'Thành viên'; 
+
+ 
+
+    const modalHtml = ` 
+
+        <div class="modal-overlay show" id="modalNguoiMua"> 
+
+            <div class="modal-box"> 
+
+                <button class="modal-close" type="button" onclick="dongModalNguoiMua()">✕</button> 
+
+ 
+
+                <div style="padding:30px 24px 20px; text-align:center; background:linear-gradient(135deg, #ffd65e, #ffba00);"> 
+
+                    <div style="width:80px; height:80px; margin:0 auto 14px; background:#fff; 
+
+                                border-radius:50%; display:flex; align-items:center; justify-content:center; 
+
+                                font-size:40px; box-shadow:0 4px 12px rgba(0,0,0,0.15);"> 
+
+                        👤 
+
+                    </div> 
+
+                    <h2 style="font-size:22px; color:#000; margin:0;"> 
+
+                        ${escapeHtml(userInfo.name)} 
+
+                    </h2> 
+
+                    <p style="color:#555; font-size:13px; margin-top:4px;"> 
+
+                        ${roleDisplay} 
+
+                    </p> 
+
+                </div> 
+
+ 
+
+                <div class="modal-body"> 
+
+                    <div style="background:#fff8e1; border-left:4px solid #ffba00; 
+
+                                padding:12px 14px; border-radius:6px; margin-bottom:20px; font-size:13px;"> 
+
+                        💡 Người này quan tâm sản phẩm  
+
+                        <strong>"${escapeHtml(productName)}"</strong> của bạn.  
+
+                        Hãy chủ động liên hệ để chốt giao dịch! 
+
+                    </div> 
+
+ 
+
+                    <div class="modal-info"> 
+
+                        <div class="modal-info-row"> 
+
+                            <span class="label">📞 Số điện thoại:</span> 
+
+                            <span class="value">${phoneDisplay}</span> 
+
+                        </div> 
+
+ 
+
+                        <div class="modal-info-row"> 
+
+                            <span class="label">📧 Email:</span> 
+
+                            <span class="value"> 
+
+                                <a href="mailto:${escapeHtml(userInfo.email)}"  
+
+                                   style="color:#ff8a00; text-decoration:none;"> 
+
+                                    ${escapeHtml(userInfo.email)} 
+
+                                </a> 
+
+                            </span> 
+
+                        </div> 
+
+ 
+
+                        <div class="modal-info-row"> 
+
+                            <span class="label">📍 Địa chỉ:</span> 
+
+                            <span class="value">${addressDisplay}</span> 
+
+                        </div> 
+
+                    </div> 
+
+ 
+
+                    <div class="modal-actions" style="margin-top:20px;"> 
+
+                        <button type="button" class="btn-add-cart" onclick="dongModalNguoiMua()"> 
+
+                            Đóng 
+
+                        </button> 
+
+                    </div> 
+
+                </div> 
+
+            </div> 
+
+        </div> 
+
+    `; 
+
+ 
+
+    document.body.insertAdjacentHTML('beforeend', modalHtml); 
+
+ 
+
+    // Click ra ngoài modal để đóng 
+
+    const modal = document.getElementById('modalNguoiMua'); 
+
+    modal.addEventListener('click', (e) => { 
+
+        if (e.target === modal) dongModalNguoiMua(); 
+
+    }); 
+
+} 
+
+ 
+
+function dongModalNguoiMua() { 
+
+    const modal = document.getElementById('modalNguoiMua'); 
+
+    if (modal) modal.remove(); 
+
+} 
+
+ 
+
+function tinhThoiGianThongBao(date) { 
+
+    const now = new Date(); 
+
+    const diff = Math.floor((now - date) / 1000); 
+
+ 
+
+    if (diff < 60) return 'Vừa xong'; 
+
+    if (diff < 3600) return Math.floor(diff / 60) + ' phút trước'; 
+
+    if (diff < 86400) return Math.floor(diff / 3600) + ' giờ trước'; 
+
+    if (diff < 604800) return Math.floor(diff / 86400) + ' ngày trước'; 
+
+    return date.toLocaleDateString('vi-VN'); 
 
 } 
 
@@ -992,129 +1632,119 @@ function resetRegionPreview() {
 
 /* ======================================================================== 
 
-   GẮN SỰ KIỆN 
+   RENDER BÀI ĐĂNG NGƯỜI DÙNG 
 
    ======================================================================== */ 
 
-function khoiTaoTaiKhoan() { 
+function renderBaiDangNguoiDungLenGrid() { 
 
-    if (window.location.search) { 
+    const grid = document.querySelector('.product-grid'); 
 
-        window.history.replaceState({}, document.title, window.location.pathname); 
+    if (!grid) return; 
+
+ 
+
+    let posts = []; 
+
+ 
+
+    if (typeof layDanhSachBaiDang === 'function') { 
+
+        posts = layDanhSachBaiDang(); 
+
+    } else { 
+
+        const data = localStorage.getItem('userPosts'); 
+
+        posts = data ? JSON.parse(data) : []; 
 
     } 
 
  
 
-    damBaoFormDangKyCoThanhPho(); 
+    if (!posts || posts.length === 0) return; 
 
  
 
-    const loginForm = document.getElementById('loginForm'); 
+    const fileName = window.location.pathname.toLowerCase().split('/').pop(); 
 
-    const registerForm = document.getElementById('registerForm'); 
+    const pageCategoryMap = { 
 
- 
+        'idea.html': null, 
 
-    const showRegisterLink = document.getElementById('showRegisterLink'); 
+        'dientu.html': 'dientu', 
 
-    const showLoginLink = document.getElementById('showLoginLink'); 
+        'phuongtien.html': 'phuongtien', 
 
- 
+        'trangphuc.html': 'trangphuc', 
 
-    const logoutBtn = document.getElementById('logoutAccountBtn'); 
+        'vatdung.html': 'vatdung' 
 
- 
-
-    if (loginForm && loginForm.dataset.bound !== 'true') { 
-
-        loginForm.dataset.bound = 'true'; 
-
-        loginForm.addEventListener('submit', xuLyFormDangNhap); 
-
-    } 
+    }; 
 
  
 
-    if (registerForm && registerForm.dataset.bound !== 'true') { 
-
-        registerForm.dataset.bound = 'true'; 
-
-        registerForm.addEventListener('submit', xuLyFormDangKy); 
-
-    } 
+    const currentCategory = pageCategoryMap[fileName]; 
 
  
 
-    if (showRegisterLink) { 
+    posts.forEach(post => { 
 
-        showRegisterLink.onclick = function(e) { 
+        if (currentCategory && post.cat !== currentCategory) return; 
 
-            e.preventDefault(); 
+        if (grid.querySelector(`[data-id="${post.id}"]`)) return; 
 
-            chuyenSangFormDangKy(); 
+        grid.insertAdjacentHTML('afterbegin', taoHtmlCardSanPham(post)); 
 
-        }; 
+    }); 
 
-    } 
-
- 
-
-    if (showLoginLink) { 
-
-        showLoginLink.onclick = function(e) { 
-
-            e.preventDefault(); 
-
-            chuyenSangFormDangNhap(); 
-
-        }; 
-
-    } 
+} 
 
  
 
-    if (logoutBtn) { 
+function taoHtmlCardSanPham(product) { 
 
-        logoutBtn.onclick = function() { 
+    return ` 
 
-            dangXuat(); 
+        <div class="product-card" 
 
-            thongBaoTaiKhoan('👋 Đã đăng xuất'); 
+             data-id="${escapeHtml(product.id)}" 
 
- 
+             data-cat="${escapeHtml(product.cat)}" 
 
-            capNhatNutAuth(); 
+             data-name="${escapeHtml(product.name)}" 
 
-            capNhatHienThiTrangTaiKhoan(); 
+             data-price="${Number(product.price) || 0}" 
 
- 
+             data-desc="${escapeHtml(product.desc)}" 
 
-            if (typeof capNhatBadgeGioHang === 'function') { 
+             data-seller="${escapeHtml(product.seller)}" 
 
-                capNhatBadgeGioHang(); 
+             data-phone="${escapeHtml(product.phone)}" 
 
-            } 
+             data-location="${escapeHtml(product.location)}" 
 
- 
+             data-qty="${escapeHtml(product.qty || '1')}"> 
 
-            if (typeof capNhatBadgeYeuThich === 'function') { 
+            <img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)}" class="card-img"> 
 
-                capNhatBadgeYeuThich(); 
+            <div class="card-actions"> 
 
-            } 
+                <button class="card-btn btn-cart" type="button">🛒</button> 
 
-        }; 
+            </div> 
 
-    } 
+            <div class="card-body"> 
 
- 
+                <h3>${escapeHtml(product.name)}</h3> 
 
-    ganSuKienTinhThanh(); 
+                <p class="price">₫${(Number(product.price) || 0).toLocaleString()}</p> 
 
-    capNhatNutAuth(); 
+            </div> 
 
-    capNhatHienThiTrangTaiKhoan(); 
+        </div> 
+
+    `; 
 
 } 
 
@@ -1122,22 +1752,24 @@ function khoiTaoTaiKhoan() {
 
 /* ======================================================================== 
 
-   CHẠY KHI LOAD TRANG 
+   HELPER CHỐNG CHÈN HTML LẠ 
 
    ======================================================================== */ 
 
-document.addEventListener('DOMContentLoaded', khoiTaoTaiKhoan); 
+function escapeHtml(value) { 
 
- 
+    return (value ?? '') 
 
-window.addEventListener('pageshow', () => { 
+        .toString() 
 
-    capNhatNutAuth(); 
+        .replace(/&/g, '&amp;') 
 
-    capNhatHienThiTrangTaiKhoan(); 
+        .replace(/</g, '&lt;') 
 
-}); 
+        .replace(/>/g, '&gt;') 
 
- 
+        .replace(/"/g, '&quot;') 
 
- 
+        .replace(/'/g, '&#039;'); 
+
+}  
