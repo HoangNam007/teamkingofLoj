@@ -88,45 +88,22 @@ function ghiJSON(key, value) {
 
    ======================================================================== */ 
 
-function chuanHoaEmailStorage(email) { 
-
-    return (email || '').toString().trim().toLowerCase(); 
-
-} 
-
- 
-
 function chuanHoaUserStorage(user) { 
-
-    return { 
-
-        id: user.id || Date.now(), 
-
-        name: user.name || user.fullName || '', 
-
-        email: chuanHoaEmailStorage(user.email), 
-
-        password: user.password || '', 
-
-        role: user.role || 'buyer', 
-
-        city: user.city || '', 
-
-        region: user.region || '', 
-
-        cart: Array.isArray(user.cart) ? user.cart : [], 
-
-        favorites: Array.isArray(user.favorites) ? user.favorites : [], 
-
-        posts: Array.isArray(user.posts) ? user.posts : [], 
-
-        createdAt: user.createdAt || new Date().toISOString() 
-
-    }; 
-
+   return { 
+       id: user.id || Date.now(), 
+       name: user.name || user.fullName || '', 
+       email: chuanHoaEmailStorage(user.email), 
+       password: user.password || '', 
+       phone: (user.phone || '').toString().trim(),   // ★ MỚI 
+       role: user.role || 'buyer', 
+       city: user.city || '', 
+       region: user.region || '', 
+       cart: Array.isArray(user.cart) ? user.cart : [], 
+       favorites: Array.isArray(user.favorites) ? user.favorites : [], 
+       posts: Array.isArray(user.posts) ? user.posts : [], 
+       createdAt: user.createdAt || new Date().toISOString() 
+   }; 
 } 
-
- 
 
 /* ======================================================================== 
 
