@@ -453,7 +453,18 @@ function dangKy(name, email, password, confirmPassword, role, city) {
     }; 
 
 } 
-
+ <div class="form-group"> 
+                   <label>Số điện thoại</label> 
+                   <input type="tel" name="phone" placeholder="Ví dụ: 0912 345 678"  
+                          pattern="[0-9\s]{9,15}" required> 
+                   <p style="font-size:12px; color:#777; margin-top:6px;"> 
+                       Số điện thoại sẽ hiển thị cho người bán khi bạn quan tâm sản phẩm của họ. 
+                   </p> 
+               </div> 
+ 
+               <div class="form-group"> 
+                   <label>Vai trò</label> 
+                   <!-- ... giữ nguyên phần cũ ... --> 
  
 
 /* ======================================================================== 
