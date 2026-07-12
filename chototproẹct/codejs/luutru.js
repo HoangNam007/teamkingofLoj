@@ -88,21 +88,44 @@ function ghiJSON(key, value) {
 
    ======================================================================== */ 
 
+function chuanHoaEmailStorage(email) { 
+
+    return (email || '').toString().trim().toLowerCase(); 
+
+} 
+
+ 
+
 function chuanHoaUserStorage(user) { 
-   return { 
-       id: user.id || Date.now(), 
-       name: user.name || user.fullName || '', 
-       email: chuanHoaEmailStorage(user.email), 
-       password: user.password || '', 
-       phone: (user.phone || '').toString().trim(),   // ★ MỚI 
-       role: user.role || 'buyer', 
-       city: user.city || '', 
-       region: user.region || '', 
-       cart: Array.isArray(user.cart) ? user.cart : [], 
-       favorites: Array.isArray(user.favorites) ? user.favorites : [], 
-       posts: Array.isArray(user.posts) ? user.posts : [], 
-       createdAt: user.createdAt || new Date().toISOString() 
-   }; 
+
+    return { 
+
+        id: user.id || Date.now(), 
+
+        name: user.name || user.fullName || '', 
+
+        email: chuanHoaEmailStorage(user.email), 
+
+        password: user.password || '', 
+
+        phone: (user.phone || '').toString().trim(),   // ★ MỚI 
+
+        role: user.role || 'buyer', 
+
+        city: user.city || '', 
+
+        region: user.region || '', 
+
+        cart: Array.isArray(user.cart) ? user.cart : [], 
+
+        favorites: Array.isArray(user.favorites) ? user.favorites : [], 
+
+        posts: Array.isArray(user.posts) ? user.posts : [], 
+
+        createdAt: user.createdAt || new Date().toISOString() 
+
+    }; 
+
 } 
 
 /* ======================================================================== 
@@ -387,6 +410,10 @@ function themBaiDangMoi(post) {
 
  
 
+    const defaultImg = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'><rect width='400' height='300' fill='%23f5f5f5'/><text x='50%25' y='50%25' font-family='Arial,sans-serif' font-size='24' fill='%23bbb' text-anchor='middle' dominant-baseline='middle'>Chợ Tốt</text></svg>"; 
+
+ 
+
     const newPost = { 
 
         id: post.id || Date.now(), 
@@ -403,7 +430,7 @@ function themBaiDangMoi(post) {
 
         desc: post.desc || '', 
 
-        image: post.image || 'https://via.placeholder.com/400x300?text=Cho+Tot', 
+        image: post.image || defaultImg,   // ★ SỬA 
 
         seller: post.seller || user?.name || '', 
 
@@ -583,33 +610,57 @@ function xoaBaiDang(id) {
 
  */ 
 
-/** 
-* Thêm thông báo cho người bán khi có người thêm sản phẩm vào giỏ. 
-
-* @param {Object} noti - { toEmail, fromUser, fromEmail, productName } 
-*/ 
 function themThongBaoChoNguoiBan(noti) { 
-   if (!noti || !noti.toEmail) return false; 
+
+    if (!noti || !noti.toEmail) return false; 
+
  
-   const all = docJSON(STORAGE_KEYS.NOTIFICATIONS, []); 
-   const list = Array.isArray(all) ? all : []; 
+
+    const all = docJSON(STORAGE_KEYS.NOTIFICATIONS, []); 
+
+    const list = Array.isArray(all) ? all : []; 
+
  
-   list.unshift({ 
-       id: Date.now() + Math.floor(Math.random() * 1000), 
-       toEmail: chuanHoaEmailStorage(noti.toEmail), 
-       fromUser: noti.fromUser || 'Người dùng', 
-       fromEmail: chuanHoaEmailStorage(noti.fromEmail || ''),  // ★ MỚI 
-       productName: noti.productName || 'Sản phẩm', 
-       time: new Date().toISOString(), 
-       read: false 
-   }); 
+
+    list.unshift({ 
+
+        id: Date.now() + Math.floor(Math.random() * 1000), 
+
+        toEmail: chuanHoaEmailStorage(noti.toEmail), 
+
+        fromUser: noti.fromUser || 'Người dùng', 
+
+        fromEmail: chuanHoaEmailStorage(noti.fromEmail || ''),  // ★ MỚI 
+
+        productName: noti.productName || 'Sản phẩm', 
+
+        time: new Date().toISOString(), 
+
+        read: false 
+
+    }); 
+
  
-   if (list.length > 100) list.length = 100; 
+
+    if (list.length > 100) list.length = 100; 
+
  
-   ghiJSON(STORAGE_KEYS.NOTIFICATIONS, list); 
-   capNhatBadgeThongBao(); 
-   return true; 
+
+    ghiJSON(STORAGE_KEYS.NOTIFICATIONS, list); 
+
+    capNhatBadgeThongBao(); 
+
+    return true; 
+
 } 
+
+ 
+
+/** 
+
+ * Lấy danh sách thông báo của user đang đăng nhập (mới nhất trước). 
+
+ */ 
 
 function layDanhSachThongBaoCuaUser() { 
 
@@ -733,6 +784,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
 }); 
 
+/** 
+
+ * Lấy thông tin chi tiết user để hiển thị (loại bỏ password). 
+
+ * Dùng khi cần xem thông tin liên hệ người mua trong thông báo. 
+
+ */ 
+
+function layThongTinUserTheoEmail(email) { 
+
+    const user = timUserTheoEmail(email); 
+
+    if (!user) return null; 
+
+ 
+
+    return { 
+
+        name: user.name, 
+
+        email: user.email, 
+
+        phone: user.phone || '', 
+
+        city: user.city, 
+
+        region: user.region, 
+
+        role: user.role 
+
+    }; 
+
+} 
+
  
 
 /* ======================================================================== 
@@ -752,5 +837,7 @@ function xoaTatCaDuLieuDemo() {
     localStorage.removeItem(STORAGE_KEYS.NOTIFICATIONS); 
 
 } 
+
+ 
 
  
