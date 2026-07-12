@@ -1389,212 +1389,101 @@ function renderDanhSachThongBao() {
    ======================================================================== */ 
 
 function moModalThongTinNguoiMua(fromEmail, fromUser, productName) { 
-
-    // Xóa modal cũ nếu có 
-
-    const oldModal = document.getElementById('modalNguoiMua'); 
-
-    if (oldModal) oldModal.remove(); 
-
+   // Xóa modal cũ nếu có 
+   const oldModal = document.getElementById('modalNguoiMua'); 
+   if (oldModal) oldModal.remove(); 
  
-
-    // Lấy thông tin user 
-
-    let userInfo = null; 
-
-    if (fromEmail && typeof layThongTinUserTheoEmail === 'function') { 
-
-        userInfo = layThongTinUserTheoEmail(fromEmail); 
-
-    } 
-
+   // Lấy thông tin user 
+   let userInfo = null; 
+   if (fromEmail && typeof layThongTinUserTheoEmail === 'function') { 
+       userInfo = layThongTinUserTheoEmail(fromEmail); 
+   } 
  
-
-    // Fallback nếu không tìm thấy user (tài khoản đã xóa hoặc dữ liệu cũ) 
-
-    if (!userInfo) { 
-
-        userInfo = { 
-
-            name: fromUser || 'Người dùng', 
-
-            email: fromEmail || 'Không có thông tin', 
-
-            phone: '', 
-
-            city: '', 
-
-            region: '', 
-
-            role: '' 
-
-        }; 
-
-    } 
-
+   // Fallback nếu không tìm thấy user 
+   if (!userInfo) { 
+       userInfo = { 
+           name: fromUser || 'Người dùng', 
+           phone: '', 
+           city: '', 
+           region: '', 
+           role: '' 
+       }; 
+   } 
  
-
-    const phoneDisplay = userInfo.phone 
-
-        ? `<a href="tel:${escapeHtml(userInfo.phone)}" style="color:#ff8a00; text-decoration:none;"> 
-
-             📞 ${escapeHtml(userInfo.phone)} 
-
-           </a>` 
-
-        : '<span style="color:#999;">Chưa cập nhật</span>'; 
-
+   const phoneDisplay = userInfo.phone 
+       ? `<a href="tel:${escapeHtml(userInfo.phone)}"  
+             style="color:#ff8a00; text-decoration:none; font-weight:600; font-size:16px;"> 
+            📞 ${escapeHtml(userInfo.phone)} 
+          </a>` 
+       : `<span style="color:#999;">Chưa cập nhật</span>`; 
  
-
-    const addressDisplay = userInfo.city 
-
-        ? `${escapeHtml(userInfo.city)}${userInfo.region ? ' - ' + escapeHtml(userInfo.region) : ''}` 
-
-        : '<span style="color:#999;">Chưa cập nhật</span>'; 
-
+   const addressDisplay = userInfo.city 
+       ? `${escapeHtml(userInfo.city)}${userInfo.region ? ' - ' + escapeHtml(userInfo.region) : ''}` 
+       : `<span style="color:#999;">Chưa cập nhật</span>`; 
  
-
-    const roleDisplay = userInfo.role === 'seller' 
-
-        ? '💰 Người bán' 
-
-        : userInfo.role === 'buyer' ? '🛒 Người mua' : 'Thành viên'; 
-
+   const roleDisplay = userInfo.role === 'seller' 
+       ? '💰 Người bán' 
+       : userInfo.role === 'buyer' ? '🛒 Người mua' : 'Thành viên'; 
  
-
-    const modalHtml = ` 
-
-        <div class="modal-overlay show" id="modalNguoiMua"> 
-
-            <div class="modal-box"> 
-
-                <button class="modal-close" type="button" onclick="dongModalNguoiMua()">✕</button> 
-
+   const modalHtml = ` 
+       <div class="modal-overlay show" id="modalNguoiMua"> 
+           <div class="modal-box"> 
+               <button class="modal-close" type="button" onclick="dongModalNguoiMua()">✕</button> 
  
-
-                <div style="padding:30px 24px 20px; text-align:center; background:linear-gradient(135deg, #ffd65e, #ffba00);"> 
-
-                    <div style="width:80px; height:80px; margin:0 auto 14px; background:#fff; 
-
-                                border-radius:50%; display:flex; align-items:center; justify-content:center; 
-
-                                font-size:40px; box-shadow:0 4px 12px rgba(0,0,0,0.15);"> 
-
-                        👤 
-
-                    </div> 
-
-                    <h2 style="font-size:22px; color:#000; margin:0;"> 
-
-                        ${escapeHtml(userInfo.name)} 
-
-                    </h2> 
-
-                    <p style="color:#555; font-size:13px; margin-top:4px;"> 
-
-                        ${roleDisplay} 
-
-                    </p> 
-
-                </div> 
-
+               <div style="padding:30px 24px 20px; text-align:center;  
+                           background:linear-gradient(135deg, #ffd65e, #ffba00);"> 
+                   <div style="width:80px; height:80px; margin:0 auto 14px; background:#fff; 
+                               border-radius:50%; display:flex; align-items:center;  
+                               justify-content:center; font-size:40px;  
+                               box-shadow:0 4px 12px rgba(0,0,0,0.15);"> 
+                       👤 
+                   </div> 
+                   <h2 style="font-size:22px; color:#000; margin:0;"> 
+                       ${escapeHtml(userInfo.name)} 
+                   </h2> 
+                   <p style="color:#555; font-size:13px; margin-top:4px;"> 
+                       ${roleDisplay} 
+                   </p> 
+               </div> 
  
-
-                <div class="modal-body"> 
-
-                    <div style="background:#fff8e1; border-left:4px solid #ffba00; 
-
-                                padding:12px 14px; border-radius:6px; margin-bottom:20px; font-size:13px;"> 
-
-                        💡 Người này quan tâm sản phẩm  
-
-                        <strong>"${escapeHtml(productName)}"</strong> của bạn.  
-
-                        Hãy chủ động liên hệ để chốt giao dịch! 
-
-                    </div> 
-
+               <div class="modal-body"> 
+                   <div style="background:#fff8e1; border-left:4px solid #ffba00; 
+                               padding:12px 14px; border-radius:6px; margin-bottom:20px;  
+                               font-size:13px;"> 
+                       💡 Người này quan tâm sản phẩm  
+                       <strong>"${escapeHtml(productName)}"</strong> của bạn.  
+                       Hãy chủ động liên hệ để chốt giao dịch! 
+                   </div> 
  
-
-                    <div class="modal-info"> 
-
-                        <div class="modal-info-row"> 
-
-                            <span class="label">📞 Số điện thoại:</span> 
-
-                            <span class="value">${phoneDisplay}</span> 
-
-                        </div> 
-
+                   <div class="modal-info"> 
+                       <div class="modal-info-row"> 
+                           <span class="label">📞 Số điện thoại:</span> 
+                           <span class="value">${phoneDisplay}</span> 
+                       </div> 
  
-
-                        <div class="modal-info-row"> 
-
-                            <span class="label">📧 Email:</span> 
-
-                            <span class="value"> 
-
-                                <a href="mailto:${escapeHtml(userInfo.email)}"  
-
-                                   style="color:#ff8a00; text-decoration:none;"> 
-
-                                    ${escapeHtml(userInfo.email)} 
-
-                                </a> 
-
-                            </span> 
-
-                        </div> 
-
+                       <div class="modal-info-row"> 
+                           <span class="label">📍 Địa chỉ:</span> 
+                           <span class="value">${addressDisplay}</span> 
+                       </div> 
+                   </div> 
  
-
-                        <div class="modal-info-row"> 
-
-                            <span class="label">📍 Địa chỉ:</span> 
-
-                            <span class="value">${addressDisplay}</span> 
-
-                        </div> 
-
-                    </div> 
-
+                   <div class="modal-actions" style="margin-top:20px;"> 
+                       <button type="button" class="btn-add-cart" onclick="dongModalNguoiMua()"> 
+                           Đóng 
+                       </button> 
+                   </div> 
+               </div> 
+           </div> 
+       </div> 
+   `; 
  
-
-                    <div class="modal-actions" style="margin-top:20px;"> 
-
-                        <button type="button" class="btn-add-cart" onclick="dongModalNguoiMua()"> 
-
-                            Đóng 
-
-                        </button> 
-
-                    </div> 
-
-                </div> 
-
-            </div> 
-
-        </div> 
-
-    `; 
-
+   document.body.insertAdjacentHTML('beforeend', modalHtml); 
  
-
-    document.body.insertAdjacentHTML('beforeend', modalHtml); 
-
- 
-
-    // Click ra ngoài modal để đóng 
-
-    const modal = document.getElementById('modalNguoiMua'); 
-
-    modal.addEventListener('click', (e) => { 
-
-        if (e.target === modal) dongModalNguoiMua(); 
-
-    }); 
-
-} 
+   const modal = document.getElementById('modalNguoiMua'); 
+   modal.addEventListener('click', (e) => { 
+       if (e.target === modal) dongModalNguoiMua(); 
+   }); 
+}  
 
  
 
