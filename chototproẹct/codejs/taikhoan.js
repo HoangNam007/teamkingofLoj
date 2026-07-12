@@ -329,77 +329,151 @@ function damBaoFormDangKyCoThanhPho() {
    ======================================================================== */ 
 
 function dangKy(name, email, password, confirmPassword, role, city, phone) { 
-   name = (name || '').trim(); 
-   email = chuanHoaEmail(email); 
-   city = (city || '').trim(); 
-   phone = (phone || '').toString().trim().replace(/\s+/g, ''); 
+
+    name = (name || '').trim(); 
+
+    email = chuanHoaEmail(email); 
+
+    city = (city || '').trim(); 
+
+    phone = (phone || '').toString().trim().replace(/\s+/g, ''); 
+
  
-   if (!name || !email || !password || !confirmPassword || !city || !phone) { 
-       return { 
-           success: false, 
-           message: '⚠️ Vui lòng nhập đầy đủ thông tin (kể cả số điện thoại)!' 
-       }; 
-   } 
+
+    if (!name || !email || !password || !confirmPassword || !city || !phone) { 
+
+        return { 
+
+            success: false, 
+
+            message: '⚠️ Vui lòng nhập đầy đủ thông tin (kể cả số điện thoại)!' 
+
+        }; 
+
+    } 
+
  
-   if (!/^[0-9]{9,15}$/.test(phone)) { 
-       return { 
-           success: false, 
-           message: '❌ Số điện thoại không hợp lệ (chỉ chứa số, 9-15 chữ số)!' 
-       }; 
-   } 
+
+    if (!/^[0-9]{9,15}$/.test(phone)) { 
+
+        return { 
+
+            success: false, 
+
+            message: '❌ Số điện thoại không hợp lệ (chỉ chứa số, 9-15 chữ số)!' 
+
+        }; 
+
+    } 
+
  
-   if (password.length < 6) { 
-       return { 
-           success: false, 
-           message: '❌ Mật khẩu tối thiểu 6 ký tự!' 
-       }; 
-   } 
+
+    if (password.length < 6) { 
+
+        return { 
+
+            success: false, 
+
+            message: '❌ Mật khẩu tối thiểu 6 ký tự!' 
+
+        }; 
+
+    } 
+
  
-   if (password !== confirmPassword) { 
-       return { 
-           success: false, 
-           message: '❌ Mật khẩu xác nhận không khớp!' 
-       }; 
-   } 
+
+    if (password !== confirmPassword) { 
+
+        return { 
+
+            success: false, 
+
+            message: '❌ Mật khẩu xác nhận không khớp!' 
+
+        }; 
+
+    } 
+
  
-   const region = layMienTheoThanhPho(city); 
+
+    const region = layMienTheoThanhPho(city); 
+
  
-   if (!region) { 
-       return { 
-           success: false, 
-           message: '❌ Tỉnh/thành phố không hợp lệ!' 
-       }; 
-   } 
+
+    if (!region) { 
+
+        return { 
+
+            success: false, 
+
+            message: '❌ Tỉnh/thành phố không hợp lệ!' 
+
+        }; 
+
+    } 
+
  
-   if (emailDaTonTai(email)) { 
-       return { 
-           success: false, 
-           message: '❌ Email đã tồn tại! Hãy đăng nhập.' 
-       }; 
-   } 
+
+    if (emailDaTonTai(email)) { 
+
+        return { 
+
+            success: false, 
+
+            message: '❌ Email đã tồn tại! Hãy đăng nhập.' 
+
+        }; 
+
+    } 
+
  
-   const user = { 
-       id: Date.now(), 
-       name: name, 
-       email: email, 
-       password: password, 
-       phone: phone,              // ★ MỚI 
-       role: role || 'buyer', 
-       city: city, 
-       region: region, 
-       cart: [], 
-       favorites: [], 
-       posts: [], 
-       createdAt: new Date().toISOString() 
-   }; 
+
+    const user = { 
+
+        id: Date.now(), 
+
+        name: name, 
+
+        email: email, 
+
+        password: password, 
+
+        phone: phone,              // ★ MỚI 
+
+        role: role || 'buyer', 
+
+        city: city, 
+
+        region: region, 
+
+        cart: [], 
+
+        favorites: [], 
+
+        posts: [], 
+
+        createdAt: new Date().toISOString() 
+
+    }; 
+
  
-   themUserMoi(user); 
+
+    themUserMoi(user); 
+
  
-   return { 
-       success: true, 
-       message: '✅ Đăng ký thành công! Hãy đăng nhập.' 
-   }; 
+
+    return { 
+
+        success: true, 
+
+        message: '✅ Đăng ký thành công! Hãy đăng nhập.' 
+
+    }; 
+
 } 
+
+ 
+
 /* ======================================================================== 
 
    ĐĂNG NHẬP 
@@ -662,7 +736,7 @@ function switchToLogin() {
 
    ======================================================================== */ 
 
-function xuLyFormDangNhap(event) { 
+function xuLyFormDangKy(event) { 
 
     event.preventDefault(); 
 
@@ -672,13 +746,23 @@ function xuLyFormDangNhap(event) {
 
  
 
+    const name = form.querySelector('[name="name"]').value; 
+
     const email = form.querySelector('[name="email"]').value; 
+
+    const phone = form.querySelector('[name="phone"]')?.value || '';   // ★ MỚI 
+
+    const role = form.querySelector('[name="role"]')?.value || 'buyer'; 
+
+    const city = form.querySelector('[name="city"]')?.value || ''; 
 
     const password = form.querySelector('[name="password"]').value; 
 
+    const confirmPassword = form.querySelector('[name="confirmPassword"]').value; 
+
  
 
-    const result = dangNhap(email, password); 
+    const result = dangKy(name, email, password, confirmPassword, role, city, phone);  // ★ THÊM phone 
 
  
 
@@ -690,31 +774,13 @@ function xuLyFormDangNhap(event) {
 
         form.reset(); 
 
- 
-
-        capNhatNutAuth(); 
-
- 
-
-        if (typeof capNhatBadgeGioHang === 'function') { 
-
-            capNhatBadgeGioHang(); 
-
-        } 
-
- 
-
-        if (typeof capNhatBadgeYeuThich === 'function') { 
-
-            capNhatBadgeYeuThich(); 
-
-        } 
+        resetRegionPreview(); 
 
  
 
         setTimeout(() => { 
 
-            window.location.href = 'idea.html'; 
+            chuyenSangFormDangNhap(); 
 
         }, 800); 
 
@@ -1081,5 +1147,3 @@ window.addEventListener('pageshow', () => {
     capNhatHienThiTrangTaiKhoan(); 
 
 }); 
-
- 
