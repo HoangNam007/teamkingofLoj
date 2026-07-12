@@ -583,57 +583,33 @@ function xoaBaiDang(id) {
 
  */ 
 
-function themThongBaoChoNguoiBan(noti) { 
-
-    if (!noti || !noti.toEmail) return false; 
-
- 
-
-    const all = docJSON(STORAGE_KEYS.NOTIFICATIONS, []); 
-
-    const list = Array.isArray(all) ? all : []; 
-
- 
-
-    list.unshift({ 
-
-        id: Date.now() + Math.floor(Math.random() * 1000), 
-
-        toEmail: chuanHoaEmailStorage(noti.toEmail), 
-
-        fromUser: noti.fromUser || 'Người dùng', 
-
-        productName: noti.productName || 'Sản phẩm', 
-
-        time: new Date().toISOString(), 
-
-        read: false 
-
-    }); 
-
- 
-
-    // Giới hạn tối đa 100 thông báo toàn hệ thống (tránh phình localStorage) 
-
-    if (list.length > 100) list.length = 100; 
-
- 
-
-    ghiJSON(STORAGE_KEYS.NOTIFICATIONS, list); 
-
-    capNhatBadgeThongBao(); 
-
-    return true; 
-
-} 
-
- 
-
 /** 
+* Thêm thông báo cho người bán khi có người thêm sản phẩm vào giỏ. 
 
- * Lấy danh sách thông báo của user đang đăng nhập (mới nhất trước). 
-
- */ 
+* @param {Object} noti - { toEmail, fromUser, fromEmail, productName } 
+*/ 
+function themThongBaoChoNguoiBan(noti) { 
+   if (!noti || !noti.toEmail) return false; 
+ 
+   const all = docJSON(STORAGE_KEYS.NOTIFICATIONS, []); 
+   const list = Array.isArray(all) ? all : []; 
+ 
+   list.unshift({ 
+       id: Date.now() + Math.floor(Math.random() * 1000), 
+       toEmail: chuanHoaEmailStorage(noti.toEmail), 
+       fromUser: noti.fromUser || 'Người dùng', 
+       fromEmail: chuanHoaEmailStorage(noti.fromEmail || ''),  // ★ MỚI 
+       productName: noti.productName || 'Sản phẩm', 
+       time: new Date().toISOString(), 
+       read: false 
+   }); 
+ 
+   if (list.length > 100) list.length = 100; 
+ 
+   ghiJSON(STORAGE_KEYS.NOTIFICATIONS, list); 
+   capNhatBadgeThongBao(); 
+   return true; 
+} 
 
 function layDanhSachThongBaoCuaUser() { 
 
