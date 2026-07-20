@@ -1,1757 +1,278 @@
-
-<!DOCTYPE html> 
-
-<html lang="vi"> 
-
-<head> 
-
-    <meta charset="UTF-8"> 
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-
-    <title>Chợ Tốt Đồ Cũ</title> 
-
-    <link rel="stylesheet" href="giaodien.css"> 
-
-</head> 
-
-<body> 
-
- 
-
-<!-- ===== HEADER ===== --> 
-
-<header class="header-container"> 
-
-    <div class="header-top"> 
-
-        <div class="logo-section"> 
-
-            <span class="menu-icon">☰</span> 
-
-            <a href="idea.html" class="logo-text">chợ tốt</a> 
-
-        </div> 
-
- 
-
-        <nav class="top-nav"> 
-
-            <a href="idea.html" class="active">Trang chủ</a> 
-
-        </nav> 
-
- 
-
-        <div class="user-actions"> 
-
-            <!-- Nút Thông báo --> 
-
-            <a href="thongbao.html" class="icon-btn-circle" id="notificationBtn" title="Thông báo"> 
-
-                🔔 
-
-                <span class="badge" id="notiCount" style="display:none">0</span> 
-
-            </a> 
-
- 
-
-            <!-- Giỏ hàng --> 
-
-            <a href="giohang.html" class="icon-btn-circle" title="Giỏ hàng"> 
-
-                🛒 
-
-                <span class="badge" id="cartCount" style="display:none">0</span> 
-
-            </a> 
-
- 
-
-            <a href="taikhoan.html" class="btn-login" id="authBtn">Đăng nhập</a> 
-
-            <a href="dangtin.html" class="btn-post">Đăng tin</a> 
-
-        </div> 
-
-    </div> 
-
- 
-
-    <!-- Search Banner --> 
-
-    <div class="search-banner"> 
-
-        <h1 class="banner-title">Giá tốt, gần bạn, chốt nhanh!</h1> 
-
- 
-
-        <div class="search-box"> 
-
-            <input type="text" class="search-input" placeholder="Tìm sản phẩm..." id="searchInput"> 
-
- 
-
-            <!-- BỘ LỌC DANH MỤC --> 
-
-            <div class="category-select" id="categoryBtn"> 
-
-                <span id="categoryText">📦 Tất cả</span> ▾ 
-
-                <div class="category-dropdown" id="categoryDropdown"> 
-
-                    <div data-cat="all">📦 Tất cả danh mục</div> 
-
-                    <div data-cat="dientu">📱 Điện tử</div> 
-
-                    <div data-cat="phuongtien">🚗 Phương tiện</div> 
-
-                    <div data-cat="trangphuc">👕 Trang phục</div> 
-
-                    <div data-cat="vatdung">🏠 Vật dụng</div> 
-
-                    <div data-cat="khac">🎁 Khác</div> 
-
-                </div> 
-
-            </div> 
-
- 
-
-            <!-- LỌC KHU VỰC --> 
-
-            <div class="location-select" id="locationBtn"> 
-
-                📍 <span id="regionText">Tất cả khu vực</span> ▾ 
-
-                <div class="region-dropdown" id="regionDropdown"> 
-
-                    <div data-region="all">🌏 Tất cả khu vực</div> 
-
-                    <div data-region="Miền Bắc">🏔 Miền Bắc</div> 
-
-                    <div data-region="Miền Trung">🌊 Miền Trung</div> 
-
-                    <div data-region="Miền Nam">🌴 Miền Nam</div> 
-
-                </div> 
-
-            </div> 
-
- 
-
-            <button class="btn-search" type="button">Tìm kiếm</button> 
-
-        </div> 
-
-    </div> 
-
-</header> 
-
-<!-- ===== MAIN ===== --> 
-
-<main> 
-
-    <h2 class="section-title" id="sectionTitle">Tin Đăng Nổi Bật Hôm Nay</h2> 
-
- 
-
-    <div class="product-grid" id="productGrid"> 
-
- 
-
-        <!-- ===== ĐIỆN TỬ ===== --> 
-
-        <div class="product-card" data-cat="dientu" data-name="Smart TV Sony 43 inch Full HD" data-price="2800000" data-desc="Màn hình không kẻ vạch, đầy đủ chân đế và điều khiển giọng nói." data-seller="Nguyễn Văn A" data-phone="0912 345 678" data-location="Hà Nội" data-qty="1"> 
-
-            <img src="picture/tvsony.webp" alt="Smart TV Sony" class="card-img"> 
-
-            <div class="card-actions"> 
-
-                <button class="card-btn btn-cart" type="button">🛒</button> 
-
-            </div> 
-
-            <div class="card-body"> 
-
-                <h3>Smart TV Sony 43 inch Full HD</h3> 
-
-                <p class="price">₫2.800.000</p> 
-
-            </div> 
-
-        </div> 
-
- 
-
-        <div class="product-card" data-cat="dientu" data-name="Laptop Dell Latitude Core i5" data-price="4200000" data-desc="RAM 8GB, SSD 256GB, mượt mà tác vụ Word, Excel, học Zoom." data-seller="Trần Thị B" data-phone="0987 654 321" data-location="TP.HCM" data-qty="1"> 
-
-            <img src="picture/laptopdell.webp" alt="Laptop Dell" class="card-img"> 
-
-            <div class="card-actions"> 
-
-                <button class="card-btn btn-cart" type="button">🛒</button> 
-
-            </div> 
-
-            <div class="card-body"> 
-
-                <h3>Laptop Dell Latitude Core i5</h3> 
-
-                <p class="price">₫4.200.000</p> 
-
-            </div> 
-
-        </div> 
-
- 
-
-        <div class="product-card" data-cat="dientu" data-name="Apple Macbook Pro M1 2020" data-price="15500000" data-desc="Chip M1, RAM 8GB, SSD 256GB, pin còn tốt, ngoại hình 95%." data-seller="Lê Minh C" data-phone="0909 111 222" data-location="Đà Nẵng" data-qty="1"> 
-
-            <img src="picture/mac m1.jpg" alt="Macbook Pro M1" class="card-img"> 
-
-            <div class="card-actions"> 
-
-                <button class="card-btn btn-cart" type="button">🛒</button> 
-
-            </div> 
-
-            <div class="card-body"> 
-
-                <h3>Apple Macbook Pro M1 2020</h3> 
-
-                <p class="price">₫15.500.000</p> 
-
-            </div> 
-
-        </div> 
-
- 
-
-        <div class="product-card" data-cat="dientu" data-name="iPhone 13 Pro Max 128GB" data-price="18200000" data-desc="Pin 92%, không trầy xước, đầy đủ phụ kiện chính hãng." data-seller="Phạm Văn D" data-phone="0933 444 555" data-location="Hà Nội" data-qty="1"> 
-
-            <img src="picture/iphn.jpg" alt="iPhone 13 Pro Max" class="card-img"> 
-
-            <div class="card-actions"> 
-
-                <button class="card-btn btn-cart" type="button">🛒</button> 
-
-            </div> 
-
-            <div class="card-body"> 
-
-                <h3>iPhone 13 Pro Max 128GB</h3> 
-
-                <p class="price">₫18.200.000</p> 
-
-            </div> 
-
-        </div> 
-
- 
-
-        <div class="product-card" data-cat="dientu" data-name="Máy ảnh Sony A6000 kèm Lens Kit" data-price="8500000" data-desc="Shutter count thấp, tặng kèm túi đựng và thẻ nhớ 64GB." data-seller="Hoàng E" data-phone="0977 888 999" data-location="TP.HCM" data-qty="1"> 
-
-            <img src="picture/sony.png" alt="Sony A6000" class="card-img"> 
-
-            <div class="card-actions"> 
-
-                <button class="card-btn btn-cart" type="button">🛒</button> 
-
-            </div> 
-
-            <div class="card-body"> 
-
-                <h3>Máy ảnh Sony A6000 kèm Lens Kit</h3> 
-
-                <p class="price">₫8.500.000</p> 
-
-            </div> 
-
-        </div> 
-
- 
-
-        <div class="product-card" data-cat="dientu" data-name="Tai nghe AirPods Pro 2" data-price="3200000" data-desc="Chống ồn chủ động, còn bảo hành Apple 3 tháng." data-seller="Vũ F" data-phone="0911 222 333" data-location="Hà Nội" data-qty="1"> 
-
-            <img src="https://static.chotot.com/storage/chotot-kinhnghiem/c2c/2020/11/airpods-2-cu.jpg" alt="AirPods Pro" class="card-img"> 
-
-            <div class="card-actions"> 
-
-                <button class="card-btn btn-cart" type="button">🛒</button> 
-
-            </div> 
-
-            <div class="card-body"> 
-
-                <h3>Tai nghe AirPods Pro 2</h3> 
-
-                <p class="price">₫3.200.000</p> 
-
-            </div> 
-
-        </div> 
-
- 
-
-        <div class="product-card" data-cat="dientu" data-name="iPad Air 4 64GB Wifi" data-price="7800000" data-desc="Màn hình đẹp, phù hợp vẽ digital art và đọc sách." data-seller="Đặng G" data-phone="0944 555 666" data-location="Đà Nẵng" data-qty="1"> 
-
-            <img src="https://media.karousell.com/media/photos/products/2023/10/17/for_sale_slightly_used_ipad_ai_1697519683_48a200f6.jpg" alt="iPad Air 4" class="card-img"> 
-
-            <div class="card-actions"> 
-
-                <button class="card-btn btn-cart" type="button">🛒</button> 
-
-            </div> 
-
-            <div class="card-body"> 
-
-                <h3>iPad Air 4 64GB Wifi</h3> 
-
-                <p class="price">₫7.800.000</p> 
-
-            </div> 
-
-        </div> 
-
- 
-
-        <div class="product-card" data-cat="dientu" data-name="Bàn phím cơ Keychron K2" data-price="850000" data-desc="Switch Gateron Brown, kết nối Bluetooth, có đèn nền." data-seller="Bùi H" data-phone="0966 777 888" data-location="TP.HCM" data-qty="2"> 
-
-            <img src="https://static.oreka.vn/800-800_a0079d6a-2f5c-40ea-9fa1-45aca54ac8a9" alt="Keychron K2" class="card-img"> 
-
-            <div class="card-actions"> 
-
-                <button class="card-btn btn-cart" type="button">🛒</button> 
-
-            </div> 
-
-            <div class="card-body"> 
-
-                <h3>Bàn phím cơ Keychron K2</h3> 
-
-                <p class="price">₫850.000</p> 
-
-            </div> 
-
-        </div> 
-
- 
-
-        <!-- ===== PHƯƠNG TIỆN ===== --> 
-
-        <div class="product-card" data-cat="phuongtien" data-name="Xe đạp địa hình Asama đen cam" data-price="1100000" data-desc="Khung sườn nhôm siêu nhẹ, xích líp hoạt động trơn tru." data-seller="Ngô I" data-phone="0922 333 444" data-location="Hà Nội" data-qty="1"> 
-
-            <img src="picture/xedop.jpg" alt="Xe đạp Asama" class="card-img"> 
-
-            <div class="card-actions"> 
-
-                <button class="card-btn btn-cart" type="button">🛒</button> 
-
-            </div> 
-
-            <div class="card-body"> 
-
-                <h3>Xe đạp địa hình Asama đen cam</h3> 
-
-                <p class="price">₫1.100.000</p> 
-
-            </div> 
-
-        </div> 
-
- 
-
-        <div class="product-card" data-cat="phuongtien" data-name="Honda Wave Alpha đời 2018" data-price="9800000" data-desc="Máy móc nguyên bản, biển số Hà Nội, sang tên nhanh." data-seller="Đỗ K" data-phone="0955 666 777" data-location="Hà Nội" data-qty="1"> 
-
-            <img src="picture/xemay.jpg" alt="Honda Wave" class="card-img"> 
-
-            <div class="card-actions"> 
-
-                <button class="card-btn btn-cart" type="button">🛒</button> 
-
-            </div> 
-
-            <div class="card-body"> 
-
-                <h3>Honda Wave Alpha đời 2018</h3> 
-
-                <p class="price">₫9.800.000</p> 
-
-            </div> 
-
-        </div> 
-
- 
-
-        <div class="product-card" data-cat="phuongtien" data-name="Honda Vision 2021 chính chủ" data-price="25000000" data-desc="Xe chính chủ, đầy đủ giấy tờ, bảo dưỡng định kỳ tại hãng." data-seller="Lý L" data-phone="0988 999 000" data-location="TP.HCM" data-qty="1"> 
-
-            <img src="picture/hoda.jpg" alt="Honda Vision" class="card-img"> 
-
-            <div class="card-actions"> 
-
-                <button class="card-btn btn-cart" type="button">🛒</button> 
-
-            </div> 
-
-            <div class="card-body"> 
-
-                <h3>Honda Vision 2021 chính chủ</h3> 
-
-                <p class="price">₫25.000.000</p> 
-
-            </div> 
-
-        </div> 
-
- 
-
-        <div class="product-card" data-cat="phuongtien" data-name="Xe đạp điện VinFast Klara" data-price="5500000" data-desc="Pin còn tốt, đi được 40km/lần sạc, phù hợp đi học." data-seller="Mai M" data-phone="0933 111 222" data-location="Đà Nẵng" data-qty="1"> 
-
-            <img src="https://bizweb.dktcdn.net/thumb/1024x1024/100/466/504/products/z6207795472230-17d8efb196de8f773ebeae6be23a5229.jpg?v=1736570969600" alt="VinFast Klara" class="card-img"> 
-
-            <div class="card-actions"> 
-
-                <button class="card-btn btn-cart" type="button">🛒</button> 
-
-            </div> 
-
-            <div class="card-body"> 
-
-                <h3>Xe đạp điện VinFast Klara</h3> 
-
-                <p class="price">₫5.500.000</p> 
-
-            </div> 
-
-        </div> 
-
- 
-
-        <div class="product-card" data-cat="phuongtien" data-name="Yamaha Exciter 150 2019" data-price="22000000" data-desc="Xe thể thao, máy bốc, biển số tỉnh, giấy tờ đầy đủ." data-seller="Tùng N" data-phone="0977 222 333" data-location="Hải Phòng" data-qty="1"> 
-
-            <img src="https://tse3.mm.bing.net/th/id/OIP.wfJCp0sEmJ1e7Du1bCDBuAHaFj?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Exciter 150" class="card-img"> 
-
-            <div class="card-actions"> 
-
-                <button class="card-btn btn-cart" type="button">🛒</button> 
-
-            </div> 
-
-            <div class="card-body"> 
-
-                <h3>Yamaha Exciter 150 2019</h3> 
-
-                <p class="price">₫22.000.000</p> 
-
-            </div> 
-
-        </div> 
-
- 
-
-        <div class="product-card" data-cat="phuongtien" data-name="Vespa Sprint 2019 trắng" data-price="38000000" data-desc="Xe đẹp, sơn zin, mới đi 12.000km, bảo hiểm còn hạn." data-seller="Hương O" data-phone="0912 444 555" data-location="TP.HCM" data-qty="1"> 
-
-            <img src="https://tse3.mm.bing.net/th/id/OIP.H9UrYtO2LwcCYOztYb3huwHaFj?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Vespa Sprint" class="card-img"> 
-
-            <div class="card-actions"> 
-
-                <button class="card-btn btn-cart" type="button">🛒</button> 
-
-            </div> 
-
-            <div class="card-body"> 
-
-                <h3>Vespa Sprint 2019 trắng</h3> 
-
-                <p class="price">₫38.000.000</p> 
-
-            </div> 
-
-        </div> 
-
- 
-
-        <!-- ===== TRANG PHỤC ===== --> 
-
-        <div class="product-card" data-cat="trangphuc" data-name="Áo khoác dạ dáng dài nam" data-price="250000" data-desc="Màu nâu beige, size L, mới mặc đúng 2 lần đi đám cưới." data-seller="Quang P" data-phone="0944 666 777" data-location="Hà Nội" data-qty="1"> 
-
-            <img src="picture/outcu.jpg" alt="Áo khoác dạ" class="card-img"> 
-
-            <div class="card-actions"> 
-
-       
-
-                <button class="card-btn btn-cart" type="button">🛒</button> 
-
-            </div> 
-
-            <div class="card-body"> 
-
-                <h3>Áo khoác dạ dáng dài nam</h3> 
-
-                <p class="price">₫250.000</p> 
-
-            </div> 
-
-        </div> 
-
- 
-
-        <div class="product-card" data-cat="trangphuc" data-name="Đồng hồ Casio Edifice dây kim loại" data-price="600000" data-desc="Mặt kính xước dăm nhỏ, hết pin về tự thay." data-seller="Sơn Q" data-phone="0966 888 999" data-location="TP.HCM" data-qty="1"> 
-
-            <img src="picture/dongho.avif" alt="Casio Edifice" class="card-img"> 
-
-            <div class="card-actions"> 
-
-       
-
-                <button class="card-btn btn-cart" type="button">🛒</button> 
-
-            </div> 
-
-            <div class="card-body"> 
-
-                <h3>Đồng hồ Casio Edifice</h3> 
-
-                <p class="price">₫600.000</p> 
-
-            </div> 
-
-        </div> 
-
- 
-
-        <div class="product-card" data-cat="trangphuc" data-name="Giày Nike Air Max 90 size 42" data-price="450000" data-desc="Đế còn tốt, da thật, đã vệ sinh sạch sẽ." data-seller="Khoa R" data-phone="0988 111 222" data-location="Đà Nẵng" data-qty="1"> 
-
-            <img src="https://www.jordan1.vn/wp-content/uploads/2023/09/s-l1600_aa42b066bb394bed8eae6297bf3f3be4.png" alt="Nike Air Max" class="card-img"> 
-
-            <div class="card-actions"> 
-
-        
-
-                <button class="card-btn btn-cart" type="button">🛒</button> 
-
-            </div> 
-
-            <div class="card-body"> 
-
-                <h3>Giày Nike Air Max 90 size 42</h3> 
-
-                <p class="price">₫450.000</p> 
-
-            </div> 
-
-        </div> 
-
- 
-
-        <div class="product-card" data-cat="trangphuc" data-name="Túi xách Coach nữ da thật" data-price="1200000" data-desc="Da thật, còn hộp và túi bụi, mua tại store Mỹ." data-seller="Lan S" data-phone="0933 333 444" data-location="TP.HCM" data-qty="1"> 
-
-            <img src="https://tse3.mm.bing.net/th/id/OIP.s_DeeTe35qG3KqjYSjRdBQHaJ4?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Túi Coach" class="card-img"> 
-
-            <div class="card-actions"> 
-
-        
-
-                <button class="card-btn btn-cart" type="button">🛒</button> 
-
-            </div> 
-
-            <div class="card-body"> 
-
-                <h3>Túi xách Coach nữ da thật</h3> 
-
-                <p class="price">₫1.200.000</p> 
-
-            </div> 
-
-        </div> 
-
- 
-
-        <div class="product-card" data-cat="trangphuc" data-name="Kính mắt Rayban Wayfarer" data-price="800000" data-desc="Kính chính hãng, tròng phân cực, có hộp và khăn lau." data-seller="Minh T" data-phone="0955 444 555" data-location="Hà Nội" data-qty="1"> 
-
-            <img src="https://cdn.vuahanghieu.com/unsafe/0x0/left/top/smart/filters:quality(90)/https://admin.vuahanghieu.com/upload/news/content/2025/05/kinh-mat-rayban-original-wayfarer-classic-sunglasses-rb2140f-901-mau-xanhden-1-jpg-1746846978-10052025101618.jpg" alt="Rayban" class="card-img"> 
-
-            <div class="card-actions"> 
-
-          
-
-                <button class="card-btn btn-cart" type="button">🛒</button> 
-
-            </div> 
-
-            <div class="card-body"> 
-
-                <h3>Kính mắt Rayban Wayfarer</h3> 
-
-                <p class="price">₫800.000</p> 
-
-            </div> 
-
-        </div> 
-
- 
-
-        <div class="product-card" data-cat="trangphuc" data-name="Áo sơ mi Uniqlo nam size M" data-price="120000" data-desc="Chất liệu cotton thoáng mát, màu xanh nhạt, ít nhăn." data-seller="Đức U" data-phone="0977 555 666" data-location="Cần Thơ" data-qty="3"> 
-
-            <img src="https://tse3.mm.bing.net/th/id/OIP.8r0ZADQzK9bSN878IcDyRAHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Uniqlo" class="card-img"> 
-
-            <div class="card-actions"> 
-
-    
-
-                <button class="card-btn btn-cart" type="button">🛒</button> 
-
-            </div> 
-
-            <div class="card-body"> 
-
-                <h3>Áo sơ mi Uniqlo nam size M</h3> 
-
-                <p class="price">₫120.000</p> 
-
-            </div> 
-
-        </div> 
-
- 
-
-        <!-- ===== VẬT DỤNG ===== --> 
-
-        <div class="product-card" data-cat="vatdung" data-name="Bàn làm việc gỗ ép 1m2" data-price="350000" data-desc="Mặt bàn còn đẹp, có 2 ngăn kéo tiện lợi." data-seller="Hằng V" data-phone="0912 666 777" data-location="Hà Nội" data-qty="1"> 
-
-            <img src="picture/ban.jpg" alt="Bàn làm việc" class="card-img"> 
-
-            <div class="card-actions"> 
-
-         
-
-                <button class="card-btn btn-cart" type="button">🛒</button> 
-
-            </div> 
-
-            <div class="card-body"> 
-
-                <h3>Bàn làm việc gỗ ép 1m2</h3> 
-
-                <p class="price">₫350.000</p> 
-
-            </div> 
-
-        </div> 
-
- 
-
-        <div class="product-card" data-cat="vatdung" data-name="Chậu cây Monstera" data-price="200000" data-desc="Cây khỏe mạnh, cao 1m, bao gồm chậu sứ trắng." data-seller="Thảo W" data-phone="0944 777 888" data-location="TP.HCM" data-qty="2"> 
-
-            <img src="picture/chaukey.webp" alt="Monstera" class="card-img"> 
-
-            <div class="card-actions"> 
-
-         
-
-                <button class="card-btn btn-cart" type="button">🛒</button> 
-
-            </div> 
-
-            <div class="card-body"> 
-
-                <h3>Chậu cây Monstera</h3> 
-
-                <p class="price">₫200.000</p> 
-
-            </div> 
-
-        </div> 
-
- 
-
-        <div class="product-card" data-cat="vatdung" data-name="Bộ giàn tạ tập thể thao tại nhà" data-price="1500000" data-desc="Gồm đòn tạ dài, ghế dốc và 30kg bánh tạ gang." data-seller="Cường X" data-phone="0966 999 000" data-location="Đà Nẵng" data-qty="1"> 
-
-            <img src="picture/phucta.jpg" alt="Giàn tạ" class="card-img"> 
-
-            <div class="card-actions"> 
-
-
-                <button class="card-btn btn-cart" type="button">🛒</button> 
-
-            </div> 
-
-            <div class="card-body"> 
-
-                <h3>Bộ giàn tạ tập thể thao</h3> 
-
-                <p class="price">₫1.500.000</p> 
-
-            </div> 
-
-        </div> 
-
- 
-
-        <div class="product-card" data-cat="vatdung" data-name="Tủ lạnh Panasonic 150L" data-price="2200000" data-desc="Hoạt động tốt, làm lạnh nhanh, tiết kiệm điện." data-seller="Yến Y" data-phone="0988 000 111" data-location="Hà Nội" data-qty="1"> 
-
-            <img src="https://dichvusuamaylanh.net/img_data/images/tu-lanh-cu-panasonic-150l.jpg" alt="Tủ lạnh" class="card-img"> 
-
-            <div class="card-actions"> 
-
-
-                <button class="card-btn btn-cart" type="button">🛒</button> 
-
-            </div> 
-
-            <div class="card-body"> 
-
-                <h3>Tủ lạnh Panasonic 150L</h3> 
-
-                <p class="price">₫2.200.000</p> 
-
-            </div> 
-
-        </div> 
-
- 
-
-        <div class="product-card" data-cat="vatdung" data-name="Máy giặt LG 8kg cửa trước" data-price="3500000" data-desc="Giặt êm, nhiều chế độ, phù hợp gia đình 3-4 người." data-seller="Long Z" data-phone="0922 111 222" data-location="TP.HCM" data-qty="1"> 
-
-            <img src="https://thumuadocuthanhnam.com/wp-content/uploads/2024/12/z6161206236175_f1a1bb30a6ea09ff7c655594fec2f18f.jpg" alt="Máy giặt LG" class="card-img"> 
-
-            <div class="card-actions"> 
-
-
-                <button class="card-btn btn-cart" type="button">🛒</button> 
-
-            </div> 
-
-            <div class="card-body"> 
-
-                <h3>Máy giặt LG 8kg cửa trước</h3> 
-
-                <p class="price">₫3.500.000</p> 
-
-            </div> 
-
-        </div> 
-
- 
-
-        <div class="product-card" data-cat="vatdung" data-name="Ghế xoay văn phòng lưới" data-price="480000" data-desc="Lưng lưới thoáng, tay vịn điều chỉnh, piston còn tốt." data-seller="An AA" data-phone="0933 222 333" data-location="Hà Nội" data-qty="2"> 
-
-            <img src="https://muabanghecu.com/wp-content/uploads/2025/02/ghe-van-phong-cu-TPHCM-24-768x768.jpg" alt="Ghế xoay" class="card-img"> 
-
-            <div class="card-actions"> 
-
-
-                <button class="card-btn btn-cart" type="button">🛒</button> 
-
-            </div> 
-
-            <div class="card-body"> 
-
-                <h3>Ghế xoay văn phòng lưới</h3> 
-
-                <p class="price">₫480.000</p> 
-
-            </div> 
-
-        </div> 
-
- 
-
-        <div class="product-card" data-cat="vatdung" data-name="Máy pha cà phê Philips" data-price="1800000" data-desc="Pha espresso và cappuccino, vệ sinh sạch sẽ." data-seller="Bình BB" data-phone="0955 333 444" data-location="TP.HCM" data-qty="1"> 
-
-            <img src="https://bizweb.dktcdn.net/100/424/337/products/may-pha-cafe-philips-ep2236-40-07.jpg?v=1684493718933" alt="Máy pha cà phê" class="card-img"> 
-
-            <div class="card-actions"> 
-
-
-                <button class="card-btn btn-cart" type="button">🛒</button> 
-
-            </div> 
-
-            <div class="card-body"> 
-
-                <h3>Máy pha cà phê Philips</h3> 
-
-                <p class="price">₫1.800.000</p> 
-
-            </div> 
-
-        </div> 
-
- 
-
-        <div class="product-card" data-cat="vatdung" data-name="Xe đẩy em bé Zaracos" data-price="650000" data-desc="Gấp gọn được, mái che nắng, bánh xe xoay 360°." data-seller="Chi CC" data-phone="0977 444 555" data-location="Đà Nẵng" data-qty="1"> 
-
-            <img src="https://hungthinhhitech.vn/uploads/product/NhaCuaDoiSong/Khac/xe-day-tre-em-zaracos-oral-2706-5.jpg?1702116510423" alt="Xe đẩy em bé" class="card-img"> 
-
-            <div class="card-actions"> 
-
-
-                <button class="card-btn btn-cart" type="button">🛒</button> 
-
-            </div> 
-
-            <div class="card-body"> 
-
-                <h3>Xe đẩy em bé Zaracos</h3> 
-
-                <p class="price">₫650.000</p> 
-
-            </div> 
-
-        </div> 
-
- 
-
-        <div class="product-card" data-cat="vatdung" data-name="Quạt điều hòa Sunhouse" data-price="900000" data-desc="Làm mát tốt, bình nước 20L, có điều khiển từ xa." data-seller="Dũng DD" data-phone="0911 555 666" data-location="Hà Nội" data-qty="1"> 
-
-            <img src="https://down-vn.img.susercontent.com/file/886a2c80a782db86ccbd6cc69a6ae329" alt="Quạt điều hòa" class="card-img"> 
-
-            <div class="card-actions"> 
-
-
-                <button class="card-btn btn-cart" type="button">🛒</button> 
-
-            </div> 
-
-            <div class="card-body"> 
-
-                <h3>Quạt điều hòa Sunhouse</h3> 
-
-                <p class="price">₫900.000</p> 
-
-            </div> 
-
-        </div> 
-
- 
-
-        <div class="product-card" data-cat="vatdung" data-name="Nồi cơm điện Cuckoo 1.8L" data-price="550000" data-desc="Hàng nội địa Hàn, nấu cơm ngon, lòng nồi còn tốt." data-seller="Em EE" data-phone="0944 666 777" data-location="TP.HCM" data-qty="1"> 
-
-            <img src="https://cuckoo.vn/wp-content/uploads/2020/03/CUCKOO-CR-1021-6-1-2048x2048.jpg" alt="Nồi cơm Cuckoo" class="card-img"> 
-
-            <div class="card-actions"> 
-
-
-                <button class="card-btn btn-cart" type="button">🛒</button> 
-
-            </div> 
-
-            <div class="card-body"> 
-
-                <h3>Nồi cơm điện Cuckoo 1.8L</h3> 
-
-                <p class="price">₫550.000</p> 
-
-            </div> 
-
-        </div> 
-
- 
-<!-- ================= THÊM ĐIỆN TỬ ================= -->
-
-<div class="product-card" data-cat="dientu"
-data-name="Samsung Galaxy S21 5G 128GB"
-data-price="8900000"
-data-desc="Máy đẹp 98%, pin tốt, nguyên zin."
-data-seller="Nguyễn Minh An"
-data-phone="0912341111"
-data-location="Hà Nội"
-data-qty="1">
-
-<img src="https://tuannguyenmobile.com/wp-content/uploads/2024/09/z5797298013850_843e574761821140c78717f0ba41bf2d-1024x1024.jpg" alt="Samsung Galaxy S21" class="card-img">
-
-<div class="card-actions">
-<button class="card-btn btn-cart">🛒</button>
-</div>
-
-<div class="card-body">
-<h3>Samsung Galaxy S21 5G 128GB</h3>
-<p class="price">₫8.900.000</p>
-</div>
-</div>
-
-<div class="product-card"
-data-cat="dientu"
-data-name="Apple Watch Series 7 GPS"
-data-price="4900000"
-data-desc="Mặt 45mm, pin 92%, đầy đủ sạc."
-data-seller="Lê Hải Nam"
-data-phone="0933777222"
-data-location="TP.HCM"
-data-qty="1">
-
-<img src="https://voz.vn/attachments/img_0048-jpeg.2151278/"
-class="card-img">
-
-<div class="card-actions">
-<button class="card-btn btn-cart">🛒</button>
-</div>
-
-<div class="card-body">
-<h3>Apple Watch Series 7 GPS</h3>
-<p class="price">₫4.900.000</p>
-</div>
-</div>
-
-<div class="product-card"
-data-cat="dientu"
-data-name="Máy in Canon LBP2900"
-data-price="1500000"
-data-desc="In rõ nét, mới thay hộp mực."
-data-seller="Đỗ Quốc Huy"
-data-phone="0966888555"
-data-location="Đà Nẵng"
-data-qty="1">
-
-<img src="https://down-vn.img.susercontent.com/file/vn-11134201-23030-nc57yh4bueov27"
-class="card-img">
-
-<div class="card-actions">
-<button class="card-btn btn-cart">🛒</button>
-</div>
-
-<div class="card-body">
-<h3>Máy in Canon LBP2900</h3>
-<p class="price">₫1.500.000</p>
-</div>
-</div>
-
-<div class="product-card"
-data-cat="dientu"
-data-name="Loa JBL Charge 5"
-data-price="2300000"
-data-desc="Âm bass mạnh, pin dùng 18 giờ."
-data-seller="Trần Hoàng Phúc"
-data-phone="0988111222"
-data-location="Hải Phòng"
-data-qty="1">
-
-<img src="https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-bluetooth-jbl-charge-5_1_1_1.jpg"
-class="card-img">
-
-<div class="card-actions">
-<button class="card-btn btn-cart">🛒</button>
-</div>
-
-<div class="card-body">
-<h3>Loa JBL Charge 5</h3>
-<p class="price">₫2.300.000</p>
-</div>
-</div>
-
-<div class="product-card"
-data-cat="dientu"
-data-name="Màn hình LG UltraWide 29 inch"
-data-price="3100000"
-data-desc="IPS Full HD, không điểm chết."
-data-seller="Hoàng Trung Kiên"
-data-phone="0944222555"
-data-location="Huế"
-data-qty="1">
-
-<img src="https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/man-hinh-cong-lg-ultrawide-29-inch-29wn600-4_1.png"
-class="card-img">
-
-<div class="card-actions">
-<button class="card-btn btn-cart">🛒</button>
-</div>
-
-<div class="card-body">
-<h3>Màn hình LG UltraWide 29 inch</h3>
-<p class="price">₫3.100.000</p>
-</div>
-</div>
-
-<div class="product-card"
-data-cat="dientu"
-data-name="PlayStation 4 Slim 500GB"
-data-price="5200000"
-data-desc="Kèm 2 tay cầm và 5 game."
-data-seller="Nguyễn Khánh Duy"
-data-phone="0977666333"
-data-location="Cần Thơ"
-data-qty="1">
-
-<img src="https://tse3.mm.bing.net/th/id/OIP.FymRddk2GsAOXVAkuhaPtgHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
-class="card-img">
-
-<div class="card-actions">
-<button class="card-btn btn-cart">🛒</button>
-</div>
-
-<div class="card-body">
-<h3>PlayStation 4 Slim 500GB</h3>
-<p class="price">₫5.200.000</p>
-</div>
-</div>
-
-<div class="product-card"
-data-cat="dientu"
-data-name="Camera hành trình Xiaomi 70mai"
-data-price="950000"
-data-desc="Quay Full HD, góc rộng 140 độ."
-data-seller="Vũ Đức Anh"
-data-phone="0909888111"
-data-location="Nghệ An"
-data-qty="2">
-
-<img src="https://tienphatauto.com.vn/hoanghung/5/images/camera-hanh-trinh-xiaomi-70mai-a500s.jpg"
-class="card-img">
-
-<div class="card-actions">
-<button class="card-btn btn-cart">🛒</button>
-</div>
-
-<div class="card-body">
-<h3>Camera hành trình Xiaomi 70mai</h3>
-<p class="price">₫950.000</p>
-</div>
-</div>
-<!-- ================= THÊM PHƯƠNG TIỆN ================= -->
-
-<div class="product-card"
-data-cat="phuongtien"
-data-name="Honda Air Blade 2020"
-data-price="31500000"
-data-desc="Xe chính chủ, máy nguyên bản, bảo dưỡng định kỳ."
-data-seller="Nguyễn Thành Long"
-data-phone="0912555444"
-data-location="Hà Nội"
-data-qty="1">
-
-<img src="https://kiemtraxecu.com/wp-content/uploads/2020/12/huong-dan-su-dung-honda-air-blade-2020.jpg" class="card-img">
-
-<div class="card-actions">
-<button class="card-btn btn-cart" type="button">🛒</button>
-</div>
-
-<div class="card-body">
-<h3>Honda Air Blade 2020</h3>
-<p class="price">₫31.500.000</p>
-</div>
-</div>
-
-
-<div class="product-card"
-data-cat="phuongtien"
-data-name="Yamaha Sirius RC 2019"
-data-price="14500000"
-data-desc="Máy mạnh, ít hao xăng, giấy tờ đầy đủ."
-data-seller="Trần Minh Đức"
-data-phone="0933444555"
-data-location="Nam Định"
-data-qty="1">
-
-<img src="https://tse4.mm.bing.net/th/id/OIP.RtqZeIeDhznaMZC_4LdLQwHaFj?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" class="card-img">
-
-<div class="card-actions">
-<button class="card-btn btn-cart" type="button">🛒</button>
-</div>
-
-<div class="card-body">
-<h3>Yamaha Sirius RC 2019</h3>
-<p class="price">₫14.500.000</p>
-</div>
-</div>
-
-
-<div class="product-card"
-data-cat="phuongtien"
-data-name="Honda SH Mode 2021 ABS"
-data-price="49800000"
-data-desc="Xe nữ sử dụng, còn mới 95%, chính chủ."
-data-seller="Lê Thanh Hương"
-data-phone="0978111222"
-data-location="TP.HCM"
-data-qty="1">
-
-<img src="https://tse2.mm.bing.net/th/id/OIP.EmDgcdrF0u66WhJLNXQZ4QHaFj?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" class="card-img">
-
-<div class="card-actions">
-<button class="card-btn btn-cart" type="button">🛒</button>
-</div>
-
-<div class="card-body">
-<h3>Honda SH Mode 2021 ABS</h3>
-<p class="price">₫49.800.000</p>
-</div>
-</div>
-
-
-<div class="product-card"
-data-cat="phuongtien"
-data-name="Xe đạp Giant Escape 3"
-data-price="4800000"
-data-desc="Khung nhôm nhẹ, phù hợp đi học và tập thể thao."
-data-seller="Đặng Quốc Bảo"
-data-phone="0944666777"
-data-location="Đà Nẵng"
-data-qty="1">
-
-<img src="https://tse2.mm.bing.net/th/id/OIP.4qgVqZx6p23BHtNMg8qRMQHaFi?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" class="card-img">
-
-<div class="card-actions">
-<button class="card-btn btn-cart" type="button">🛒</button>
-</div>
-
-<div class="card-body">
-<h3>Xe đạp Giant Escape 3</h3>
-<p class="price">₫4.800.000</p>
-</div>
-</div>
-
-
-<div class="product-card"
-data-cat="phuongtien"
-data-name="Xe máy điện Yadea G5"
-data-price="16500000"
-data-desc="Pin Lithium, đi hơn 70km mỗi lần sạc."
-data-seller="Hoàng Nhật Minh"
-data-phone="0909777666"
-data-location="Huế"
-data-qty="1">
-
-<img src="https://xedapdiencuvietcuong.com/wp-content/uploads/xe-may-dien-yadea-g5-cu.jpg" class="card-img">
-
-<div class="card-actions">
-<button class="card-btn btn-cart" type="button">🛒</button>
-</div>
-
-<div class="card-body">
-<h3>Xe máy điện Yadea G5</h3>
-<p class="price">₫16.500.000</p>
-</div>
-</div>
-
-
-<div class="product-card"
-data-cat="phuongtien"
-data-name="Toyota Vios E 2017"
-data-price="325000000"
-data-desc="Xe gia đình sử dụng, chưa từng va chạm."
-data-seller="Phạm Văn Nam"
-data-phone="0987666111"
-data-location="Bình Dương"
-data-qty="1">
-
-<img src="https://toyotabinhduongg.com/wp-content/uploads/2023/11/20231030_130219774_iOS.jpg" class="card-img">
-
-<div class="card-actions">
-<button class="card-btn btn-cart" type="button">🛒</button>
-</div>
-
-<div class="card-body">
-<h3>Toyota Vios E 2017</h3>
-<p class="price">₫325.000.000</p>
-</div>
-</div>
-
-
-<div class="product-card"
-data-cat="phuongtien"
-data-name="Mazda 3 Sedan 2018"
-data-price="455000000"
-data-desc="Nội thất đẹp, bảo dưỡng hãng đầy đủ."
-data-seller="Nguyễn Khánh Sơn"
-data-phone="0918888999"
-data-location="Hải Phòng"
-data-qty="1">
-
-<img src="https://phucxecu.com.vn/wp-content/uploads/2023/04/3-5.jpg" class="card-img">
-
-<div class="card-actions">
-<button class="card-btn btn-cart" type="button">🛒</button>
-</div>
-
-<div class="card-body">
-<h3>Mazda 3 Sedan 2018</h3>
-<p class="price">₫455.000.000</p>
-</div>
-</div>
-
-
-<div class="product-card"
-data-cat="phuongtien"
-data-name="Ford Ranger XLS 2019"
-data-price="610000000"
-data-desc="Xe bán tải đẹp, máy dầu, ít sử dụng."
-data-seller="Đỗ Văn Hải"
-data-phone="0965111222"
-data-location="Quảng Ninh"
-data-qty="1">
-
-<img src="https://dailymuabanxe.net/wp-content/uploads/2023/01/z4023191840552_7e5859f1a9937f650ad1ee31e11afdcd.jpg" class="card-img">
-
-<div class="card-actions">
-<button class="card-btn btn-cart" type="button">🛒</button>
-</div>
-
-<div class="card-body">
-<h3>Ford Ranger XLS 2019</h3>
-<p class="price">₫610.000.000</p>
-</div>
-</div>
-
-
-<div class="product-card"
-data-cat="phuongtien"
-data-name="Honda Future FI 2022"
-data-price="26800000"
-data-desc="Xe còn rất mới, bảo hành đầy đủ."
-data-seller="Lý Minh Quân"
-data-phone="0944888555"
-data-location="Bình Dương"
-data-qty="1">
-
-<img src="https://img.carbiz.vn/files/2024/01/04/Honda%20Future%20125%20FI/Honda-Future-2024.jpg" class="card-img">
-
-<div class="card-actions">
-<button class="card-btn btn-cart" type="button">🛒</button>
-</div>
-
-<div class="card-body">
-<h3>Honda Future FI 2022</h3>
-<p class="price">₫26.800.000</p>
-</div>
-</div>
-   
-<!-- ================= THÊM TRANG PHỤC ================= -->
-
-<div class="product-card"
-data-cat="trangphuc"
-data-name="Áo Hoodie Adidas Originals"
-data-price="320000"
-data-desc="Hoodie nỉ dày, mặc ấm, size L, còn mới 95%."
-data-seller="Nguyễn Đức Anh"
-data-phone="0913456789"
-data-location="Hà Nội"
-data-qty="1">
-
-<img src="https://tse3.mm.bing.net/th/id/OIP.FjFPhOECwtShdAVFb9IexgAAAA?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" class="card-img">
-
-<div class="card-actions">
-
-<button class="card-btn btn-cart" type="button">🛒</button>
-</div>
-
-<div class="card-body">
-<h3>Áo Hoodie Adidas Originals</h3>
-<p class="price">₫320.000</p>
-</div>
-</div>
-
-
-<div class="product-card"
-data-cat="trangphuc"
-data-name="Quần Jeans Levi's 511"
-data-price="450000"
-data-desc="Jean xanh đậm, co giãn nhẹ, size 32."
-data-seller="Lê Minh Quang"
-data-phone="0987123456"
-data-location="TP.HCM"
-data-qty="1">
-
-<img src="https://tse1.mm.bing.net/th/id/OIP.QgTANYQ8sPsmJoYxO8bVtwHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" class="card-img">
-
-<div class="card-actions">
-<button class="card-btn btn-cart" type="button">🛒</button>
-</div>
-
-<div class="card-body">
-<h3>Quần Jeans Levi's 511</h3>
-<p class="price">₫450.000</p>
-</div>
-</div>
-
-
-<div class="product-card"
-data-cat="trangphuc"
-data-name="Giày Converse Chuck 70"
-data-price="780000"
-data-desc="Đế cao su còn đẹp, size 42."
-data-seller="Trần Quốc Bảo"
-data-phone="0944111222"
-data-location="Đà Nẵng"
-data-qty="1">
-
-<img src="https://www.jordan1.vn/wp-content/uploads/2023/09/converse-chuck-70-hi-faded-spruc_0afdb43a3b794ffc9e54f8e76de5f1c8.png" class="card-img">
-
-<div class="card-actions">
-<button class="card-btn btn-cart" type="button">🛒</button>
-</div>
-
-<div class="card-body">
-<h3>Giày Converse Chuck 70</h3>
-<p class="price">₫780.000</p>
-</div>
-</div>
-
-
-<div class="product-card"
-data-cat="trangphuc"
-data-name="Giày Nike Air Force 1"
-data-price="1500000"
-data-desc="Giày trắng, mới 90%, full box."
-data-seller="Hoàng Tuấn Kiệt"
-data-phone="0933222111"
-data-location="Hải Phòng"
-data-qty="1">
-
-<img src="https://capvirgo.com/wp-content/uploads/2022/10/wsxc1664359539205_0.jpg" class="card-img">
-
-<div class="card-actions">
-<button class="card-btn btn-cart" type="button">🛒</button>
-</div>
-
-<div class="card-body">
-<h3>Giày Nike Air Force 1</h3>
-<p class="price">₫1.500.000</p>
-</div>
-</div>
-
-
-<div class="product-card"
-data-cat="trangphuc"
-data-name="Đồng hồ G-Shock GA-2100"
-data-price="1850000"
-data-desc="Chống nước, pin mới thay, đầy đủ hộp."
-data-seller="Đặng Minh Tâm"
-data-phone="0911888777"
-data-location="Huế"
-data-qty="1">
-
-<img src="https://image.donghohaitrieu.com/wp-content/uploads/2023/09/GA-2100-1A1DR-6.jpg" class="card-img">
-
-<div class="card-actions">
-<button class="card-btn btn-cart" type="button">🛒</button>
-</div>
-
-<div class="card-body">
-<h3>Đồng hồ G-Shock GA-2100</h3>
-<p class="price">₫1.850.000</p>
-</div>
-</div>
-
-
-<div class="product-card"
-data-cat="trangphuc"
-data-name="Áo Polo Lacoste"
-data-price="420000"
-data-desc="Áo cotton cao cấp, size XL."
-data-seller="Nguyễn Hữu Phong"
-data-phone="0966444333"
-data-location="Nha Trang"
-data-qty="1">
-
-<img src="https://tse1.mm.bing.net/th/id/OIP.KGh4YOFUscYgzzjzObHGTwHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" class="card-img">
-
-<div class="card-actions">
-<button class="card-btn btn-cart" type="button">🛒</button>
-</div>
-
-<div class="card-body">
-<h3>Áo Polo Lacoste</h3>
-<p class="price">₫420.000</p>
-</div>
-</div>
-
-
-<div class="product-card"
-data-cat="trangphuc"
-data-name="Váy công sở nữ cao cấp"
-data-price="390000"
-data-desc="Thiết kế thanh lịch, phù hợp đi làm."
-data-seller="Phạm Thu Trang"
-data-phone="0988333444"
-data-location="Cần Thơ"
-data-qty="1">
-
-<img src="https://dongphuchaianh.vn/wp-content/uploads/2022/08/chan-vay-cong-so-dang-dai-qua-goi.jpg" class="card-img">
-
-<div class="card-actions">
-<button class="card-btn btn-cart" type="button">🛒</button>
-</div>
-
-<div class="card-body">
-<h3>Váy công sở nữ cao cấp</h3>
-<p class="price">₫390.000</p>
-</div>
-</div>
-
-
-<div class="product-card"
-data-cat="trangphuc"
-data-name="Túi xách Charles & Keith"
-data-price="680000"
-data-desc="Túi nữ màu kem, còn mới 95%."
-data-seller="Lê Ngọc Linh"
-data-phone="0909444555"
-data-location="Bình Dương"
-data-qty="1">
-
-<img src="https://phukiendino.com/wp-content/uploads/2024/04/tui-xach-nu-charles-keith-nap-gap-mau-trang.jpg" class="card-img">
-
-<div class="card-actions">
-<button class="card-btn btn-cart" type="button">🛒</button>
-</div>
-
-<div class="card-body">
-<h3>Túi xách Charles & Keith</h3>
-<p class="price">₫680.000</p>
-</div>
-</div>
-
-
-<div class="product-card"
-data-cat="trangphuc"
-data-name="Thắt lưng da nam cao cấp"
-data-price="180000"
-data-desc="Da bò thật, khóa tự động."
-data-seller="Võ Minh Phúc"
-data-phone="0919777888"
-data-location="Hà Nội"
-data-qty="2">
-
-<img src="https://polytino.com/wp-content/uploads/2024/10/that-lung-nam.png" class="card-img">
-
-<div class="card-actions">
-<button class="card-btn btn-cart" type="button">🛒</button>
-</div>
-
-<div class="card-body">
-<h3>Thắt lưng da nam cao cấp</h3>
-<p class="price">₫180.000</p>
-</div>
-</div>
-
-<!-- ================= THÊM VẬT DỤNG ================= -->
-
-<div class="product-card"
-data-cat="vatdung"
-data-name="Nồi chiên không dầu Philips HD9200"
-data-price="1650000"
-data-desc="Dung tích 4.1L, hoạt động tốt, ít sử dụng."
-data-seller="Nguyễn Thị Hạnh"
-data-phone="0912111222"
-data-location="Hà Nội"
-data-qty="1">
-
-<img src="https://down-vn.img.susercontent.com/file/edab984b047228b7d15374f6dcb6770a" class="card-img">
-
-<div class="card-actions">
-<button class="card-btn btn-cart" type="button">🛒</button>
-</div>
-
-<div class="card-body">
-<h3>Nồi chiên không dầu Philips HD9200</h3>
-<p class="price">₫1.650.000</p>
-</div>
-</div>
-
-
-<div class="product-card"
-data-cat="vatdung"
-data-name="Lò vi sóng Sharp 23L"
-data-price="1250000"
-data-desc="Lò hoạt động ổn định, ngoại hình đẹp."
-data-seller="Trần Văn Nam"
-data-phone="0988111333"
-data-location="TP.HCM"
-data-qty="1">
-
-<img src="https://tse1.mm.bing.net/th/id/OIP._lkRLQK8QtoPl0xYo62DfwHaFj?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" class="card-img">
-
-<div class="card-actions">
-<button class="card-btn btn-cart" type="button">🛒</button>
-</div>
-
-<div class="card-body">
-<h3>Lò vi sóng Sharp 23L</h3>
-<p class="price">₫1.250.000</p>
-</div>
-</div>
-
-
-<div class="product-card"
-data-cat="vatdung"
-data-name="Máy hút bụi Electrolux"
-data-price="980000"
-data-desc="Lực hút mạnh, đầy đủ phụ kiện."
-data-seller="Lê Văn Tuấn"
-data-phone="0944666999"
-data-location="Đà Nẵng"
-data-qty="1">
-
-<img src="https://cdn2.fptshop.com.vn/unsafe/1920x0/filters:format(webp):quality(75)/may_hut_bui_electrolux_zlux1811_thumb_c6bb5745f0.png" class="card-img">
-
-<div class="card-actions">
-<button class="card-btn btn-cart" type="button">🛒</button>
-</div>
-
-<div class="card-body">
-<h3>Máy hút bụi Electrolux</h3>
-<p class="price">₫980.000</p>
-</div>
-</div>
-
-
-<div class="product-card"
-data-cat="vatdung"
-data-name="Bàn học gỗ MDF 1m2"
-data-price="890000"
-data-desc="Bàn chắc chắn, có ngăn kéo, phù hợp học tập."
-data-seller="Phạm Quốc Đạt"
-data-phone="0933555666"
-data-location="Huế"
-data-qty="1">
-
-<img src="https://tse4.mm.bing.net/th/id/OIP.48nMuHFw-6b7knUPR5EMTgHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" class="card-img">
-
-<div class="card-actions">
-<button class="card-btn btn-cart" type="button">🛒</button>
-</div>
-
-<div class="card-body">
-<h3>Bàn học gỗ MDF 1m2</h3>
-<p class="price">₫890.000</p>
-</div>
-</div>
-
-
-<div class="product-card"
-data-cat="vatdung"
-data-name="Ghế tựa"
-data-price="750000"
-data-desc="Ghế còn dùng tốt."
-data-seller="Ngô Thành Đạt"
-data-phone="0977666888"
-data-location="Hải Phòng"
-data-qty="1">
-
-<img src="https://tse4.mm.bing.net/th/id/OIP.wsL08gP-0o5AeZq9470H1wHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" class="card-img">
-
-<div class="card-actions">
-<button class="card-btn btn-cart" type="button">🛒</button>
-</div>
-
-<div class="card-body">
-<h3>Ghế tựa</h3>
-<p class="price">₫750.000</p>
-</div>
-</div>
-
-
-<div class="product-card"
-data-cat="vatdung"
-data-name="Kệ sách gỗ 5 tầng"
-data-price="680000"
-data-desc="Kệ gỗ MDF chống ẩm, chịu lực tốt."
-data-seller="Nguyễn Gia Bảo"
-data-phone="0911888999"
-data-location="Bắc Ninh"
-data-qty="1">
-
-<img src="https://cf.shopee.vn/file/b4978b9f2a719dadd7971b08bfa4d250" class="card-img">
-
-<div class="card-actions">
-<button class="card-btn btn-cart" type="button">🛒</button>
-</div>
-
-<div class="card-body">
-<h3>Kệ sách gỗ 5 tầng</h3>
-<p class="price">₫680.000</p>
-</div>
-</div>
-
-
-<div class="product-card"
-data-cat="vatdung"
-data-name="Quạt điều hòa Kangaroo"
-data-price="1450000"
-data-desc="Làm mát nhanh, bình nước lớn, tiết kiệm điện."
-data-seller="Đỗ Minh Khôi"
-data-phone="0988777444"
-data-location="Nghệ An"
-data-qty="1">
-
-<img src="https://down-vn.img.susercontent.com/file/6c2591d12efdcc7d7bc0d6741e83be33" class="card-img">
-
-<div class="card-actions">
-<button class="card-btn btn-cart" type="button">🛒</button>
-</div>
-
-<div class="card-body">
-<h3>Quạt điều hòa Kangaroo</h3>
-<p class="price">₫1.450.000</p>
-</div>
-</div>
-
-
-<div class="product-card"
-data-cat="vatdung"
-data-name="Máy xay sinh tố Panasonic"
-data-price="520000"
-data-desc="Cối thủy tinh, công suất 450W."
-data-seller="Hoàng Văn Dũng"
-data-phone="0966333444"
-data-location="Thanh Hóa"
-data-qty="1">
-
-<img src="https://tse3.mm.bing.net/th/id/OIP.efV4FV_28B7fiNKbZ2oytgHaE8?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" class="card-img">
-
-<div class="card-actions">
-<button class="card-btn btn-cart" type="button">🛒</button>
-</div>
-
-<div class="card-body">
-<h3>Máy xay sinh tố Panasonic</h3>
-<p class="price">₫520.000</p>
-</div>
-</div>
-
-</div> 
-
-</main> 
-
-<!-- ===== MODAL CHI TIẾT ===== --> 
-
-<div class="modal-overlay" id="modal"> 
-
-    <div class="modal-box"> 
-
-        <button class="modal-close" type="button">✕</button> 
-
- 
-
-        <img src="" alt="" class="modal-img" id="modalImg"> 
-
- 
-
-        <div class="modal-body"> 
-
-            <h2 id="modalName"></h2> 
-
-            <p class="modal-price" id="modalPrice"></p> 
-
- 
-
-            <div class="modal-info"> 
-
-                <div class="modal-info-row"> 
-
-                    <span class="label">📝 Mô tả:</span> 
-
-                    <span class="value" id="modalDesc"></span> 
-
-                </div> 
-
- 
-
-                <div class="modal-info-row"> 
-
-                    <span class="label">📍 Địa chỉ:</span> 
-
-                    <span class="value" id="modalLocation"></span> 
-
-                </div> 
-
- 
-
-                <div class="modal-info-row"> 
-
-                    <span class="label">📦 Số lượng:</span> 
-
-                    <span class="value" id="modalQty"></span> 
-
-                </div> 
-
- 
-
-                <div class="modal-info-row"> 
-
-                    <span class="label">👤 Người bán:</span> 
-
-                    <span class="value" id="modalSeller"></span> 
-
-                </div> 
-
- 
-
-                <div class="modal-info-row"> 
-
-                    <span class="label">📞 SĐT:</span> 
-
-                    <span class="value" id="modalPhone"></span> 
-
-                </div> 
-
-            </div> 
-
- 
-
-            <div class="modal-actions"> 
-
-                <button class="btn-add-cart" type="button">Thêm vào giỏ</button> 
-
-            </div> 
-
-        </div> 
-
-    </div> 
-
-</div> 
-
- 
-
-<!-- ===== FOOTER ===== --> 
-
-<footer class="site-footer"> 
-
-    <div style="margin-bottom:10px;"> 
-
-        <a href="#">Về chúng tôi</a> 
-
-        <a href="#">Điều khoản</a> 
-
-        <a href="#">Bảo mật</a> 
-
-        <a href="#">Liên hệ</a> 
-
-    </div> 
-
-    <p>© 2026 Chợ Tốt Đồ Cũ – đồ của người là đồ của mình, đồ của mình chính là của mình</p> 
-
-</footer> 
-
- 
-
-<!-- TOAST --> 
-
-<div class="toast" id="toast"></div> 
-
- 
-
-<!-- ===== NHÚNG JS THEO ĐÚNG THƯ MỤC codejs ===== --> 
-
-<script src="codejs/luutru.js"></script> 
-
-<script src="codejs/giaodien.js"></script> 
-
-<script src="codejs/taikhoan.js"></script> 
-
-<script src="codejs/giohang.js"></script> 
-
-<script src="codejs/trang.js"></script> 
-
- 
-
-</body> 
-
-</html> 
-
- 
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chợ Tốt Đồ Cũ</title>
+    <link rel="stylesheet" href="giaodien.css">
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="header-container">
+    <div class="header-top">
+        <div class="logo-section">
+            <a href="idea.html" class="logo-text">chợ tốt</a>
+        </div>
+
+        <nav class="top-nav">
+            <a href="idea.html" class="active">Trang chủ</a>
+        </nav>
+
+        <div class="user-actions">
+            <a href="thongbao.html" class="icon-btn-circle" id="notificationBtn" title="Thông báo">
+                🔔
+                <span class="badge" id="notiCount" style="display:none">0</span>
+            </a>
+
+            <a href="giohang.html" class="icon-btn-circle" title="Giỏ hàng">
+                🛒
+                <span class="badge" id="cartCount" style="display:none">0</span>
+            </a>
+
+            <a href="taikhoan.html" class="btn-login" id="authBtn">Đăng nhập</a>
+            <a href="dangtin.html" class="btn-post">Đăng tin</a>
+        </div>
+    </div>
+
+    <!-- Search Banner -->
+    <div class="search-banner">
+        <h1 class="banner-title">Giá tốt, gần bạn, chốt nhanh!</h1>
+
+        <div class="search-box">
+            <input type="text" class="search-input" placeholder="Tìm sản phẩm..." id="searchInput">
+
+            <div class="category-select" id="categoryBtn">
+                <span id="categoryText">📦 Tất cả</span> ▾
+                <div class="category-dropdown" id="categoryDropdown">
+                    <div data-cat="all">📦 Tất cả danh mục</div>
+                    <div data-cat="dientu">📱 Điện tử</div>
+                    <div data-cat="phuongtien">🚗 Phương tiện</div>
+                    <div data-cat="trangphuc">👕 Trang phục</div>
+                    <div data-cat="vatdung">🏠 Vật dụng</div>
+                    <div data-cat="khac">🎁 Khác</div>
+                </div>
+            </div>
+
+            <div class="location-select" id="locationBtn">
+                📍 <span id="regionText">Tất cả khu vực</span> ▾
+                <div class="region-dropdown" id="regionDropdown">
+                    <div data-region="all">🌏 Tất cả khu vực</div>
+                    <div data-region="Miền Bắc">🏔 Miền Bắc</div>
+                    <div data-region="Miền Trung">🌊 Miền Trung</div>
+                    <div data-region="Miền Nam">🌴 Miền Nam</div>
+                </div>
+            </div>
+
+            <button class="btn-search" type="button">Tìm kiếm</button>
+        </div>
+    </div>
+</header>
+
+<!-- ===== MAIN ===== -->
+<main>
+    <h2 class="section-title" id="sectionTitle">Tin Đăng Nổi Bật Hôm Nay</h2>
+
+    <div class="product-grid" id="productGrid">
+
+        <!-- SP DEMO — có thể xóa hết sau này -->
+
+        <div class="product-card" data-cat="dientu" 
+             data-name="Smart TV Sony 43 inch Full HD" 
+             data-price="2800000" 
+             data-desc="Màn hình không kẻ vạch, đầy đủ chân đế và điều khiển giọng nói." 
+             data-seller="Nguyễn Văn A" data-phone="0912345678" 
+             data-location="Hà Nội" data-weight="15">
+            <img src="https://cdn.tgdd.vn/Products/Images/1942/226093/tivi-sony-43x75k-1-org.jpg" alt="Smart TV Sony" class="card-img">
+            <div class="card-actions">
+                <button class="card-btn btn-cart" type="button">🛒</button>
+            </div>
+            <div class="card-body">
+                <h3>Smart TV Sony 43 inch Full HD</h3>
+                <p class="price">₫2.800.000</p>
+            </div>
+        </div>
+
+        <div class="product-card" data-cat="dientu"
+             data-name="Laptop Dell Latitude Core i5"
+             data-price="4200000"
+             data-desc="RAM 8GB, SSD 256GB, mượt mà tác vụ Word, Excel, học Zoom."
+             data-seller="Trần Thị B" data-phone="0987654321"
+             data-location="TP.HCM" data-weight="2">
+            <img src="https://laptopcuvina.com/wp-content/uploads/2022/09/Dell-Latitude-5410-2.jpg" alt="Laptop Dell" class="card-img">
+            <div class="card-actions">
+                <button class="card-btn btn-cart" type="button">🛒</button>
+            </div>
+            <div class="card-body">
+                <h3>Laptop Dell Latitude Core i5</h3>
+                <p class="price">₫4.200.000</p>
+            </div>
+        </div>
+
+        <div class="product-card" data-cat="dientu"
+             data-name="iPhone 13 Pro Max 128GB"
+             data-price="18200000"
+             data-desc="Pin 92%, không trầy xước, đầy đủ phụ kiện chính hãng."
+             data-seller="Phạm Văn D" data-phone="0933444555"
+             data-location="Hà Nội" data-weight="0.3">
+            <img src="https://cdn.tgdd.vn/Products/Images/42/230529/iphone-13-pro-max-thumb-1.jpg" alt="iPhone 13 Pro Max" class="card-img">
+            <div class="card-actions">
+                <button class="card-btn btn-cart" type="button">🛒</button>
+            </div>
+            <div class="card-body">
+                <h3>iPhone 13 Pro Max 128GB</h3>
+                <p class="price">₫18.200.000</p>
+            </div>
+        </div>
+
+        <div class="product-card" data-cat="vatdung"
+             data-name="Máy giặt LG 8kg cửa trước"
+             data-price="3500000"
+             data-desc="Giặt êm, nhiều chế độ, phù hợp gia đình 3-4 người."
+             data-seller="Long Z" data-phone="0922111222"
+             data-location="TP.HCM" data-weight="60">
+            <img src="https://thumuadocuthanhnam.com/wp-content/uploads/2024/12/z6161206236175_f1a1bb30a6ea09ff7c655594fec2f18f.jpg" alt="Máy giặt LG" class="card-img">
+            <div class="card-actions">
+                <button class="card-btn btn-cart" type="button">🛒</button>
+            </div>
+            <div class="card-body">
+                <h3>Máy giặt LG 8kg cửa trước</h3>
+                <p class="price">₫3.500.000</p>
+            </div>
+        </div>
+
+        <div class="product-card" data-cat="vatdung"
+             data-name="Ghế xoay văn phòng lưới"
+             data-price="480000"
+             data-desc="Lưng lưới thoáng, tay vịn điều chỉnh, piston còn tốt."
+             data-seller="An AA" data-phone="0933222333"
+             data-location="Hà Nội" data-weight="12">
+            <img src="https://muabanghecu.com/wp-content/uploads/2025/02/ghe-van-phong-cu-TPHCM-24-768x768.jpg" alt="Ghế xoay" class="card-img">
+            <div class="card-actions">
+                <button class="card-btn btn-cart" type="button">🛒</button>
+            </div>
+            <div class="card-body">
+                <h3>Ghế xoay văn phòng lưới</h3>
+                <p class="price">₫480.000</p>
+            </div>
+        </div>
+
+        <div class="product-card" data-cat="vatdung"
+             data-name="Máy pha cà phê Philips"
+             data-price="1800000"
+             data-desc="Pha espresso và cappuccino, vệ sinh sạch sẽ."
+             data-seller="Bình BB" data-phone="0955333444"
+             data-location="TP.HCM" data-weight="8">
+            <img src="https://bizweb.dktcdn.net/100/424/337/products/may-pha-cafe-philips-ep2236-40-07.jpg?v=1684493718933" alt="Máy pha cà phê" class="card-img">
+            <div class="card-actions">
+                <button class="card-btn btn-cart" type="button">🛒</button>
+            </div>
+            <div class="card-body">
+                <h3>Máy pha cà phê Philips</h3>
+                <p class="price">₫1.800.000</p>
+            </div>
+        </div>
+
+        <div class="product-card" data-cat="phuongtien"
+             data-name="Xe đạp thể thao MTB"
+             data-price="1500000"
+             data-desc="Khung nhôm, phanh đĩa, đã kiểm tra kỹ thuật."
+             data-seller="Cường CC" data-phone="0912333555"
+             data-location="Đà Nẵng" data-weight="14">
+            <img src="https://xedapthongnhat.vn/wp-content/uploads/2022/09/MTB-24_YELLOW_1.jpg" alt="Xe đạp MTB" class="card-img">
+            <div class="card-actions">
+                <button class="card-btn btn-cart" type="button">🛒</button>
+            </div>
+            <div class="card-body">
+                <h3>Xe đạp thể thao MTB</h3>
+                <p class="price">₫1.500.000</p>
+            </div>
+        </div>
+
+        <div class="product-card" data-cat="trangphuc"
+             data-name="Áo khoác bomber unisex"
+             data-price="180000"
+             data-desc="Chất da mềm, size L, mới mặc vài lần."
+             data-seller="Linh LL" data-phone="0944666777"
+             data-location="Hà Nội" data-weight="0.6">
+            <img src="https://product.hstatic.net/1000276168/product/img_5828_9ba26bfc03434a5d8ad3af1a137ad60d_master.jpg" alt="Áo bomber" class="card-img">
+            <div class="card-actions">
+                <button class="card-btn btn-cart" type="button">🛒</button>
+            </div>
+            <div class="card-body">
+                <h3>Áo khoác bomber unisex</h3>
+                <p class="price">₫180.000</p>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<!-- ===== MODAL CHI TIẾT ===== -->
+<div class="modal-overlay" id="modal">
+    <div class="modal-box">
+        <button class="modal-close" type="button">✕</button>
+
+        <img src="" alt="" class="modal-img" id="modalImg">
+
+        <div class="modal-body">
+            <h2 id="modalName"></h2>
+            <p class="modal-price" id="modalPrice"></p>
+
+            <div class="modal-info">
+                <div class="modal-info-row">
+                    <span class="label">📝 Mô tả:</span>
+                    <span class="value" id="modalDesc"></span>
+                </div>
+
+                <div class="modal-info-row">
+                    <span class="label">📍 Địa chỉ:</span>
+                    <span class="value" id="modalLocation"></span>
+                </div>
+
+                <div class="modal-info-row">
+                    <span class="label">⚖️ Trọng lượng:</span>
+                    <span class="value" id="modalWeight"></span>
+                </div>
+
+                <div class="modal-info-row">
+                    <span class="label">👤 Người bán:</span>
+                    <span class="value" id="modalSeller"></span>
+                </div>
+
+                <div class="modal-info-row">
+                    <span class="label">📞 SĐT:</span>
+                    <span class="value" id="modalPhone"></span>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-add-cart" type="button">Thêm vào giỏ</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer">
+    <div style="margin-bottom:10px;">
+        <a href="#">Về chúng tôi</a>
+        <a href="#">Điều khoản</a>
+        <a href="#">Bảo mật</a>
+        <a href="#">Liên hệ</a>
+    </div>
+    <p>© 2026 Chợ Tốt Đồ Cũ – đồ của người là đồ của mình, đồ của mình chính là của mình</p>
+</footer>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- ===== NHÚNG JS ===== -->
+<script src="codejs/luutru.js"></script>
+<script src="codejs/giaodien.js"></script>
+<script src="codejs/taikhoan.js"></script>
+<script src="codejs/giohang.js"></script>
+<script src="codejs/trang.js"></script>
+
+</body>
+</html>
