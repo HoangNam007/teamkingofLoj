@@ -1,10 +1,4 @@
-/* ========================================================================
-   GIOHANG.JS - Giỏ hàng (V4 - Siêu đơn giản)
-   ======================================================================== */
 
-/* ========================================================================
-   TÊN DANH MỤC
-   ======================================================================== */
 function hienThiTenDanhMuc(cat) {
     const map = {
         dientu: 'Điện tử',
@@ -16,9 +10,6 @@ function hienThiTenDanhMuc(cat) {
     return map[cat] || 'Sản phẩm';
 }
 
-/* ========================================================================
-   THÊM VÀO GIỎ HÀNG
-   ======================================================================== */
 function themVaoGioHang(productId) {
     if (!dangDangNhap()) {
         showToast('⚠️ Vui lòng đăng nhập để dùng giỏ hàng!', 'warning');
@@ -33,20 +24,17 @@ function themVaoGioHang(productId) {
 
     const currentUser = layUserHienTai();
 
-    // Chặn thêm SP của chính mình
     if (chuanHoaEmail(post.ownerEmail) === chuanHoaEmail(currentUser.email)) {
         showToast('⚠️ Không thể thêm sản phẩm của chính mình!', 'warning');
         return;
     }
 
-    // Check đã có trong giỏ chưa
     const cart = layGioHang();
     if (cart.some(item => String(item.id) === String(productId))) {
         showToast('ℹ️ Sản phẩm đã có trong giỏ hàng!', 'info');
         return;
     }
 
-    // Thêm vào giỏ
     cart.push({
         id: post.id,
         name: post.name,
@@ -62,7 +50,6 @@ function themVaoGioHang(productId) {
     luuGioHang(cart);
     capNhatBadgeGioHang();
 
-    // Gửi thông báo cho người bán
     themThongBao(
         post.ownerEmail,
         currentUser.name,
@@ -76,9 +63,6 @@ function themVaoGioHang(productId) {
     showToast('🛒 Đã thêm vào giỏ hàng!', 'success');
 }
 
-/* ========================================================================
-   XÓA KHỎI GIỎ
-   ======================================================================== */
 function xoaKhoiGioHang(index) {
     const cart = layGioHang();
     if (index < 0 || index >= cart.length) return;
@@ -88,9 +72,6 @@ function xoaKhoiGioHang(index) {
     capNhatBadgeGioHang();
 }
 
-/* ========================================================================
-   CẬP NHẬT BADGE GIỎ HÀNG
-   ======================================================================== */
 function capNhatBadgeGioHang() {
     const badges = document.querySelectorAll('#cartCount');
     if (!badges.length) return;
@@ -102,9 +83,6 @@ function capNhatBadgeGioHang() {
     });
 }
 
-/* ========================================================================
-   RENDER BẢNG GIỎ HÀNG
-   ======================================================================== */
 function renderBangGioHang() {
     const tbody = document.getElementById('cartBody');
     if (!tbody) return;
@@ -139,7 +117,6 @@ function renderBangGioHang() {
         const price = Number(item.price) || 0;
         const seller = item.seller;
 
-        // 3 trạng thái: bình thường, đã xóa, đã bán
         let statusText = '';
         let rowStyle = 'cursor:pointer;';
         let clickable = true;
@@ -206,9 +183,6 @@ function renderBangGioHang() {
     tbody.innerHTML = html;
 }
 
-/* ========================================================================
-   XÓA SP KHỎI BẢNG
-   ======================================================================== */
 function xoaSanPhamKhoiBang(index) {
     if (!confirm('Xóa sản phẩm này khỏi giỏ hàng?')) return;
     xoaKhoiGioHang(index);
