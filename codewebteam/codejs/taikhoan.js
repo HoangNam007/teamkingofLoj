@@ -1,4 +1,4 @@
-/* TAIKHOAN.JS - Đăng ký / Đăng nhập / Đăng xuất*/
+
 const TINH_THANH_THEO_MIEN = {
     'Miền Bắc': [
         'Hà Nội', 'Hải Phòng', 'Quảng Ninh', 'Bắc Ninh', 'Hải Dương',
@@ -30,7 +30,6 @@ function layMienTheoThanhPho(city) {
     }
     return '';}
 
-/* ĐĂNG NHẬP */
 function xuLyDangNhap(event) {
     event.preventDefault();
     const form = event.target;
@@ -49,7 +48,6 @@ function xuLyDangNhap(event) {
 
     datUserHienTai(user);
 
-    // ★ Check user có bị chặn không
     if (user.blocked === true) {
         showToast('⚠️ Tài khoản của bạn đã bị khóa! Vui lòng xem thông báo.', 'warning');
         setTimeout(() => { window.location.href = 'thongbao.html'; }, 1500);
@@ -59,8 +57,6 @@ function xuLyDangNhap(event) {
     showToast('✅ Chào mừng ' + user.name + '!', 'success');
     setTimeout(() => { window.location.href = 'idea.html'; }, 800);
 }
-
-/* ĐĂNG KÝ*/
 function xuLyDangKy(event) {
     event.preventDefault();
     const form = event.target;
@@ -121,7 +117,6 @@ function xuLyDangKy(event) {
 
     window.scrollTo({ top: 0, behavior: 'smooth' });}
 
-/* CẬP NHẬT NÚT HEADER */
 function capNhatNutAuth() {
     const authButtons = document.querySelectorAll('#authBtn, .btn-login');
     const user = layUserHienTai();
@@ -144,9 +139,6 @@ function capNhatNutAuth() {
     });
 }
 
-/* ========================================================================
-   HIỂN THỊ TRANG TÀI KHOẢN
-   ======================================================================== */
 function capNhatHienThiTrangTaiKhoan() {
     const user = layUserHienTai();
     const loggedInSection = document.getElementById('loggedInSection');
@@ -175,9 +167,6 @@ function capNhatHienThiTrangTaiKhoan() {
     }
 }
 
-/* ========================================================================
-   PREVIEW MIỀN KHI CHỌN TỈNH
-   ======================================================================== */
 function ganSuKienTinhThanh() {
     const citySelect = document.getElementById('citySelect');
     const regionPreview = document.getElementById('regionPreview');
@@ -200,10 +189,6 @@ function ganSuKienTinhThanh() {
         }
     });
 }
-
-/* ========================================================================
-   VALIDATE SĐT REALTIME
-   ======================================================================== */
 function ganValidatePhoneRealtime() {
     const phoneInput = document.getElementById('registerPhone');
     if (!phoneInput || phoneInput.dataset.bound === 'true') return;
@@ -214,10 +199,6 @@ function ganValidatePhoneRealtime() {
         if (this.value.length > 10) this.value = this.value.substring(0, 10);
     });
 }
-
-/* ========================================================================
-   KHỞI TẠO
-   ======================================================================== */
 function khoiTaoTaiKhoan() {
     ganValidatePhoneRealtime();
 
