@@ -1,7 +1,6 @@
-// Danh sách email admin
+
 const ADMIN_EMAILS = ['admin@gmail.com'];
 
-/*HELPER */
 function docJSON(key, mặcĐịnh) {
     try {
         const data = localStorage.getItem(key);
@@ -24,7 +23,6 @@ function formatGiaTien(gia) {
     return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 }
 
-/* USERS*/
 function layDanhSachUsers() {
     return docJSON('users', []);
 }
@@ -80,14 +78,10 @@ function capNhatUser(email, dataMoi) {
     return true;
 }
 
-/* ADMIN CHECK */
 function laAdmin(user) {
     if (!user || !user.email) return false;
     return ADMIN_EMAILS.includes(chuanHoaEmail(user.email));}
 
-/* ========================================================================
-   CURRENT USER (đang đăng nhập)
-   ======================================================================== */
 function layUserHienTai() {
     return docJSON('currentUser', null);
 }
@@ -113,7 +107,6 @@ function capNhatUserHienTai(dataMoi) {
     return true;
 }
 
-/* POSTS (BÀI ĐĂNG) */
 function layDanhSachBaiDang() {
     return docJSON('posts', []);}
 
@@ -126,7 +119,7 @@ function themBaiDangMoi(post) {
 
     const posts = layDanhSachBaiDang();
     const priceOriginal = Math.round(Number(post.price)) || 0;
-    const priceDisplay = Math.round(priceOriginal * 1.05); // Cộng 5% phí
+    const priceDisplay = Math.round(priceOriginal * 1.05); 
 
     const newPost = {
         id: post.id || Date.now(),
@@ -188,7 +181,6 @@ function danhDauDaBan(id) {
     posts[index].status = 'sold';
     luuDanhSachBaiDang(posts);
 
-    // Xóa tất cả noti về SP này
     xoaNotiTheoPostId(id);
     return true;
 }
@@ -205,14 +197,10 @@ function xoaBaiDang(id) {
     const newPosts = posts.filter(p => String(p.id) !== String(id));
     luuDanhSachBaiDang(newPosts);
 
-    // Xóa tất cả noti về SP này
     xoaNotiTheoPostId(id);
     return true;
 }
 
-/* ========================================================================
-   CHẶN / MỞ KHÓA USER (dành cho Admin)
-   ======================================================================== */
 function chanUser(email, lyDo) {
     const users = layDanhSachUsers();
     const index = users.findIndex(u => chuanHoaEmail(u.email) === chuanHoaEmail(email));
@@ -246,7 +234,7 @@ function laBiChan(user) {
 function userHienTaiBiChan() {
     const user = layUserHienTai();
     if (!user) return false;
-    // Đọc user mới nhất từ danh sách (vì user hiện tại là snapshot)
+
     const usersMoi = layDanhSachUsers();
     const userMoiNhat = usersMoi.find(u => chuanHoaEmail(u.email) === chuanHoaEmail(user.email));
     if (!userMoiNhat) return false;
@@ -262,15 +250,12 @@ function layLyDoBiChan() {
     return userMoiNhat.blockReason || 'Không có lý do';
 }
 
-/* ========================================================================
-   TÍNH DOANH THU + LỢI NHUẬN CỦA 1 USER (dành cho Admin)
-   ======================================================================== */
 function tinhDoanhThuUser(userEmail) {
     const posts = layDanhSachBaiDang();
     const emailChuan = chuanHoaEmail(userEmail);
 
-    let doanhThu = 0;   // Tổng giá gốc SP đã bán
-    let loiNhuan = 0;   // 5% phí hệ thống thu
+    let doanhThu = 0;  
+    let loiNhuan = 0;  
 
     posts.forEach(p => {
         if (chuanHoaEmail(p.ownerEmail) === emailChuan && p.status === 'sold') {
@@ -283,7 +268,6 @@ function tinhDoanhThuUser(userEmail) {
     return { doanhThu, loiNhuan };
 }
 
-/* CART (GIỎ HÀNG) - Mỗi user 1 giỏ */
 function layGioHang() {
     const user = layUserHienTai();
     if (!user) return [];
@@ -298,12 +282,6 @@ function luuGioHang(cart) {
     ghiJSON('carts', allCarts);
     return true;    }
 
-/* ========================================================================
-   NOTIFICATIONS (THÔNG BÁO)
-   ------------------------------------------------------------------------
-   Mỗi lần ai đó thêm SP vào giỏ = 1 thông báo mới
-   Format: "[Tên A] đã thêm SP [B] vào giỏ hàng"
-   ======================================================================== */
 function layDanhSachThongBao() {
     return docJSON('notifications', []);
 }
@@ -313,7 +291,6 @@ function luuDanhSachThongBao(list) {
 }
 
 
-/*THÊM THÔNG BÁO*/
 function themThongBao(toEmail, fromUserName, fromUserPhone, fromUserCity, productName, postId, fromEmail) {
     const list = layDanhSachThongBao();
     const emailFromChuan = chuanHoaEmail(fromEmail);
@@ -372,12 +349,6 @@ function xoaNotiTheoPostId(postId) {
     capNhatBadgeThongBao();
 }
 
-/* ========================================================================
-   ĐỒNG BỘ POSTS KHI USER SỬA PROFILE
-   ------------------------------------------------------------------------
-   Khi user sửa tên/SĐT/thành phố → tất cả posts của user tự cập nhật
-   thông tin người bán (seller, phone, location, region)
-   ======================================================================== */
 function dongBoPostTheoUser(user) {
     if (!user || !user.email) return;
     const emailChuan = chuanHoaEmail(user.email);
@@ -400,12 +371,6 @@ function dongBoPostTheoUser(user) {
     }
 }
 
-/* ========================================================================
-   ĐỒNG BỘ THÔNG BÁO KHI USER SỬA PROFILE
-   ------------------------------------------------------------------------
-   Khi user sửa profile → tất cả noti mà user đã gửi (fromEmail = user.email)
-   cũng được update tên/SĐT/thành phố mới
-   ======================================================================== */
 function dongBoThongBaoTheoUser(user) {
     if (!user || !user.email) return;
     const emailChuan = chuanHoaEmail(user.email);
@@ -443,17 +408,10 @@ function capNhatBadgeThongBao() {
         badge.style.display = unread > 0 ? 'flex' : 'none';
     });
 }
-
-/* ========================================================================
-   AUTO CẬP NHẬT BADGE KHI TRANG LOAD
-   ======================================================================== */
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(capNhatBadgeThongBao, 50);
 });
 
-/* ========================================================================
-   RESET DATA (debug)
-   ======================================================================== */
 function xoaTatCaDuLieu() {
     localStorage.removeItem('users');
     localStorage.removeItem('currentUser');
@@ -463,12 +421,6 @@ function xoaTatCaDuLieu() {
     console.log('✅ Đã xóa toàn bộ dữ liệu');
 }
 
-
-/* ========================================================================
-   ĐỒNG BỘ THÔNG BÁO KHI USER SỬA PROFILE
-   ------------------------------------------------------------------------
-   Khi user sửa tên/SĐT/thành phố → tất cả noti mà user gửi được cập nhật
-   ======================================================================== */
 function dongBoThongBaoTheoUser(user) {
     if (!user || !user.email) return;
     const emailChuan = chuanHoaEmail(user.email);
