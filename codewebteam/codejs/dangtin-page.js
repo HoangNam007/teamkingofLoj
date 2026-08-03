@@ -1,6 +1,3 @@
-/* ========================================================================
-   DANGTIN-PAGE.JS - Đăng tin + Tin của tôi (V4 - có chiết khấu 5%)
-   ======================================================================== */
 
 const TEN_DANH_MUC = {
     dientu: '📱 Điện tử',
@@ -17,9 +14,7 @@ const TEN_TRANG_THAI = {
 
 const PLACEHOLDER_IMG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='300'><rect width='400' height='300' fill='%23f5f5f5'/><text x='50%25' y='50%25' font-family='Arial' font-size='24' fill='%23bbb' text-anchor='middle' dominant-baseline='middle'>Preview</text></svg>";
 
-/* ========================================================================
-   TRANG ĐĂNG TIN
-   ======================================================================== */
+    
 function setupTrangDangTin() {
     const imageInput = document.getElementById('postImageInput');
     const imagePreview = document.getElementById('postImagePreview');
@@ -79,14 +74,12 @@ function xuLyDangTinMoi(event) {
         return;
     }
 
-    // ★ Kiểm tra ảnh có tải được không TRƯỚC KHI hiện modal
     kiemTraAnh(image, function(anhOk) {
         if (!anhOk) {
             showToast('❌ Ảnh không tải được! Vui lòng dùng link ảnh khác.', 'error');
             return;
         }
 
-        // Ảnh OK → tính giá +5% và hiện modal xác nhận
         const priceHienThi = Math.round(priceGoc * 1.05);
         const phi = priceHienThi - priceGoc;
 
@@ -118,9 +111,6 @@ function kiemTraAnh(url, callback) {
     };
     img.src = url;
 }
-/* ========================================================================
-   TRANG TIN CỦA TÔI
-   ======================================================================== */
 function setupTrangTinCuaToi() {
     renderTinCuaToi();
 
@@ -166,7 +156,6 @@ function renderTinCuaToi() {
             ? new Date(post.createdAt).toLocaleDateString('vi-VN')
             : '';
 
-        // Hiển thị cả 2 giá
         const giaGoc = post.priceOriginal || Math.round(post.price / 1.05);
         const giaHienThi = post.price;
         const priceHtml = `
@@ -252,9 +241,6 @@ function xoaTinDaDang(id) {
     }
 }
 
-/* ========================================================================
-   MODAL SỬA TIN
-   ======================================================================== */
 function moModalSuaTin(id) {
     const post = layBaiDangTheoId(id);
     if (!post) {
@@ -266,7 +252,6 @@ function moModalSuaTin(id) {
         return;
     }
 
-    // Lấy giá GỐC (không phải giá đã +5%)
     const giaGoc = post.priceOriginal || Math.round(post.price / 1.05);
 
     document.getElementById('editPostId').value = post.id;
@@ -310,7 +295,6 @@ function xuLySubmitFormSuaTin(e) {
         return;
     }
 
-    // ★ Kiểm tra ảnh có tải được không
     kiemTraAnh(image, function(anhOk) {
         if (!anhOk) {
             showToast('❌ Ảnh không tải được! Vui lòng dùng link ảnh khác.', 'error');
@@ -342,9 +326,6 @@ function xuLySubmitFormSuaTin(e) {
         });
     });
 }
-/* ========================================================================
-   MODAL XÁC NHẬN ĐĂNG TIN (thay cho confirm())
-   ======================================================================== */
 function hienModalXacNhanDangTin(config) {
     // Xóa modal cũ nếu có
     const oldModal = document.getElementById('modalConfirmDangTin');
@@ -395,7 +376,7 @@ function hienModalXacNhanDangTin(config) {
 
     document.body.insertAdjacentHTML('beforeend', modalHtml);
 
-    // Lưu callback vào biến toàn cục để nút bấm gọi được
+
     window._callbackDangTin = config.onConfirm;
 }
 
