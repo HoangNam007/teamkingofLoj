@@ -1,6 +1,4 @@
-/* ========================================================================
-   CHITIET-PAGE.JS - Trang chi tiết sản phẩm (V4)
-   ======================================================================== */
+
 
 document.addEventListener('DOMContentLoaded', () => {
     renderTrangChiTiet();
@@ -10,7 +8,6 @@ function renderTrangChiTiet() {
     const container = document.getElementById('detailContainer');
     if (!container) return;
 
-    // Đọc ID từ URL
     const urlParams = new URLSearchParams(window.location.search);
     const productId = urlParams.get('id');
 
