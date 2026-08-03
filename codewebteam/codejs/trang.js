@@ -1,6 +1,4 @@
-/* ========================================================================
-   TRANG.JS - Router chính + logic từng trang
-   ======================================================================== */
+
 
 const TRANG_THAI_LOC = {
     keyword: '',
@@ -10,23 +8,15 @@ const TRANG_THAI_LOC = {
     perPage: 30
 };
 
-/* ========================================================================
-   CHẶN USER BỊ KHÓA VÀO CÁC TRANG BỊ CẤM
-   ------------------------------------------------------------------------
-   User bị chặn CHỈ được vào: thongbao.html, thongtin.html, taikhoan.html
-   Các trang khác → hiện thông báo "Tài khoản đã bị khóa"
-   ======================================================================== */
 function chanUserBiKhoaNeuCan() {
     if (!dangDangNhap()) return false;
     if (!userHienTaiBiChan()) return false;
 
-    // Các trang được phép truy cập khi bị chặn
     const trangDuocPhep = ['thongbao.html', 'thongtin.html', 'taikhoan.html'];
     const fileName = window.location.pathname.split('/').pop().toLowerCase();
 
     if (trangDuocPhep.includes(fileName)) return false;
 
-    // Không thuộc trang được phép → ẩn nội dung, hiện thông báo
     const main = document.querySelector('main');
     if (main) {
         const lyDo = layLyDoBiChan();
@@ -53,7 +43,7 @@ function chanUserBiKhoaNeuCan() {
         `;
     }
 
-    return true; // Đã chặn
+    return true; 
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -92,7 +82,6 @@ function nhanBietTrang() {
     if (fileName === 'quanly.html') return 'admin';
     return 'other';}
 
-/* TRANG CHỦ */
 function khoiTaoTrangChu() {
     setupDropdownKhuVuc();
     setupDropdownDanhMuc();
@@ -271,9 +260,6 @@ function setupLocKhuVuc() {
     });
 }
 
-/* ========================================================================
-   TRANG GIỎ HÀNG
-   ======================================================================== */
 function khoiTaoTrangGioHang() {
     const notLoggedIn = document.getElementById('notLoggedIn');
     const cartContent = document.getElementById('cartContent');
@@ -288,10 +274,6 @@ function khoiTaoTrangGioHang() {
     if (cartContent) cartContent.style.display = 'block';
     renderBangGioHang();
 }
-
-/* ========================================================================
-   TRANG THÔNG BÁO
-   ======================================================================== */
 function khoiTaoTrangThongBao() {
     const container = document.getElementById('thongBaoList');
     if (!container) return;
@@ -306,7 +288,6 @@ function khoiTaoTrangThongBao() {
         return;
     }
 
-    // ★ MỚI: Nếu user bị chặn, hiện thông báo khóa tài khoản
     if (userHienTaiBiChan()) {
         const lyDo = layLyDoBiChan();
         container.innerHTML = `
@@ -384,9 +365,6 @@ function tinhThoiGian(date) {
     return date.toLocaleDateString('vi-VN');
 }
 
-/* ========================================================================
-   TRANG ĐĂNG TIN
-   ======================================================================== */
 function khoiTaoTrangDangTin() {
     const notLoggedIn = document.getElementById('notLoggedIn');
     const postContent = document.getElementById('postContent');
@@ -405,9 +383,6 @@ function khoiTaoTrangDangTin() {
     }
 }
 
-/* ========================================================================
-   TRANG TIN CỦA TÔI
-   ======================================================================== */
 function khoiTaoTrangTinCuaToi() {
     const notLoggedIn = document.getElementById('notLoggedIn');
     const myPostsContent = document.getElementById('myPostsPageContent');
@@ -425,10 +400,6 @@ function khoiTaoTrangTinCuaToi() {
         setupTrangTinCuaToi();
     }
 }
-
-/* ========================================================================
-   TRANG THÔNG TIN CÁ NHÂN
-   ======================================================================== */
 function khoiTaoTrangThongTin() {
     const notLoggedIn = document.getElementById('notLoggedIn');
     const profileContent = document.getElementById('profileContent');
@@ -516,7 +487,6 @@ function xuLyLuuThongTin(event) {
     setTimeout(() => { location.reload(); }, 800);
 }
 
-/* TRANG ADMIN */
 function khoiTaoTrangAdmin() {
     const notPermitted = document.getElementById('notPermitted');
     const adminContent = document.getElementById('adminContent');
