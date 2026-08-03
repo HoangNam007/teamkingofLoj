@@ -1,5 +1,4 @@
-/* GIAODIEN.JS dùng chung */
-/*  DROPDOWN KHU VỰC */
+
 function setupDropdownKhuVuc() {
     const locationBtn = document.getElementById('locationBtn');
     const regionDropdown = document.getElementById('regionDropdown');
@@ -16,7 +15,6 @@ function setupDropdownKhuVuc() {
         regionDropdown.classList.remove('show');
     });}
 
-/* DROPDOWN DANH MỤC */
 function setupDropdownDanhMuc() {
     const categoryBtn = document.getElementById('categoryBtn');
     const categoryDropdown = document.getElementById('categoryDropdown');
@@ -33,7 +31,6 @@ function setupDropdownDanhMuc() {
         categoryDropdown.classList.remove('show');
     });}
 
-/*TOAST - Thông báo nhỏ (thay cho alert) */
 function showToast(message, type) {
     let toast = document.getElementById('toast');
 
