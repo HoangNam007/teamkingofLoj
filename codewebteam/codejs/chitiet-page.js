@@ -30,7 +30,6 @@ function renderTrangChiTiet() {
         return;
     }
 
-    // Check trạng thái
     if (product.status === 'sold') {
         container.innerHTML = `
             <div class="empty-state" style="grid-column:1/-1;">
