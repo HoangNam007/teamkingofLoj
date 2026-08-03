@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng Tin – Chợ Tốt</title>
+    <link rel="stylesheet" href="giaodien.css">
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="header-container">
+    <div class="header-top">
+        <div class="logo-section">
+            <a href="idea.html" class="logo-text">chợ tốt</a>
+        </div>
+
+        <nav class="top-nav">
+            <a href="idea.html">Trang chủ</a>
+        </nav>
+
+        <div class="user-actions">
+            <a href="thongbao.html" class="icon-btn-circle" title="Thông báo">
+                🔔
+                <span class="badge" id="notiCount" style="display:none">0</span>
+            </a>
+            <a href="giohang.html" class="icon-btn-circle" title="Giỏ hàng">
+                🛒
+                <span class="badge" id="cartCount" style="display:none">0</span>
+            </a>
+            <a href="tincuatoi.html" class="btn-my-posts">📋 Tin của tôi</a>
+            <a href="quanly.html" class="btn-admin">Quản lý</a>
+            <a href="taikhoan.html" class="btn-login" id="authBtn">Đăng nhập</a>
+            <a href="dangtin.html" class="btn-post btn-active">Đăng tin</a>
+        </div>
+    </div>
+</header>
+
+<!-- ===== PAGE HEADER ===== -->
+<div class="page-header">
+    <h1>📝 ĐĂNG TIN MỚI</h1>
+    <p>Đăng sản phẩm bạn muốn bán</p>
+</div>
+
+<!-- ===== MAIN ===== -->
+<main>
+    <!-- Chưa đăng nhập -->
+    <div id="notLoggedIn" style="display:none; text-align:center; padding:60px 20px;">
+        <div style="font-size:64px; margin-bottom:20px;">🔐</div>
+        <h2 style="color:#666; margin-bottom:15px;">Vui lòng đăng nhập để đăng tin</h2>
+        <a href="taikhoan.html" class="btn-explore">Đăng nhập ngay</a>
+    </div>
+
+    <!-- Đã đăng nhập -->
+    <div id="postContent" style="display:none;">
+        <div class="auth-container">
+            <div class="auth-section">
+                <h2>Thông tin sản phẩm</h2>
+
+                <form id="postForm">
+                    <div class="form-group">
+                        <label>Tên sản phẩm *</label>
+                        <input type="text" name="name" placeholder="Ví dụ: iPhone 13 Pro Max">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Danh mục *</label>
+                        <select name="cat">
+                            <option value="dientu">📱 Thiết bị điện tử</option>
+                            <option value="phuongtien">🚗 Phương tiện</option>
+                            <option value="trangphuc">👕 Thời trang & Phụ kiện</option>
+                            <option value="vatdung">🏠 Vật dụng gia đình</option>
+                            <option value="khac">🎁 Khác</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Giá bán (VNĐ) *</label>
+                        <input type="number" name="price" placeholder="Ví dụ: 2500000" min="1" max="999999999999">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Mô tả sản phẩm</label>
+                        <textarea name="desc" rows="4" 
+                                  placeholder="Mô tả tình trạng, phụ kiện đi kèm..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Link hình ảnh sản phẩm *</label>
+                        <input type="text" name="image" id="postImageInput" 
+                               placeholder="Dán link ảnh vào đây">
+                        <p style="font-size:12px; color:#777; margin-top:6px;">
+                            💡 Copy link ảnh từ Google Images, Imgur, hoặc website khác.
+                        </p>
+
+                        <div style="margin-top:12px;">
+                            <img id="postImagePreview"
+                                 src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='300'><rect width='400' height='300' fill='%23f5f5f5'/><text x='50%25' y='50%25' font-family='Arial' font-size='24' fill='%23bbb' text-anchor='middle' dominant-baseline='middle'>Preview</text></svg>"
+                                 alt="Preview"
+                                 style="width:100%; max-height:250px; object-fit:contain; 
+                                        border-radius:10px; border:2px solid #eee; background:#fff;">
+                        </div>
+                    </div>
+
+<div style="padding:12px; background:#fff3cd; border-left:4px solid #ff8a00; 
+            border-radius:6px; margin:15px 0; font-size:13px; color:#555;">
+    💡 <strong>Lưu ý:</strong> Hệ thống sẽ tự động cộng thêm <strong style="color:#ff8a00;">phí dịch vụ 5%</strong> vào giá bán khi hiển thị cho người mua.
+    <br>Ví dụ: giá bạn nhập 1.000.000đ → giá hiển thị 1.050.000đ.
+</div>
+
+<button type="submit" class="btn-submit">📤 Đăng Tin Ngay</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer">
+    <div style="margin-bottom:10px;">
+        <a href="#">Về chúng tôi</a>
+        <a href="#">Điều khoản</a>
+        <a href="#">Bảo mật</a>
+        <a href="#">Liên hệ</a>
+    </div>
+    <p>© 2026 Chợ Tốt Đồ Cũ – đồ của người là đồ của mình</p>
+</footer>
+
+<!-- ===== NHÚNG JS ===== -->
+<script src="codejs/luutru.js"></script>
+<script src="codejs/taikhoan.js"></script>
+<script src="codejs/giohang.js"></script>
+<script src="codejs/giaodien.js"></script>
+<script src="codejs/trang.js"></script>
+<script src="codejs/dangtin-page.js"></script>
+
+</body>
+</html>

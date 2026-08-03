@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Chợ Tốt Đồ Cũ</title>
+    <link rel="stylesheet" href="giaodien.css">
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="header-container">
+    <div class="header-top">
+        <div class="logo-section">
+            <a href="idea.html" class="logo-text">chợ tốt</a>
+        </div>
+
+        <nav class="top-nav">
+            <a href="idea.html" class="active">Trang chủ</a>
+        </nav>
+
+        <div class="user-actions">
+            <a href="thongbao.html" class="icon-btn-circle" title="Thông báo">
+                🔔
+                <span class="badge" id="notiCount" style="display:none">0</span>
+            </a>
+            <a href="giohang.html" class="icon-btn-circle" title="Giỏ hàng">
+                🛒
+                <span class="badge" id="cartCount" style="display:none">0</span>
+            </a>
+            <a href="tincuatoi.html" class="btn-admin">📋 Tin của tôi</a>
+            <a href="quanly.html" class="btn-admin">Quản lý</a>
+            <a href="taikhoan.html" class="btn-login" id="authBtn">Đăng nhập</a>
+            <a href="dangtin.html" class="btn-post">Đăng tin</a>
+        </div>
+    </div>
+
+    <div class="search-banner">
+        <div class="search-banner-inner">
+            <h1 class="banner-title">Giá tốt, gần bạn, chốt nhanh!</h1>
+
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Tìm sản phẩm..." id="searchInput">
+
+                <div class="category-select" id="categoryBtn">
+                    <span id="categoryText">📦 Tất cả</span> ▾
+                    <div class="category-dropdown" id="categoryDropdown">
+                        <div data-cat="all">📦 Tất cả danh mục</div>
+                        <div data-cat="dientu">📱 Điện tử</div>
+                        <div data-cat="phuongtien">🚗 Phương tiện</div>
+                        <div data-cat="trangphuc">👕 Trang phục</div>
+                        <div data-cat="vatdung">🏠 Vật dụng</div>
+                        <div data-cat="khac">🎁 Khác</div>
+                    </div>
+                </div>
+
+                <div class="location-select" id="locationBtn">
+                    📍 <span id="regionText">Tất cả khu vực</span> ▾
+                    <div class="region-dropdown" id="regionDropdown">
+                        <div data-region="all">🌏 Tất cả khu vực</div>
+                        <div data-region="Miền Bắc">🏔 Miền Bắc</div>
+                        <div data-region="Miền Trung">🌊 Miền Trung</div>
+                        <div data-region="Miền Nam">🌴 Miền Nam</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- ===== MAIN ===== -->
+<main>
+    <h2 class="section-title" id="sectionTitle">Sản phẩm mới nhất</h2>
+
+    <div class="product-grid">
+        <!-- JS sẽ render vào đây -->
+    </div>
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer">
+    <div style="margin-bottom:10px;">
+        <a href="#">Về chúng tôi</a>
+        <a href="#">Điều khoản</a>
+        <a href="#">Bảo mật</a>
+        <a href="#">Liên hệ</a>
+    </div>
+    <p>© 2026 Chợ Tốt Đồ Cũ – đồ của người là đồ của mình</p>
+</footer>
+
+<!-- ===== NHÚNG JS (ĐÚNG THỨ TỰ) ===== -->
+<script src="codejs/luutru.js"></script>
+<script src="codejs/taikhoan.js"></script>
+<script src="codejs/giohang.js"></script>
+<script src="codejs/giaodien.js"></script>
+<script src="codejs/trang.js"></script>
+
+</body>
+</html>

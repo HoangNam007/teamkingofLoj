@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Tin Của Tôi – Chợ Tốt</title>
+    <link rel="stylesheet" href="giaodien.css">
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="header-container">
+    <div class="header-top">
+        <div class="logo-section">
+            <a href="idea.html" class="logo-text">chợ tốt</a>
+        </div>
+
+        <nav class="top-nav">
+            <a href="idea.html">Trang chủ</a>
+        </nav>
+
+        <div class="user-actions">
+            <a href="thongbao.html" class="icon-btn-circle" title="Thông báo">
+                🔔
+                <span class="badge" id="notiCount" style="display:none">0</span>
+            </a>
+            <a href="giohang.html" class="icon-btn-circle" title="Giỏ hàng">
+                🛒
+                <span class="badge" id="cartCount" style="display:none">0</span>
+            </a>
+            <a href="tincuatoi.html" class="btn-my-posts btn-active">📋 Tin của tôi</a>
+            <a href="quanly.html" class="btn-admin">Quản lý</a>
+            <a href="taikhoan.html" class="btn-login" id="authBtn">Đăng nhập</a>
+            <a href="dangtin.html" class="btn-post">Đăng tin</a>
+        </div>
+    </div>
+</header>
+
+<!-- ===== PAGE HEADER ===== -->
+<div class="page-header">
+    <h1>📋 TIN ĐĂNG CỦA TÔI</h1>
+    <p>Xem, sửa, đánh dấu đã bán hoặc xóa các tin bạn đã đăng</p>
+</div>
+
+<!-- ===== MAIN ===== -->
+<main>
+    <div id="notLoggedIn" style="display:none; text-align:center; padding:60px 20px;">
+        <div style="font-size:64px; margin-bottom:20px;">🔐</div>
+        <h2 style="color:#666; margin-bottom:15px;">Vui lòng đăng nhập</h2>
+        <a href="taikhoan.html" class="btn-explore">Đăng nhập ngay</a>
+    </div>
+
+    <div id="myPostsPageContent" style="display:none;">
+        <div id="myPostsContainer" class="my-posts-container"></div>
+    </div>
+</main>
+
+<!-- ===== MODAL SỬA TIN ===== -->
+<div id="modalSuaTin" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); 
+                              z-index:999; justify-content:center; align-items:center; padding:20px;">
+    <div style="background:#fff; border-radius:16px; max-width:560px; width:100%; 
+                max-height:90vh; overflow-y:auto; padding:24px; position:relative;">
+        <button type="button" 
+                onclick="dongModalSuaTin()"
+                style="position:absolute; top:12px; right:14px; background:rgba(0,0,0,0.06);
+                       border:none; width:32px; height:32px; border-radius:50%; font-size:18px;
+                       cursor:pointer;">✕</button>
+
+        <h2 style="margin-bottom:20px; border-bottom:3px solid #ffcc00; padding-bottom:10px;">
+            ✏️ Chỉnh sửa tin đăng
+        </h2>
+
+        <form id="editPostForm">
+            <input type="hidden" id="editPostId">
+
+            <div class="form-group">
+                <label>Tên sản phẩm *</label>
+                <input type="text" id="editPostName">
+            </div>
+
+            <div class="form-group">
+                <label>Giá bán (VNĐ) *</label>
+                <input type="number" id="editPostPrice" min="1" max="999999999999">
+            </div>
+
+            <div class="form-group">
+                <label>Mô tả</label>
+                <textarea id="editPostDesc" rows="3"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Link ảnh *</label>
+                <input type="text" id="editPostImage">
+                <div style="margin-top:12px;">
+                    <img id="editPostImagePreview"
+                         src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='200'><rect width='400' height='200' fill='%23f5f5f5'/><text x='50%25' y='50%25' font-family='Arial' font-size='20' fill='%23bbb' text-anchor='middle' dominant-baseline='middle'>Preview</text></svg>"
+                         alt="Preview"
+                         style="width:100%; max-height:180px; object-fit:contain; 
+                                border-radius:10px; border:2px solid #eee; background:#fff;">
+                </div>
+            </div>
+
+            <button type="submit" class="btn-submit">💾 Lưu thay đổi</button>
+            <button type="button" class="btn-submit" 
+                    style="background:#222; color:#fff; margin-top:8px;"
+                    onclick="dongModalSuaTin()">Hủy</button>
+        </form>
+    </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer">
+    <div style="margin-bottom:10px;">
+        <a href="#">Về chúng tôi</a>
+        <a href="#">Điều khoản</a>
+        <a href="#">Bảo mật</a>
+        <a href="#">Liên hệ</a>
+    </div>
+    <p>© 2026 Chợ Tốt Đồ Cũ – đồ của người là đồ của mình</p>
+</footer>
+
+<!-- ===== NHÚNG JS ===== -->
+<script src="codejs/luutru.js"></script>
+<script src="codejs/taikhoan.js"></script>
+<script src="codejs/giohang.js"></script>
+<script src="codejs/giaodien.js"></script>
+<script src="codejs/trang.js"></script>
+<script src="codejs/dangtin-page.js"></script>
+
+</body>
+</html>

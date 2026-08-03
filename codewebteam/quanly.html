@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý – Chợ Tốt</title>
+    <link rel="stylesheet" href="giaodien.css">
+</head>
+<body>
+
+<header class="header-container">
+    <div class="header-top">
+        <div class="logo-section">
+            <a href="idea.html" class="logo-text">Chợ Tốt</a>
+        </div>
+        <nav class="top-nav">
+            <a href="idea.html">Trang chủ</a>
+        </nav>
+        <div class="user-actions">
+            <a href="thongbao.html" class="icon-btn-circle">🔔<span class="badge" id="notiCount" style="display:none">0</span></a>
+            <a href="giohang.html" class="icon-btn-circle">🛒<span class="badge" id="cartCount" style="display:none">0</span></a>
+            <a href="tincuatoi.html" class="btn-my-posts">Tin của tôi</a>
+            <a href="quanly.html" class="btn-admin btn-active">Quản lý</a>
+            <a href="taikhoan.html" class="btn-login" id="authBtn">Đăng nhập</a>
+            <a href="dangtin.html" class="btn-post">Đăng tin</a>
+        </div>
+    </div>
+</header>
+
+<div class="page-header">
+    <h1>⚙️ TRANG QUẢN LÝ HỆ THỐNG</h1>
+    <p>Thống kê và giám sát toàn bộ hoạt động</p>
+</div>
+
+<main>
+    <div id="notPermitted" class="not-permitted-box" style="display:none;">
+        <div class="not-permitted-icon">🚫</div>
+        <h2>Bạn không có quyền mở trang này!</h2>
+    </div>
+
+    <div id="adminContent" style="display:none;">
+        <div class="admin-container">
+
+            <!-- 5 khối thống kê -->
+            <div class="admin-stats" style="grid-template-columns: repeat(5, 1fr);">
+                <div class="admin-stat-card">
+                    <div class="admin-stat-icon">👥</div>
+                    <div class="admin-stat-num" id="totalUsers">0</div>
+                    <div class="admin-stat-label">Người dùng</div>
+                </div>
+                <div class="admin-stat-card">
+                    <div class="admin-stat-icon">📦</div>
+                    <div class="admin-stat-num" id="totalActivePosts">0</div>
+                    <div class="admin-stat-label">SP đang bán</div>
+                </div>
+                <div class="admin-stat-card">
+                    <div class="admin-stat-icon">✅</div>
+                    <div class="admin-stat-num" id="totalSold">0</div>
+                    <div class="admin-stat-label">SP đã bán</div>
+                </div>
+                <div class="admin-stat-card">
+                    <div class="admin-stat-icon">💰</div>
+                    <div class="admin-stat-num" id="totalRevenue" style="font-size:22px;">0đ</div>
+                    <div class="admin-stat-label">Tổng doanh thu</div>
+                </div>
+                <div class="admin-stat-card">
+                    <div class="admin-stat-icon">💵</div>
+                    <div class="admin-stat-num" id="totalProfit" style="font-size:22px; color:#28a745;">0đ</div>
+                    <div class="admin-stat-label">Lợi nhuận (5%)</div>
+                </div>
+            </div>
+
+            <!-- Bảng danh sách user -->
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th class="stt">STT</th>
+                        <th>👤 Họ tên</th>
+                        <th>📧 Email</th>
+                        <th>📞 SĐT</th>
+                        <th>📍 Thành phố</th>
+                        <th>
+                            🌏 Miền<br>
+                            <select id="filterRegion" onchange="renderDanhSachUsers()" 
+                                    style="padding:3px; font-size:11px; margin-top:3px;">
+                                <option value="all">Tất cả</option>
+                                <option value="Miền Bắc">Bắc</option>
+                                <option value="Miền Trung">Trung</option>
+                                <option value="Miền Nam">Nam</option>
+                            </select>
+                        </th>
+                        <th style="text-align:center;">
+                            📦 Đang bán<br>
+                            <select id="sortActive" onchange="doiSort('active', this.value)" 
+                                    style="padding:3px; font-size:11px; margin-top:3px;">
+                                <option value="none">Mặc định</option>
+                                <option value="desc">Nhiều → Ít</option>
+                                <option value="asc">Ít → Nhiều</option>
+                            </select>
+                        </th>
+                        <th style="text-align:center;">
+                            ✅ Đã bán<br>
+                            <select id="sortSold" onchange="doiSort('sold', this.value)" 
+                                    style="padding:3px; font-size:11px; margin-top:3px;">
+                                <option value="none">Mặc định</option>
+                                <option value="desc">Nhiều → Ít</option>
+                                <option value="asc">Ít → Nhiều</option>
+                            </select>
+                        </th>
+                        <th style="text-align:center;">
+                            💰 Doanh thu<br>
+                            <select id="sortRevenue" onchange="doiSort('revenue', this.value)" 
+                                    style="padding:3px; font-size:11px; margin-top:3px;">
+                                <option value="none">Mặc định</option>
+                                <option value="desc">Cao → Thấp</option>
+                                <option value="asc">Thấp → Cao</option>
+                            </select>
+                        </th>
+                        <th style="text-align:center;">
+                            💵 Lợi nhuận<br>
+                            <select id="sortProfit" onchange="doiSort('profit', this.value)" 
+                                    style="padding:3px; font-size:11px; margin-top:3px;">
+                                <option value="none">Mặc định</option>
+                                <option value="desc">Cao → Thấp</option>
+                                <option value="asc">Thấp → Cao</option>
+                            </select>
+                        </th>
+                        <th style="text-align:center;">Trạng thái</th>
+                        <th style="text-align:center;">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody id="adminUsersBody"></tbody>
+            </table>
+
+        </div>
+    </div>
+</main>
+
+<!-- Modal chặn user -->
+<div id="modalChan" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); 
+                            z-index:999; justify-content:center; align-items:center; padding:20px;">
+    <div style="background:#fff; border-radius:12px; max-width:500px; width:100%; padding:25px;">
+        <h2 style="margin-bottom:15px; color:#dc3545;">🔒 Chặn người dùng</h2>
+        <p style="margin-bottom:15px;">Bạn đang chặn: <strong id="modalChanName"></strong></p>
+        
+        <div class="form-group">
+            <label>Lý do chặn (bắt buộc):</label>
+            <textarea id="lyDoChan" rows="4" 
+                      placeholder="VD: Đăng sản phẩm không rõ nguồn gốc..."
+                      style="width:100%; padding:10px; border:1.5px solid #ddd; border-radius:6px;"></textarea>
+        </div>
+
+        <div style="display:flex; gap:10px; margin-top:20px;">
+            <button onclick="xacNhanChan()" style="flex:1; padding:12px; background:#dc3545; 
+                    color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">
+                🔒 Xác nhận chặn
+            </button>
+            <button onclick="dongModalChan()" style="flex:1; padding:12px; background:#666; 
+                    color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">
+                Hủy
+            </button>
+        </div>
+    </div>
+</div>
+
+<footer class="site-footer">
+    <p>© 2026 Chợ Tốt</p>
+</footer>
+
+<script src="codejs/luutru.js"></script>
+<script src="codejs/taikhoan.js"></script>
+<script src="codejs/giohang.js"></script>
+<script src="codejs/giaodien.js"></script>
+<script src="codejs/trang.js"></script>
+<script src="codejs/quanly.js"></script>
+
+</body>
+</html>
