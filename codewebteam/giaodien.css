@@ -1,4 +1,4 @@
-/* RESET */
+
 * {
     margin: 0;
     padding: 0;
@@ -17,7 +17,6 @@ a {
 button, input, select, textarea {
     font-family: inherit;}
 
-        /* HEADER */
 .header-container {
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     background: #ffcc00;
@@ -80,7 +79,6 @@ button, input, select, textarea {
     display: flex;
     align-items: center;}
 
-/* ===== NÚT ICON TRÒN ===== */
 .icon-btn-circle {
     transition: all 0.2s;
     border-radius: 50%;
@@ -108,7 +106,6 @@ button, input, select, textarea {
     background: #e67a00;
     color: #fff;}
 
-/* ===== BADGE ===== */
 .badge {
     box-shadow: 0 1px 4px rgba(0,0,0,0.2);
     border: 2px solid #ffcc00;
@@ -127,12 +124,6 @@ button, input, select, textarea {
     align-items: center;
     justify-content: center;}
 
-
-/* ========================================================================
-   NÚT HEADER - Dùng chung cho tất cả (btn-login, btn-admin, btn-my-posts, btn-post)
-   Mặc định: viền đen, chữ đen, nền trong suốt
-   Khi ACTIVE (đang ở trang đó): nền cam, chữ trắng
-   ======================================================================== */
 .btn-login,
 .btn-admin,
 .btn-my-posts,
@@ -155,8 +146,6 @@ button, input, select, textarea {
 .btn-my-posts:hover,
 .btn-post:hover {
     background: rgba(0,0,0,0.1);}
-
-/* Trang hiện tại - nền cam, chữ trắng */
 .btn-active {
     background: #ff8a00;
     color: #fff;
@@ -165,10 +154,6 @@ button, input, select, textarea {
 .btn-active:hover {
     background: #e67a00;
     color: #fff;}
-
-/* ========================================================================
-   PAGE HEADER (tiêu đề mỗi trang) - Tách biệt rõ
-   ======================================================================== */
 .page-header {
     border-bottom: 4px solid #ff8a00;
     padding: 35px 20px 25px;
@@ -185,9 +170,6 @@ button, input, select, textarea {
     color: #666;
     font-size: 15px;}
 
-/* ========================================================================
-   SEARCH BANNER
-   ======================================================================== */
 .search-banner {
     padding: 25px 20px 30px;
     background: #ffe17a;
@@ -222,7 +204,7 @@ button, input, select, textarea {
 .search-input {
     flex: 1;
     border: none;
-    border-radius: 10px 0 0 10px;  /* GIỮ NGUYÊN */
+    border-radius: 10px 0 0 10px;  
     padding: 15px 20px;
     font-size: 15px;
     outline: none;
@@ -232,7 +214,7 @@ button, input, select, textarea {
 .category-select,
 .location-select {
     border-left: 1px solid #eee;
-    border-radius: 0 10px 10px 0;  /* THÊM DÒNG NÀY */
+    border-radius: 0 10px 10px 0;  
     padding: 15px 20px;
     background: #fafafa;
     font-size: 14px;
@@ -299,10 +281,6 @@ button, input, select, textarea {
 
 .btn-search:hover {
     background: #e67a00;}
-
-/* ========================================================================
-   MAIN CONTENT
-   ======================================================================== */
 main {
     max-width: 1320px;
     margin: 25px auto;
@@ -316,8 +294,6 @@ main {
     font-size: 22px;
     font-weight: 700;
     display: inline-block;}
-
-/* PRODUCT GRID*/
 .product-grid {
     gap: 14px;
     display: grid;
@@ -400,10 +376,6 @@ main {
     color: #ee4d2d;
     font-size: 16px;
     font-weight: 700;}
-
-/* ========================================================================
-   TRANG CHI TIẾT SP (chitiet.html)
-   ======================================================================== */
 .detail-container {
     max-width: 900px;
     margin: 30px auto;
@@ -493,10 +465,6 @@ main {
 .btn-detail-back:hover {
     border-color: #888;
     background: #f5f5f5;}
-
-/* ========================================================================
-   CART TABLE
-   ======================================================================== */
 .cart-table {
     box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     border-radius: 10px;
@@ -539,10 +507,6 @@ main {
 
 .btn-remove:hover {
     background: #fff0f0;}
-
-/* ========================================================================
-   NÚT KHÁM PHÁ / EXPLORE
-   ======================================================================== */
 .btn-explore {
     transition: all 0.2s;
     border-radius: 25px;
@@ -558,10 +522,6 @@ main {
     background: #e67a00;
     color: #fff;
     transform: translateY(-2px);}
-
-/* ========================================================================
-   FORMS - Đăng ký / Đăng nhập / Đăng tin
-   ======================================================================== */
 .auth-container {
     max-width: 520px;
     margin: 0 auto;}
@@ -637,10 +597,6 @@ main {
 .btn-submit:hover {
     background: #e67a00;
     transform: translateY(-1px);}
-
-/* ========================================================================
-   TAB ĐĂNG TIN
-   ======================================================================== */
 .post-tabs {
     gap: 10px;
     max-width: 720px;
@@ -666,8 +622,6 @@ main {
     border-color: #ff8a00;
     background: #ff8a00;
     color: #fff;}
-
-/* ===== CARD TIN CỦA TÔI ===== */
 .my-posts-container {
     max-width: 720px;
     margin: 0 auto;}
@@ -751,10 +705,6 @@ main {
     background: #ff4757;
     color: #fff;
     border-color: #ff4757;}
-
-/* ========================================================================
-   THÔNG BÁO CARD
-   ======================================================================== */
 .noti-card {
     transition: all 0.25s;
     box-shadow: 0 2px 8px rgba(0,0,0,0.06);
@@ -799,9 +749,6 @@ main {
     color: #888;
     font-size: 12px;}
 
-/* ========================================================================
-   PROFILE CARD
-   ======================================================================== */
 .profile-card {
     box-shadow: 0 4px 16px rgba(0,0,0,0.08);
     border-radius: 16px;
@@ -853,10 +800,6 @@ main {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;}
-
-/* ========================================================================
-   EMPTY STATE
-   ======================================================================== */
 .empty-state {
     border: 1px dashed #ddd;
     border-radius: 14px;
@@ -875,10 +818,6 @@ main {
 
 .empty-state p {
     color: #999;}
-
-/* ========================================================================
-   PHÂN TRANG
-   ======================================================================== */
 #paginationContainer {
     margin-top: 32px;
     padding: 10px 0 20px;
@@ -908,10 +847,6 @@ main {
     background: #ff8a00;
     color: #fff;
     cursor: default;}
-
-/* ========================================================================
-   FILTER BAR (giỏ hàng, tin của tôi)
-   ======================================================================== */
 .cart-filter-bar,
 .my-posts-filter-bar {
     gap: 10px;
@@ -945,10 +880,6 @@ main {
 
 .filter-select:focus {
     border-color: #ffba00;}
-
-/* ========================================================================
-   TRANG ADMIN
-   ======================================================================== */
 .not-permitted-box {
     box-shadow: 0 4px 16px rgba(0,0,0,0.05);
     border-radius: 16px;
@@ -1080,10 +1011,6 @@ main {
     font-size: 11px;
     font-weight: 700;
     display: inline-block;}
-
-/* ========================================================================
-   FOOTER
-   ======================================================================== */
 .site-footer {
     border-top: 1px solid #e0e0e0;
     margin-top: 50px;
@@ -1116,18 +1043,10 @@ main {
     z-index: 9999;
     transform: translateY(120%);
     transition: transform 0.35s ease;}
-
-
-/* ========================================================================
-   ★ V4 - CSS CHO ADMIN (có doanh thu + chặn user)
-   ======================================================================== */
-
-/* Badge count có màu sold */
 .badge-count.sold {
     background: #17a2b8;
 }
 
-/* Bảng admin có sort */
 .admin-table th {
     user-select: none;
 }
@@ -1138,7 +1057,6 @@ main {
     margin-left: 3px;
 }
 
-/* Nút chặn/mở khóa */
 .admin-table button {
     transition: all 0.2s;
 }
