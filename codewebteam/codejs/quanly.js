@@ -148,7 +148,6 @@ function doiSort(mode, direction) {
         SORT_DIR = direction;
     }
 
-    // Reset các dropdown khác về "Mặc định"
     const allSorts = ['sortActive', 'sortSold', 'sortRevenue', 'sortProfit'];
     const currentId = 'sort' + mode.charAt(0).toUpperCase() + mode.slice(1);
     allSorts.forEach(id => {
