@@ -102,11 +102,9 @@ function xuLyDangTinMoi(event) {
 function kiemTraAnh(url, callback) {
     const img = new Image();
     img.onload = function () {
-        // Ảnh load OK và có kích thước thật
         callback(this.naturalWidth > 0);
     };
     img.onerror = function () {
-        // Ảnh lỗi
         callback(false);
     };
     img.src = url;
@@ -327,7 +325,6 @@ function xuLySubmitFormSuaTin(e) {
     });
 }
 function hienModalXacNhanDangTin(config) {
-    // Xóa modal cũ nếu có
     const oldModal = document.getElementById('modalConfirmDangTin');
     if (oldModal) oldModal.remove();
 
