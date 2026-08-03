@@ -1,19 +1,11 @@
-/* ========================================================================
-   QUANLY.JS - Trang Admin (V3 - có chặn user + doanh thu + sort)
-   ======================================================================== */
-
-let SORT_MODE = 'default';   // default | active | sold | revenue | profit
-let SORT_DIR = 'desc';        // asc | desc
-let EMAIL_DANG_CHAN = '';     // Email user đang chuẩn bị chặn
-
+let SORT_MODE = 'default';   
+let SORT_DIR = 'desc';       
+let EMAIL_DANG_CHAN = '';     
 function khoiTaoNoiDungAdmin() {
     capNhatThongKe();
     renderDanhSachUsers();
 }
 
-/* ========================================================================
-   THỐNG KÊ 5 KHỐI
-   ======================================================================== */
 function capNhatThongKe() {
     const users = layDanhSachUsers();
     const posts = layDanhSachBaiDang();
@@ -22,7 +14,6 @@ function capNhatThongKe() {
     const totalActive = posts.filter(p => (p.status || 'active') === 'active').length;
     const totalSold = posts.filter(p => p.status === 'sold').length;
 
-    // Tính tổng doanh thu + lợi nhuận
     let totalRevenue = 0;
     let totalProfit = 0;
     posts.filter(p => p.status === 'sold').forEach(p => {
@@ -38,9 +29,6 @@ function capNhatThongKe() {
     document.getElementById('totalProfit').textContent = formatGiaTien(totalProfit) + 'đ';
 }
 
-/* ========================================================================
-   RENDER DANH SÁCH USER (kèm sort + filter miền)
-   ======================================================================== */
 function renderDanhSachUsers() {
     const tbody = document.getElementById('adminUsersBody');
     if (!tbody) return;
@@ -48,14 +36,12 @@ function renderDanhSachUsers() {
     const users = layDanhSachUsers();
     const posts = layDanhSachBaiDang();
 
-    // Lọc theo miền
     const filterRegion = document.getElementById('filterRegion')?.value || 'all';
     let filtered = users;
     if (filterRegion !== 'all') {
         filtered = filtered.filter(u => u.region === filterRegion);
     }
 
-    // Tính stats cho từng user
     const userStats = filtered.map(u => {
         const userEmail = chuanHoaEmail(u.email);
         const myPosts = posts.filter(p => chuanHoaEmail(p.ownerEmail) === userEmail);
@@ -79,9 +65,8 @@ function renderDanhSachUsers() {
         };
     });
 
-    // Sắp xếp
     if (SORT_MODE === 'default') {
-        // Mặc định: theo ngày đăng ký (cũ nhất trên)
+     
         userStats.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
     } else {
         const key = '_' + SORT_MODE;
@@ -154,9 +139,6 @@ function renderDanhSachUsers() {
     tbody.innerHTML = html;
 }
 
-/* ========================================================================
-   ĐỔI SORT (khi user chọn từ dropdown)
-   ======================================================================== */
 function doiSort(mode, direction) {
     if (direction === 'none') {
         SORT_MODE = 'default';
@@ -178,9 +160,6 @@ function doiSort(mode, direction) {
 
     renderDanhSachUsers();
 }
-/* ========================================================================
-   MODAL CHẶN USER
-   ======================================================================== */
 function moModalChan(email, name) {
     EMAIL_DANG_CHAN = email;
     document.getElementById('modalChanName').textContent = name;
